@@ -3,8 +3,7 @@ import type { ReactNode } from 'react'
 import DesktopIcon from './DesktopIcon'
 import Taskbar from './Taskbar'
 import type { TaskbarApp } from './Taskbar'
-import StartMenu from './StartMenu'
-import type { StartMenuItem } from './StartMenu'
+import NewStartMenu from './NewStartMenu'
 import DesktopWindow from './DesktopWindow'
 import Wallpaper from './Wallpaper'
 
@@ -22,42 +21,42 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     title: 'ABOUT_ME.EXE',
     icon: '👤',
     position: { x: 220, y: 140 },
-    content: (
-      <div className="space-y-4 text-left">
-        <p>
-          Welcome to the retro desktop! I craft playful, interactive experiences that blend art,
-          storytelling, and engineered polish. This world is built as an homage to the machines that
-          started it all.
-        </p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>🛠️ Full-stack focus with React, TypeScript, and creative tooling.</li>
-          <li>🎨 Pixel-perfect attention to detail, from UX motion to CRT glow.</li>
-          <li>🕹️ Passion for gamified portfolios, narrative UIs, and delightful surprises.</li>
-        </ul>
-      </div>
-    ),
+     content: (
+       <div className="space-y-4 text-left font-pixel-content text-sm leading-relaxed">
+         <p className="text-pixel-text">
+           Welcome to the retro desktop! I craft playful, interactive experiences that blend art,
+           storytelling, and engineered polish. This world is built as an homage to the machines that
+           started it all.
+         </p>
+         <ul className="list-disc space-y-2 pl-5 text-pixel-text-light">
+           <li>🛠️ Full-stack focus with React, TypeScript, and creative tooling.</li>
+           <li>🎨 Pixel-perfect attention to detail, from UX motion to CRT glow.</li>
+           <li>🕹️ Passion for gamified portfolios, narrative UIs, and delightful surprises.</li>
+         </ul>
+       </div>
+     ),
   },
   projects: {
     title: 'PROJECTS.EXE',
     icon: '💼',
     position: { x: 540, y: 180 },
-    content: (
-      <div className="space-y-3 text-left">
-        <p>Featured builds loaded straight from the archives:</p>
-        <ul className="space-y-2 border-l-4 border-pixel-amber pl-3">
-          <li>
-            <strong>Retro OS Portfolio</strong> – A draggable window system with a living terminal and
-            secret commands.
-          </li>
-          <li>
-            <strong>Arcade Mini Games</strong> – Pixel-perfect Pong, Snake, and Tetris built in React.
-          </li>
-          <li>
-            <strong>Synthwave Dashboard</strong> – Framer Motion + Web Audio for reactive soundscapes.
-          </li>
-        </ul>
-      </div>
-    ),
+     content: (
+       <div className="space-y-4 text-left font-pixel-content text-sm leading-relaxed">
+         <p className="text-pixel-text">Featured builds loaded straight from the archives:</p>
+         <ul className="space-y-3 border-l-4 border-pixel-warning pl-4 text-pixel-text-light">
+           <li>
+             <strong className="text-pixel-primary">Retro OS Portfolio</strong> – A draggable window system with a living terminal and
+             secret commands.
+           </li>
+           <li>
+             <strong className="text-pixel-secondary">Arcade Mini Games</strong> – Pixel-perfect Pong, Snake, and Tetris built in React.
+           </li>
+           <li>
+             <strong className="text-pixel-accent">Synthwave Dashboard</strong> – Framer Motion + Web Audio for reactive soundscapes.
+           </li>
+         </ul>
+       </div>
+     ),
   },
   terminal: {
     title: 'TERMINAL.EXE',
@@ -132,25 +131,32 @@ type DesktopShortcut = {
   description: string
 }
 
-const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
-  { id: 'about', label: 'About Me', icon: '👤', description: 'Meet the pixel hero' },
-  { id: 'projects', label: 'Projects', icon: '💼', description: 'Interactive builds & case studies' },
-  { id: 'terminal', label: 'Terminal', icon: '💻', description: 'Hack the portfolio' },
-  { id: 'resume', label: 'Resume', icon: '📄', description: 'Experience & skills hologram' },
-  { id: 'contact', label: 'Contact', icon: '📧', description: 'Transmission channels' },
-  { id: 'games', label: 'Games', icon: '🎮', description: 'Easter eggs & arcade fun' },
+const DESKTOP_SHORTCUTS: (DesktopShortcut & { position: { x: number; y: number } })[] = [
+  { id: 'about', label: 'About Me', icon: '👤', description: 'Meet the pixel hero', position: { x: 80, y: 120 } },
+  { id: 'projects', label: 'Projects', icon: '💼', description: 'Interactive builds & case studies', position: { x: 200, y: 80 } },
+  { id: 'terminal', label: 'Terminal', icon: '💻', description: 'Hack the portfolio', position: { x: 120, y: 250 } },
+  { id: 'resume', label: 'Resume', icon: '📄', description: 'Experience & skills hologram', position: { x: 60, y: 380 } },
+  { id: 'contact', label: 'Contact', icon: '📧', description: 'Transmission channels', position: { x: 180, y: 320 } },
+  { id: 'games', label: 'Games', icon: '🎮', description: 'Easter eggs & arcade fun', position: { x: 1100, y: 150 } },
 ]
 
-const START_MENU_BLUEPRINT = DESKTOP_SHORTCUTS.map(({ id, label, description }) => ({
+const START_MENU_ITEMS = DESKTOP_SHORTCUTS.map(({ id, label, icon }) => ({
   id,
   label,
-  description,
+  icon,
+  onClick: () => {} // Will be set in component
 }))
 
 const Desktop = () => {
   const [time, setTime] = useState(new Date())
   const [selectedShortcut, setSelectedShortcut] = useState<WindowId | null>(null)
   const [isStartOpen, setIsStartOpen] = useState(false)
+  
+  // Debug function
+  const handleStartToggle = () => {
+    console.log('Start button clicked! Current state:', isStartOpen)
+    setIsStartOpen(!isStartOpen)
+  }
   const [openWindows, setOpenWindows] = useState<WindowId[]>(['about'])
 
   useEffect(() => {
@@ -218,35 +224,47 @@ const Desktop = () => {
     }
   })
 
-  const startMenuItems: StartMenuItem[] = START_MENU_BLUEPRINT.map((item) => ({
+  const startMenuItems = START_MENU_ITEMS.map((item) => ({
     ...item,
-    onSelect: () => openWindow(item.id),
+    onClick: () => openWindow(item.id as WindowId),
   }))
 
   return (
     <div
-      className="relative h-screen w-screen overflow-hidden bg-pixel-black font-pixel text-pixel-green"
+      className="relative h-screen w-screen overflow-hidden font-pixel"
+      style={{ 
+        backgroundColor: '#faf7f0',
+        color: '#5d4e37',
+        backgroundImage: 'url(/wallpapers/cozy-pixel.svg)',
+        backgroundSize: '400px 300px',
+        backgroundRepeat: 'repeat'
+      }}
       onMouseDown={handleDesktopMouseDown}
     >
       <Wallpaper />
 
       <div className="relative z-10 flex h-full flex-col">
-        <div className="relative flex-1">
-          <div className="absolute inset-0 p-6">
-            <div className="flex h-full w-full">
-              <div className="flex w-56 flex-col gap-6">
-                {DESKTOP_SHORTCUTS.map((shortcut) => (
-                  <DesktopIcon
-                    key={shortcut.id}
-                    icon={shortcut.icon}
-                    label={shortcut.label}
-                    isActive={selectedShortcut === shortcut.id}
-                    onSelect={() => handleShortcutSelect(shortcut.id)}
-                    onActivate={() => handleShortcutActivate(shortcut.id)}
-                  />
-                ))}
-              </div>
-            </div>
+         <div className="relative flex-1">
+           <div className="absolute inset-0">
+             {/* Desktop Icons - Absolute positioned */}
+             {DESKTOP_SHORTCUTS.map((shortcut) => (
+               <div
+                 key={shortcut.id}
+                 className="absolute"
+                 style={{ 
+                   left: `${shortcut.position.x}px`, 
+                   top: `${shortcut.position.y}px` 
+                 }}
+               >
+                 <DesktopIcon
+                   icon={shortcut.icon}
+                   label={shortcut.label}
+                   isActive={selectedShortcut === shortcut.id}
+                   onSelect={() => handleShortcutSelect(shortcut.id)}
+                   onActivate={() => handleShortcutActivate(shortcut.id)}
+                 />
+               </div>
+             ))}
 
             {openWindows.map((id) => {
               const config = WINDOW_CONFIG[id]
@@ -268,14 +286,19 @@ const Desktop = () => {
           </div>
         </div>
 
-        <Taskbar
-          timeLabel={timeLabel}
-          isStartOpen={isStartOpen}
-          onToggleStart={() => setIsStartOpen((value) => !value)}
-          apps={taskbarApps}
-        />
-
-        <StartMenu items={startMenuItems} isVisible={isStartOpen} />
+        <div className="relative">
+          <Taskbar
+            timeLabel={timeLabel}
+            isStartOpen={isStartOpen}
+            onToggleStart={handleStartToggle}
+            apps={taskbarApps}
+          />
+          <NewStartMenu 
+            isOpen={isStartOpen}
+            onClose={() => setIsStartOpen(false)}
+            menuItems={startMenuItems}
+          />
+        </div>
       </div>
     </div>
   )

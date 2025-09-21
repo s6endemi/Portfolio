@@ -22,18 +22,28 @@ const DesktopWindow = ({
   return (
     <div
       className={clsx(
-        'absolute w-[380px] border-4 border-pixel-black bg-pixel-gray shadow-[8px_8px_0_0_#000000b3] transition-transform duration-150',
+        'absolute w-[380px] border-4 rounded-lg overflow-hidden',
         !isFocused && 'opacity-90'
       )}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
+        backgroundColor: '#ffffff',
+        borderColor: '#d0c4b0',
+        boxShadow: '6px 6px 0 0 rgba(139,111,71,0.4)'
       }}
       onMouseDown={(event) => {
         event.stopPropagation()
         onFocus?.()
       }}
     >
-      <div className="flex items-center justify-between border-b-4 border-pixel-black bg-pixel-dark-gray px-3 py-2 font-pixel text-xs uppercase text-pixel-light-gray">
+      <div 
+        className="window-header flex items-center justify-between border-b-4 px-3 py-2 font-pixel text-xs uppercase"
+        style={{
+          backgroundColor: '#7ba7bc',
+          borderBottomColor: '#8b6f47',
+          color: '#ffffff'
+        }}
+      >
         <div className="flex items-center gap-2">
           {icon && <span aria-hidden>{icon}</span>}
           {title}
@@ -41,13 +51,24 @@ const DesktopWindow = ({
         <button
           type="button"
           onClick={onClose}
-          className="flex h-6 w-6 items-center justify-center border-2 border-pixel-black bg-pixel-light-gray text-pixel-black"
+          className="flex h-6 w-6 items-center justify-center border-2 rounded hover:bg-red-400 transition-colors cursor-pointer"
+          style={{
+            backgroundColor: '#f4f1e8',
+            borderColor: '#8b6f47',
+            color: '#5d4e37'
+          }}
           aria-label={`Close ${title}`}
         >
           ✕
         </button>
       </div>
-      <div className="max-h-[400px] overflow-y-auto bg-pixel-light-gray p-4 font-pixel text-xs leading-relaxed text-pixel-black">
+      <div 
+        className="max-h-[400px] overflow-y-auto p-4 font-pixel-content text-sm leading-relaxed"
+        style={{
+          backgroundColor: '#ffffff',
+          color: '#2c3e50'
+        }}
+      >
         {children}
       </div>
     </div>

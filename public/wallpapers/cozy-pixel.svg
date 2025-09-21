@@ -1,0 +1,48 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Cozy Color Palette -->
+    <pattern id="pixelGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#faf7f0"/>
+      <rect width="1" height="16" fill="#e8dcc0" opacity="0.3"/>
+      <rect width="16" height="1" fill="#e8dcc0" opacity="0.3"/>
+    </pattern>
+    
+    <!-- Pixel Clouds -->
+    <pattern id="clouds" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="transparent"/>
+      <!-- Cloud 1 -->
+      <rect x="10" y="8" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
+      <rect x="18" y="4" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
+      <rect x="26" y="8" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
+      <!-- Cloud 2 -->
+      <rect x="50" y="20" width="8" height="8" fill="#d4a574" opacity="0.4"/>
+      <rect x="58" y="16" width="8" height="8" fill="#d4a574" opacity="0.4"/>
+    </pattern>
+    
+    <!-- Pixel Trees -->
+    <pattern id="trees" width="120" height="60" patternUnits="userSpaceOnUse">
+      <rect width="120" height="60" fill="transparent"/>
+      <!-- Tree 1 -->
+      <rect x="20" y="40" width="8" height="16" fill="#8b6f47"/>
+      <rect x="16" y="32" width="16" height="16" fill="#a8b5a0"/>
+      <!-- Tree 2 -->
+      <rect x="80" y="35" width="8" height="20" fill="#8b6f47"/>
+      <rect x="76" y="25" width="16" height="20" fill="#a8b5a0"/>
+    </pattern>
+  </defs>
+  
+  <!-- Base -->
+  <rect width="100%" height="100%" fill="url(#pixelGrid)"/>
+  
+  <!-- Sky gradient -->
+  <rect width="100%" height="60%" fill="url(#clouds)"/>
+  
+  <!-- Ground with trees -->
+  <rect y="60%" width="100%" height="40%" fill="#d4a574" opacity="0.2"/>
+  <rect y="60%" width="100%" height="40%" fill="url(#trees)"/>
+  
+  <!-- Decorative elements -->
+  <rect x="50" y="20" width="16" height="16" fill="#7ba7bc" opacity="0.6"/>
+  <rect x="300" y="40" width="16" height="16" fill="#b5a7d6" opacity="0.6"/>
+  <rect x="150" y="200" width="24" height="8" fill="#a8b5a0" opacity="0.5"/>
+</svg>

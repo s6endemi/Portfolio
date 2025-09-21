@@ -8,15 +8,23 @@ const config = {
     extend: {
       fontFamily: {
         pixel: ['Press Start 2P', 'monospace'],
+        'pixel-content': ['Courier New', 'monospace'],
+        'pixel-ui': ['Arial', 'sans-serif'],
       },
       colors: {
-        'pixel-green': '#00ff41',
-        'pixel-amber': '#ffb000',
-        'pixel-cyan': '#00ffff',
-        'pixel-black': '#000000',
-        'pixel-gray': '#c0c0c0',
-        'pixel-dark-gray': '#404040',
-        'pixel-light-gray': '#e0e0e0',
+        // Cozy & Warm Palette - Gemütlich & Sonnig
+        'cozy-cream': '#faf7f0',         // Warmes Creme (Background)
+        'cozy-beige': '#e8dcc0',         // Sanftes Beige (Icons)
+        'cozy-brown': '#8b6f47',         // Warmes Braun (Borders)
+        'cozy-sage': '#a8b5a0',          // Sanftes Salbeigrün
+        'cozy-blue': '#7ba7bc',          // Gemütliches Blau
+        'cozy-coral': '#d4a574',         // Warmes Koralle
+        'cozy-lavender': '#b5a7d6',      // Sanftes Lavendel
+        'cozy-text': '#5d4e37',          // Warmes Braun für Text
+        'cozy-text-light': '#8a7968',    // Helles Braun für Secondary Text
+        'cozy-shadow': '#c4b5a0',        // Weiche Schatten
+        'cozy-border': '#d0c4b0',        // Sanfte Borders
+        'cozy-highlight': '#f4f1e8',     // Highlight Hintergrund
       },
     },
   },

@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { KeyboardEvent, MouseEvent } from 'react'
 
 export type DesktopIconProps = {
@@ -41,30 +40,43 @@ const DesktopIcon = ({
     <div
       role="button"
       tabIndex={0}
-      className="w-20 flex flex-col items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-pixel-cyan"
+      className="w-24 flex flex-col items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-pixel-primary cursor-pointer group"
       onDoubleClick={handleDoubleClick}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
+      {/* 3D Pixel Icon */}
       <div
-        className={clsx(
-          'flex h-14 w-14 items-center justify-center border-2 border-black bg-pixel-gray text-2xl shadow-[4px_4px_0_0_#00000080] transition-colors duration-200',
-          isActive && 'bg-pixel-light-gray border-pixel-cyan'
-        )}
+        className="relative flex h-20 w-20 items-center justify-center text-4xl transition-all duration-200 group-hover:scale-105 border-t-4 border-l-4 border-r-4 border-b-4"
+        style={{
+          backgroundColor: isActive ? '#7ba7bc' : '#e8dcc0',
+          borderTopColor: isActive ? '#d4a574' : '#f4f1e8',
+          borderLeftColor: isActive ? '#d4a574' : '#f4f1e8', 
+          borderRightColor: '#8b6f47',
+          borderBottomColor: '#8b6f47',
+          boxShadow: '4px 4px 0 0 rgba(139,111,71,0.4)'
+        }}
       >
+        {/* Inner 3D highlight */}
+        <div className="absolute inset-1 border-t border-l border-pixel-light opacity-50" />
+        
         {imageSrc ? (
-          <img src={imageSrc} alt="" className="h-10 w-10 object-contain" />
+          <img src={imageSrc} alt="" className="h-12 w-12 object-contain pixel-perfect" />
         ) : (
-          <span className="select-none" aria-hidden>
+          <span className="select-none filter drop-shadow-sm" aria-hidden>
             {icon ?? '📁'}
           </span>
         )}
       </div>
+      
+      {/* Icon Label */}
       <span
-        className={clsx(
-          'text-center text-xs uppercase tracking-wider text-pixel-green drop-shadow-[0_0_4px_#00ff41]',
-          isActive && 'text-pixel-amber'
-        )}
+        className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border shadow-sm"
+        style={{
+          backgroundColor: isActive ? 'rgba(123, 167, 188, 0.2)' : 'rgba(244, 241, 232, 0.9)',
+          borderColor: isActive ? '#7ba7bc' : '#d0c4b0',
+          color: isActive ? '#7ba7bc' : '#5d4e37'
+        }}
       >
         {label}
       </span>

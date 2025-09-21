@@ -6,9 +6,9 @@ type WallpaperProps = {
 
 const gradientMap: Record<WallpaperVariant, string> = {
     nebula:
-      'radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.35), transparent 55%), radial-gradient(circle at 80% 30%, rgba(0, 170, 255, 0.3), transparent 60%), radial-gradient(circle at 50% 80%, rgba(255, 176, 0, 0.25), transparent 55%)',
+      'radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.08), transparent 70%), radial-gradient(circle at 80% 30%, rgba(123, 104, 238, 0.06), transparent 75%), radial-gradient(circle at 50% 80%, rgba(255, 107, 107, 0.05), transparent 70%)',
     radiant:
-      'radial-gradient(circle at 15% 10%, rgba(0, 255, 130, 0.4), transparent 45%), radial-gradient(circle at 85% 25%, rgba(0, 200, 255, 0.4), transparent 50%), radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.35), transparent 55%)',
+      'radial-gradient(circle at 15% 10%, rgba(81, 207, 102, 0.1), transparent 60%), radial-gradient(circle at 85% 25%, rgba(255, 212, 59, 0.08), transparent 65%), radial-gradient(circle at 50% 80%, rgba(74, 144, 226, 0.06), transparent 70%)',
 }
 
 const Wallpaper = ({ variant = 'nebula' }: WallpaperProps) => {
@@ -16,10 +16,11 @@ const Wallpaper = ({ variant = 'nebula' }: WallpaperProps) => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div
-        className="absolute inset-0 bg-pixel-black"
+        className="absolute inset-0"
         style={{
-          backgroundImage: `${gradientMap[variant]}, linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)`,
-          backgroundSize: '100% 100%, 48px 48px, 48px 48px',
+          backgroundColor: '#f0f8ff',
+          backgroundImage: `${gradientMap[variant]}, linear-gradient(rgba(74,144,226,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,226,0.08) 1px, transparent 1px)`,
+          backgroundSize: '100% 100%, 32px 32px, 32px 32px',
         }}
       />
 
