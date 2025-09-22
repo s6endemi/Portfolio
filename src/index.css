@@ -39,6 +39,10 @@ body {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
+  /* Enable smooth scrolling */
+  scroll-behavior: smooth;
+  /* Improve touch scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Terminal & Boot Animations */
@@ -95,21 +99,67 @@ body {
 }
 
 /* Scrollbar Styling for Terminal */
+.terminal-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Improve scroll performance */
+  will-change: scroll-position;
+  /* Enable momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Better scroll snap for mobile */
+  overscroll-behavior: contain;
+}
+
 .terminal-scroll::-webkit-scrollbar {
   width: 8px;
 }
 
 .terminal-scroll::-webkit-scrollbar-track {
   background: #1a1a1a;
+  border-radius: 4px;
 }
 
 .terminal-scroll::-webkit-scrollbar-thumb {
   background: #00ff41;
   border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.5);
 }
 
 .terminal-scroll::-webkit-scrollbar-thumb:hover {
   background: #00cc33;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+}
+
+/* Mobile scrollbar (thinner) */
+@media (max-width: 768px) {
+  .terminal-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .terminal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 65, 0.8);
+  }
+
+  /* Improve touch targets on mobile */
+  .scroll-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+}
+
+/* Smooth scroll animations */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Touch manipulation improvements */
+.touch-optimized {
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body,

@@ -18,12 +18,28 @@ const InteractiveTerminal = () => {
   const [commandHistory, setCommandHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 768)
+  const [showScrollButtons, setShowScrollButtons] = useState(false)
+  const [canScrollUp, setCanScrollUp] = useState(false)
+  const [canScrollDown, setCanScrollDown] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
 
+  // Track screen size for dynamic font sizing
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   // Boot sequence
   useEffect(() => {
-    const bootSequence = [
+    const isMobile = window.innerWidth < 768
+
+    const desktopBootSequence = [
       { text: '████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     ', delay: 100 },
       { text: '╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     ', delay: 150 },
       { text: '   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     ', delay: 200 },
@@ -44,6 +60,30 @@ const InteractiveTerminal = () => {
       { text: '🎮 Type "games" to unlock mini arcade', delay: 2600 },
       { text: '', delay: 2800 },
     ]
+
+    const mobileBootSequence = [
+      { text: '██████╗ ██╗██╗  ██╗███████╗██╗', delay: 100 },
+      { text: '██╔══██╗██║╚██╗██╔╝██╔════╝██║', delay: 200 },
+      { text: '██████╔╝██║ ╚███╔╝ █████╗  ██║', delay: 300 },
+      { text: '██╔═══╝ ██║ ██╔██╗ ██╔══╝  ██║', delay: 400 },
+      { text: '██║     ██║██╔╝ ██╗███████╗███████╗', delay: 500 },
+      { text: '╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝', delay: 600 },
+      { text: '', delay: 700 },
+      { text: '🎮 PORTFOLIO TERMINAL v2.1', delay: 800 },
+      { text: '📡 Connecting...', delay: 1000 },
+      { text: '✅ Connected!', delay: 1200 },
+      { text: '🧠 Loading AI...', delay: 1400 },
+      { text: '✅ AI Ready: [DEVELOPER]', delay: 1600 },
+      { text: '🎯 Starting shell...', delay: 1800 },
+      { text: '✅ Ready!', delay: 2000 },
+      { text: '', delay: 2200 },
+      { text: '💡 Type "help" for commands', delay: 2400 },
+      { text: '🎵 Type "music" for vibes', delay: 2600 },
+      { text: '🎮 Type "games" for arcade', delay: 2800 },
+      { text: '', delay: 3000 },
+    ]
+
+    const bootSequence = isMobile ? mobileBootSequence : desktopBootSequence
 
     let timeoutIds: number[] = []
 
@@ -78,12 +118,71 @@ const InteractiveTerminal = () => {
     setLines([])
   }
 
+  // Check if scrolling is needed and update scroll buttons
+  const checkScrollable = () => {
+    if (terminalRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = terminalRef.current
+      const isScrollable = scrollHeight > clientHeight
+      const isAtTop = scrollTop <= 10
+      const isAtBottom = scrollTop >= scrollHeight - clientHeight - 10
+
+      setShowScrollButtons(isScrollable && screenWidth < 768) // Only show on mobile when scrollable
+      setCanScrollUp(isScrollable && !isAtTop)
+      setCanScrollDown(isScrollable && !isAtBottom)
+    }
+  }
+
   // Auto-scroll to bottom and auto-focus after boot
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+      checkScrollable()
     }
   }, [lines])
+
+  // Check scrollable state on screen resize
+  useEffect(() => {
+    checkScrollable()
+  }, [screenWidth])
+
+  // Smooth scroll functions
+  const scrollToTop = () => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const scrollToBottom = () => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: terminalRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const scrollUp = () => {
+    if (terminalRef.current) {
+      const scrollAmount = terminalRef.current.clientHeight * 0.7
+      terminalRef.current.scrollBy({
+        top: -scrollAmount,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const scrollDown = () => {
+    if (terminalRef.current) {
+      const scrollAmount = terminalRef.current.clientHeight * 0.7
+      terminalRef.current.scrollBy({
+        top: scrollAmount,
+        behavior: 'smooth'
+      })
+    }
+  }
 
   // Auto-focus input after boot with preventDefault to avoid scrolling
   useEffect(() => {
@@ -173,21 +272,27 @@ const InteractiveTerminal = () => {
     setIsProcessing(false)
   }
 
-  // Handle input
+  // Handle input and keyboard shortcuts
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       processCommand(currentInput)
       setCurrentInput('')
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      if (commandHistory.length > 0) {
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl/Cmd + Arrow Up = scroll up
+        scrollUp()
+      } else if (commandHistory.length > 0) {
         const newIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1)
         setHistoryIndex(newIndex)
         setCurrentInput(commandHistory[newIndex])
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
-      if (historyIndex !== -1) {
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl/Cmd + Arrow Down = scroll down
+        scrollDown()
+      } else if (historyIndex !== -1) {
         const newIndex = historyIndex + 1
         if (newIndex >= commandHistory.length) {
           setHistoryIndex(-1)
@@ -197,17 +302,29 @@ const InteractiveTerminal = () => {
           setCurrentInput(commandHistory[newIndex])
         }
       }
+    } else if (e.key === 'Home' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      scrollToTop()
+    } else if (e.key === 'End' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      scrollToBottom()
+    } else if (e.key === 'PageUp') {
+      e.preventDefault()
+      scrollUp()
+    } else if (e.key === 'PageDown') {
+      e.preventDefault()
+      scrollDown()
     }
   }
 
   return (
-    <div className="flex flex-col h-full relative bg-black" style={{ height: '100%', maxHeight: '100%' }}>
+    <div className="flex flex-col h-full relative bg-black touch-manipulation" style={{ height: '100%', maxHeight: '100%' }}>
 
       {/* Terminal Content - Flexible Layout */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div
           ref={terminalRef}
-          className="flex-1 p-6 font-mono text-base overflow-y-auto terminal-scroll"
+          className="flex-1 p-3 sm:p-6 font-mono text-sm sm:text-base overflow-y-auto terminal-scroll touch-optimized"
           style={{
             backgroundColor: '#0d1117',
             color: '#ffffff',
@@ -220,6 +337,8 @@ const InteractiveTerminal = () => {
             maxHeight: '100%'
           }}
           onClick={() => inputRef.current?.focus({ preventScroll: true })}
+          onTouchStart={() => inputRef.current?.focus({ preventScroll: true })}
+          onScroll={checkScrollable}
         >
         <AnimatePresence>
           {lines.map((line, index) => (
@@ -240,7 +359,7 @@ const InteractiveTerminal = () => {
               }`}
               style={{
                 fontFamily: 'Courier New, monospace',
-                fontSize: '14px',
+                fontSize: screenWidth < 768 ? '12px' : '14px',
                 lineHeight: '1.6',
                 textShadow:
                   line.type === 'system' ? '0 0 6px currentColor, 0 0 12px currentColor' :
@@ -250,7 +369,7 @@ const InteractiveTerminal = () => {
                   line.type === 'games' ? '0 0 6px #f472b6, 0 0 12px #f472b6' :
                   line.type === 'matrix' ? '0 0 6px #22c55e, 0 0 12px #22c55e' :
                   '0 0 4px #bbf7d0, 0 0 8px #bbf7d0',
-                letterSpacing: '0.5px'
+                letterSpacing: screenWidth < 768 ? '0.3px' : '0.5px'
               }}
             >
               {line.isTyping ? (
@@ -264,29 +383,99 @@ const InteractiveTerminal = () => {
 
           {/* Boot Progress */}
           {isBooting && (
-            <div className="mt-6 p-4">
-              <div className="flex items-center gap-3 text-cyan-400">
-                <span className="animate-spin text-lg">⚡</span>
-                <span style={{ textShadow: '0 0 8px #22d3ee' }}>Booting terminal...</span>
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3 text-cyan-400">
+                <span className="animate-spin text-base sm:text-lg">⚡</span>
+                <span
+                  className="text-sm sm:text-base"
+                  style={{ textShadow: '0 0 8px #22d3ee' }}
+                >
+                  Booting terminal...
+                </span>
               </div>
             </div>
           )}
         </div>
 
-      {/* Input Area - Compact */}
+      {/* Mobile Scroll Controls */}
+      {showScrollButtons && (
+        <div className="flex justify-center items-center gap-2 py-2 px-4 bg-black/80 border-t border-green-700/30">
+          <button
+            onClick={scrollToTop}
+            disabled={!canScrollUp}
+            className={`px-3 py-2 text-xs font-mono rounded border transition-all duration-200 scroll-button ${
+              canScrollUp
+                ? 'bg-green-900/40 border-green-600 text-green-300 hover:bg-green-800/60 hover:text-green-100'
+                : 'bg-gray-800/40 border-gray-600 text-gray-500 cursor-not-allowed'
+            }`}
+            style={{
+              textShadow: canScrollUp ? '0 0 4px currentColor' : 'none'
+            }}
+          >
+            ⇈ TOP
+          </button>
+
+          <button
+            onClick={scrollUp}
+            disabled={!canScrollUp}
+            className={`px-3 py-2 text-xs font-mono rounded border transition-all duration-200 scroll-button ${
+              canScrollUp
+                ? 'bg-green-900/40 border-green-600 text-green-300 hover:bg-green-800/60 hover:text-green-100'
+                : 'bg-gray-800/40 border-gray-600 text-gray-500 cursor-not-allowed'
+            }`}
+            style={{
+              textShadow: canScrollUp ? '0 0 4px currentColor' : 'none'
+            }}
+          >
+            ↑ UP
+          </button>
+
+          <button
+            onClick={scrollDown}
+            disabled={!canScrollDown}
+            className={`px-3 py-2 text-xs font-mono rounded border transition-all duration-200 scroll-button ${
+              canScrollDown
+                ? 'bg-green-900/40 border-green-600 text-green-300 hover:bg-green-800/60 hover:text-green-100'
+                : 'bg-gray-800/40 border-gray-600 text-gray-500 cursor-not-allowed'
+            }`}
+            style={{
+              textShadow: canScrollDown ? '0 0 4px currentColor' : 'none'
+            }}
+          >
+            ↓ DOWN
+          </button>
+
+          <button
+            onClick={scrollToBottom}
+            disabled={!canScrollDown}
+            className={`px-3 py-2 text-xs font-mono rounded border transition-all duration-200 scroll-button ${
+              canScrollDown
+                ? 'bg-green-900/40 border-green-600 text-green-300 hover:bg-green-800/60 hover:text-green-100'
+                : 'bg-gray-800/40 border-gray-600 text-gray-500 cursor-not-allowed'
+            }`}
+            style={{
+              textShadow: canScrollDown ? '0 0 4px currentColor' : 'none'
+            }}
+          >
+            ⇊ BOTTOM
+          </button>
+        </div>
+      )}
+
+      {/* Input Area - Mobile Responsive */}
       <div
-        className="border-t-2 p-3 bg-black/95 shrink-0"
+        className="border-t-2 p-2 sm:p-3 bg-black/95 shrink-0"
         style={{
           borderTopColor: '#00ff41',
-          minHeight: '70px'
+          minHeight: screenWidth < 768 ? '60px' : '70px'
         }}
       >
-        <div className="flex items-center p-3 rounded-lg border border-green-700/40 bg-black/50 backdrop-blur-sm">
+        <div className="flex items-center p-2 sm:p-3 rounded-lg border border-green-700/40 bg-black/50 backdrop-blur-sm">
             <span
-              className="text-cyan-300 mr-3 font-bold whitespace-nowrap"
+              className="text-cyan-300 mr-2 sm:mr-3 font-bold whitespace-nowrap text-xs sm:text-base"
               style={{
                 textShadow: '0 0 6px #22d3ee, 0 0 12px #22d3ee',
-                fontSize: '16px'
+                fontSize: screenWidth < 768 ? '12px' : '16px'
               }}
             >
               eren@portfolio:~$
@@ -299,24 +488,24 @@ const InteractiveTerminal = () => {
               onKeyDown={handleKeyDown}
               onFocus={(e) => e.preventDefault()}
               disabled={isProcessing || isBooting}
-              className="flex-1 bg-transparent border-none outline-none font-mono"
+              className="flex-1 bg-transparent border-none outline-none font-mono touch-manipulation"
               style={{
-                fontSize: '16px',
+                fontSize: screenWidth < 768 ? '14px' : '16px',
                 fontFamily: 'Courier New, monospace',
-                letterSpacing: '0.5px',
+                letterSpacing: screenWidth < 768 ? '0.3px' : '0.5px',
                 color: '#e6fffa',
                 textShadow: '0 0 6px #86efac, 0 0 12px #86efac'
               }}
               placeholder={
                 isBooting ? "🚀 Booting..." :
                 isProcessing ? "⚡ Processing..." :
-                "Type command + Enter..."
+                screenWidth < 768 ? "Type command..." : "Type command + Enter..."
               }
             />
             <span
-              className="animate-pulse ml-2"
+              className="animate-pulse ml-1 sm:ml-2"
               style={{
-                fontSize: '18px',
+                fontSize: screenWidth < 768 ? '14px' : '18px',
                 color: '#e6fffa',
                 textShadow: '0 0 10px #86efac, 0 0 20px #86efac'
               }}
