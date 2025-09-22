@@ -1,7 +1,7 @@
-import type { KeyboardEvent, MouseEvent } from 'react'
+import type { KeyboardEvent, MouseEvent, TouchEvent } from 'react'
 import { motion, useAnimationControls } from 'framer-motion'
 import type { Variants } from 'framer-motion'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export type DesktopIconProps = {
   icon?: string
@@ -21,6 +21,8 @@ const DesktopIcon = ({
   onSelect,
 }: DesktopIconProps) => {
   const controls = useAnimationControls()
+  const [tapCount, setTapCount] = useState(0)
+  const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const triggerLaunch = useCallback(() => {
     controls.stop()
@@ -51,6 +53,46 @@ const DesktopIcon = ({
     }
   }
 
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    // Clear any existing timeout
+    if (tapTimeoutRef.current) {
+      clearTimeout(tapTimeoutRef.current)
+    }
+
+    const newTapCount = tapCount + 1
+    setTapCount(newTapCount)
+
+    if (newTapCount === 1) {
+      // First tap - select the icon
+      onSelect?.()
+
+      // Set timeout to reset tap count if no second tap
+      tapTimeoutRef.current = setTimeout(() => {
+        setTapCount(0)
+      }, 300)
+    } else if (newTapCount === 2) {
+      // Double tap - activate the icon
+      setTapCount(0)
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current)
+      }
+      triggerLaunch()
+      onActivate?.()
+    }
+  }
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const iconVariants: Variants = {
     idle: {
       scale: 1,
@@ -77,14 +119,15 @@ const DesktopIcon = ({
       role="button"
       tabIndex={0}
       data-role="desktop-icon"
-      className="w-24 flex flex-col items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-pixel-primary cursor-pointer group"
+      className="w-20 sm:w-24 flex flex-col items-center gap-2 sm:gap-3 outline-none focus-visible:ring-2 focus-visible:ring-pixel-primary cursor-pointer group touch-manipulation"
       onDoubleClick={handleDoubleClick}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      onTouchStart={handleTouchStart}
     >
       {/* 3D Pixel Icon with Pulse Animation */}
       <motion.div
-        className="relative flex h-20 w-20 items-center justify-center text-4xl border-t-4 border-l-4 border-r-4 border-b-4"
+        className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center text-3xl sm:text-4xl border-t-4 border-l-4 border-r-4 border-b-4"
         style={{
           backgroundColor: isActive ? '#7ba7bc' : '#e8dcc0',
           borderTopColor: isActive ? '#d4a574' : '#f4f1e8',

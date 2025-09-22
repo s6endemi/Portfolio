@@ -393,19 +393,90 @@ type DesktopShortcut = {
   label: string
   icon: string
   description: string
+  position: { x: number; y: number }
 }
 
-const DESKTOP_SHORTCUTS: (DesktopShortcut & { position: { x: number; y: number } })[] = [
-  // Left side - Clean vertical stack with consistent spacing
-  { id: 'about', label: 'About Me', icon: '👤', description: 'Meet the pixel hero', position: { x: 80, y: 120 } },
-  { id: 'projects', label: 'Projects', icon: '💼', description: 'Interactive builds & case studies', position: { x: 80, y: 240 } },
-  { id: 'terminal', label: 'Terminal', icon: '💻', description: 'Hack the portfolio', position: { x: 80, y: 360 } },
-  { id: 'resume', label: 'Resume', icon: '📄', description: 'Experience & skills hologram', position: { x: 80, y: 480 } },
-  
-  // Right side - Clean vertical stack  
-  { id: 'contact', label: 'Contact', icon: '📧', description: 'Transmission channels', position: { x: 1200, y: 120 } },
-  { id: 'games', label: 'Games', icon: '🎮', description: 'Easter eggs & arcade fun', position: { x: 1200, y: 240 } },
+const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
+  {
+    id: 'about',
+    label: 'ABOUT ME',
+    icon: '👤',
+    description: 'Personal info and background',
+    position: { x: 80, y: 120 }
+  },
+  {
+    id: 'projects',
+    label: 'PROJECTS',
+    icon: '💼',
+    description: 'Portfolio and work samples',
+    position: { x: 80, y: 240 }
+  },
+  {
+    id: 'terminal',
+    label: 'TERMINAL',
+    icon: '💻',
+    description: 'Interactive command line',
+    position: { x: 80, y: 360 }
+  },
+  {
+    id: 'resume',
+    label: 'RESUME',
+    icon: '📄',
+    description: 'Professional experience',
+    position: { x: 1200, y: 120 }
+  },
+  {
+    id: 'contact',
+    label: 'CONTACT',
+    icon: '📧',
+    description: 'Get in touch',
+    position: { x: 1200, y: 240 }
+  },
+  {
+    id: 'games',
+    label: 'GAMES',
+    icon: '🎮',
+    description: 'Retro arcade games',
+    position: { x: 1200, y: 360 }
+  }
 ]
+
+// Responsive icon positioning function
+const getResponsiveIconPosition = (shortcut: DesktopShortcut, screenWidth: number, allShortcuts: DesktopShortcut[]) => {
+  const isMobile = screenWidth < 768
+  const isTablet = screenWidth < 1024
+  const isRightSide = shortcut.position.x > 600 // Original right-side icons
+
+  if (isMobile) {
+    // Mobile: Single column centered
+    const leftSideIcons = allShortcuts.filter(s => s.position.x <= 600)
+    const rightSideIcons = allShortcuts.filter(s => s.position.x > 600)
+    const allIcons = [...leftSideIcons, ...rightSideIcons]
+    const index = allIcons.findIndex(s => s.id === shortcut.id)
+
+    return {
+      x: Math.max(20, (screenWidth - 80) / 2), // Adjusted for smaller mobile icons
+      y: 60 + (index * 100) // Reduced spacing for mobile
+    }
+  } else if (isTablet) {
+    // Tablet: Two columns, closer to edges
+    const sideIcons = isRightSide
+      ? allShortcuts.filter(s => s.position.x > 600)
+      : allShortcuts.filter(s => s.position.x <= 600)
+    const index = sideIcons.findIndex(s => s.id === shortcut.id)
+
+    return {
+      x: isRightSide ? Math.max(screenWidth - 150, screenWidth - 200) : 40,
+      y: 80 + (index * 120)
+    }
+  } else {
+    // Desktop: Original positions, but make sure they fit on screen
+    return {
+      x: Math.min(shortcut.position.x, screenWidth - 120),
+      y: shortcut.position.y
+    }
+  }
+}
 
 const START_MENU_ITEMS = DESKTOP_SHORTCUTS.map(({ id, label, icon, description }) => ({
   id,
@@ -436,6 +507,18 @@ const Desktop = () => {
     about: WINDOW_CONFIG.about.position,
   }))
   const [openWindows, setOpenWindows] = useState<WindowId[]>(['about'])
+  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 })
+
+  // Handle responsive screen size changes
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setScreenSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
+    return () => window.removeEventListener('resize', updateScreenSize)
+  }, [])
 
   const handleStartToggle = () => {
     setIsStartOpen((previous) => !previous)
@@ -570,40 +653,45 @@ const Desktop = () => {
 
   return (
     <div
-      className="relative h-screen w-screen overflow-hidden font-pixel"
+      className="relative h-screen w-screen overflow-hidden font-pixel touch-manipulation"
       style={{
         backgroundColor: '#faf7f0',
         color: '#5d4e37',
         backgroundImage: 'url(/wallpapers/cozy-pixel.svg)',
-        backgroundSize: '400px 300px',
+        backgroundSize: 'clamp(200px, 50vw, 400px) clamp(150px, 37.5vw, 300px)',
         backgroundRepeat: 'repeat'
       }}
       onMouseDown={handleDesktopMouseDown}
+      onTouchStart={handleDesktopMouseDown}
     >
       <Wallpaper />
 
       <div className="relative z-10 flex h-full flex-col">
          <div className="relative flex-1">
            <div className="absolute inset-0">
-             {/* Desktop Icons - Absolute positioned */}
-             {DESKTOP_SHORTCUTS.map((shortcut) => (
-               <div
-                 key={shortcut.id}
-                 className="absolute"
-                 style={{ 
-                   left: `${shortcut.position.x}px`, 
-                   top: `${shortcut.position.y}px` 
-                 }}
-               >
-                  <DesktopIcon
-                    icon={shortcut.icon}
-                    label={shortcut.label}
-                    isActive={selectedShortcut === shortcut.id}
-                    onSelect={() => handleShortcutSelect(shortcut.id)}
-                    onActivate={() => handleShortcutActivate(shortcut)}
-                  />
-               </div>
-             ))}
+             {/* Desktop Icons - Responsive positioned */}
+             {DESKTOP_SHORTCUTS.map((shortcut) => {
+               const responsivePosition = getResponsiveIconPosition(shortcut, screenSize.width, DESKTOP_SHORTCUTS)
+
+               return (
+                 <div
+                   key={shortcut.id}
+                   className="absolute transition-all duration-300 ease-out"
+                   style={{
+                     left: `${responsivePosition.x}px`,
+                     top: `${responsivePosition.y}px`
+                   }}
+                 >
+                   <DesktopIcon
+                     icon={shortcut.icon}
+                     label={shortcut.label}
+                     isActive={selectedShortcut === shortcut.id}
+                     onSelect={() => handleShortcutSelect(shortcut.id)}
+                     onActivate={() => handleShortcutActivate(shortcut)}
+                   />
+                 </div>
+               )
+             })}
 
             <AnimatePresence>
               {openWindows.map((id) => {

@@ -3,6 +3,22 @@ import { motion, useDragControls } from 'framer-motion'
 import type { PropsWithChildren } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
+const useScreenSize = () => {
+  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setScreenSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
+    return () => window.removeEventListener('resize', updateScreenSize)
+  }, [])
+
+  return screenSize
+}
+
 type DesktopWindowProps = PropsWithChildren<{
   title: string
   icon?: string
@@ -27,6 +43,41 @@ const DesktopWindow = ({
 }: DesktopWindowProps) => {
   const dragControls = useDragControls()
   const [showParticles, setShowParticles] = useState(false)
+  const screenSize = useScreenSize()
+
+  const getResponsiveWindowProps = () => {
+    const isMobile = screenSize.width < 768
+    const isTablet = screenSize.width < 1024
+    const isTerminal = title === 'TERMINAL.EXE'
+
+    if (isMobile) {
+      return {
+        width: Math.min(screenSize.width - 20, 520),
+        height: isTerminal ? Math.min(screenSize.height - 100, 500) : 'auto',
+        position: {
+          x: Math.max(10, (screenSize.width - Math.min(screenSize.width - 20, 520)) / 2),
+          y: 60
+        }
+      }
+    } else if (isTablet) {
+      return {
+        width: isTerminal ? Math.min(screenSize.width - 80, 700) : 520,
+        height: isTerminal ? Math.min(screenSize.height - 120, 550) : 'auto',
+        position: {
+          x: Math.max(40, Math.min(position.x, screenSize.width - (isTerminal ? 700 : 520) - 40)),
+          y: Math.max(60, Math.min(position.y, screenSize.height - 200))
+        }
+      }
+    } else {
+      return {
+        width: isTerminal ? 900 : 520,
+        height: isTerminal ? 650 : 'auto',
+        position
+      }
+    }
+  }
+
+  const responsiveProps = getResponsiveWindowProps()
 
   useEffect(() => {
     if (!origin) {
@@ -55,15 +106,15 @@ const DesktopWindow = ({
 
   const enterKeyframes = useMemo(
     () => ({
-      x: position.x,
-      y: position.y,
+      x: responsiveProps.position.x,
+      y: responsiveProps.position.y,
       scale: 1,
       opacity: 1,
       rotate: 0,
       skewX: 0,
       borderRadius: '12px',
     }),
-    [position.x, position.y]
+    [responsiveProps.position.x, responsiveProps.position.y]
   )
 
   const particleOffsets = useMemo(
@@ -84,8 +135,11 @@ const DesktopWindow = ({
       return { x, y }
     }
 
-    const maxX = Math.max(16, window.innerWidth - 436)
-    const maxY = Math.max(48, window.innerHeight - 156)
+    const windowWidth = responsiveProps.width
+    const isMobile = screenSize.width < 768
+
+    const maxX = Math.max(16, window.innerWidth - windowWidth - 20)
+    const maxY = Math.max(48, window.innerHeight - (isMobile ? 200 : 156))
 
     return {
       x: Math.min(Math.max(16, x), maxX),
@@ -114,13 +168,13 @@ const DesktopWindow = ({
       )}
 
       <motion.div
-        className={clsx(
-          'absolute overflow-hidden rounded-lg border-4 shadow-[6px_6px_0_0_rgba(139,111,71,0.35)]',
-          title === 'TERMINAL.EXE' ? 'w-[900px] h-[650px]' : 'w-[520px] min-h-[420px]'
-        )}
+        className="absolute overflow-hidden rounded-lg border-4 shadow-[6px_6px_0_0_rgba(139,111,71,0.35)]"
         style={{
           backgroundColor: '#fffdfa',
           borderColor: '#d0c4b0',
+          width: `${responsiveProps.width}px`,
+          height: responsiveProps.height === 'auto' ? 'auto' : `${responsiveProps.height}px`,
+          minHeight: responsiveProps.height === 'auto' ? '420px' : undefined,
         }}
         initial={initial}
         animate={enterKeyframes}
