@@ -41,6 +41,13 @@ body {
   height: 100vh;
 }
 
+body,
+button,
+a,
+[data-role="desktop-icon"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path fill="%235d4e37" d="M0 0h3v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h-1v-1h-1v-1h-1v-1h-1v-1H7V6H6V5H5V4H4V3H3V2H0z"/><path fill="%23faf7f0" d="M1 1h2v1h1v1h1v1h1v1h1v1h1v1h-1V7H7V6H6V5H5V4H4V3H3V2H1z"/></svg>') 1 1, auto;
+}
+
 @keyframes scanlines {
   0% {
     background-position: 0 0;

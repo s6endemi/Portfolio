@@ -1,4 +1,7 @@
 import type { KeyboardEvent, MouseEvent } from 'react'
+import { motion, useAnimationControls } from 'framer-motion'
+import type { Variants } from 'framer-motion'
+import { useCallback } from 'react'
 
 export type DesktopIconProps = {
   icon?: string
@@ -17,9 +20,20 @@ const DesktopIcon = ({
   onActivate,
   onSelect,
 }: DesktopIconProps) => {
+  const controls = useAnimationControls()
+
+  const triggerLaunch = useCallback(() => {
+    controls.stop()
+    controls
+      .start('launch')
+      .then(() => controls.start('idle'))
+      .catch(() => controls.start('idle'))
+  }, [controls])
+
   const handleDoubleClick = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
+    triggerLaunch()
     onActivate?.()
   }
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -32,22 +46,45 @@ const DesktopIcon = ({
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       event.stopPropagation()
+      triggerLaunch()
       onActivate?.()
     }
+  }
+
+  const iconVariants: Variants = {
+    idle: {
+      scale: 1,
+      rotate: 0,
+      boxShadow: '4px 4px 0 0 rgba(139,111,71,0.4)',
+    },
+    hover: {
+      scale: 1.05,
+      transition: { type: 'spring' as const, stiffness: 360, damping: 20 },
+    },
+    launch: {
+      scale: [1, 1.18, 0.94, 1.04, 1],
+      rotate: [0, -6, 4, -1, 0],
+      transition: {
+        duration: 0.45,
+        ease: [0.17, 0.84, 0.44, 1],
+        times: [0, 0.3, 0.55, 0.75, 1],
+      },
+    },
   }
 
   return (
     <div
       role="button"
       tabIndex={0}
+      data-role="desktop-icon"
       className="w-24 flex flex-col items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-pixel-primary cursor-pointer group"
       onDoubleClick={handleDoubleClick}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      {/* 3D Pixel Icon */}
-      <div
-        className="relative flex h-20 w-20 items-center justify-center text-4xl transition-all duration-200 group-hover:scale-105 border-t-4 border-l-4 border-r-4 border-b-4"
+      {/* 3D Pixel Icon with Pulse Animation */}
+      <motion.div
+        className="relative flex h-20 w-20 items-center justify-center text-4xl border-t-4 border-l-4 border-r-4 border-b-4"
         style={{
           backgroundColor: isActive ? '#7ba7bc' : '#e8dcc0',
           borderTopColor: isActive ? '#d4a574' : '#f4f1e8',
@@ -56,6 +93,10 @@ const DesktopIcon = ({
           borderBottomColor: '#8b6f47',
           boxShadow: '4px 4px 0 0 rgba(139,111,71,0.4)'
         }}
+        variants={iconVariants}
+        initial="idle"
+        animate={controls}
+        whileHover="hover"
       >
         {/* Inner 3D highlight */}
         <div className="absolute inset-1 border-t border-l border-pixel-light opacity-50" />
@@ -67,7 +108,7 @@ const DesktopIcon = ({
             {icon ?? '📁'}
           </span>
         )}
-      </div>
+      </motion.div>
       
       {/* Icon Label */}
       <span

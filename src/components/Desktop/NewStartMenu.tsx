@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface MenuItem {
   id: string
   label: string
   icon: string
+  description?: string
   onClick: () => void
 }
 
@@ -13,97 +14,115 @@ interface NewStartMenuProps {
   menuItems: MenuItem[]
 }
 
+const panelTransition = { duration: 0.18, ease: [0.16, 1, 0.3, 1] as const }
+const backdropTransition = { duration: 0.18 }
+
 const NewStartMenu = ({ isOpen, onClose, menuItems }: NewStartMenuProps) => {
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsVisible(true)
-      setIsAnimating(true)
-    } else {
-      setIsAnimating(false)
-      // Delay hiding to allow close animation
-      setTimeout(() => setIsVisible(false), 300)
-    }
-  }, [isOpen])
-
-  if (!isVisible) return null
-
   return (
-    <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 z-40"
-        onClick={onClose}
-        style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}
-      />
-      
-      {/* Start Menu */}
-      <div
-        className={`absolute bottom-16 left-4 z-50 w-80 border-4 rounded-lg overflow-hidden transition-all duration-300 ${
-          isAnimating 
-            ? 'opacity-100 scale-100 translate-y-0' 
-            : 'opacity-0 scale-95 translate-y-2'
-        }`}
-        style={{
-          backgroundColor: '#f4f1e8',
-          borderColor: '#8b6f47',
-          boxShadow: '8px 8px 0 0 rgba(139,111,71,0.6)'
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Menu Header */}
-        <div 
-          className="px-4 py-3 border-b-4 font-pixel text-sm"
-          style={{
-            backgroundColor: '#7ba7bc',
-            borderBottomColor: '#8b6f47',
-            color: '#ffffff'
-          }}
-        >
-          🏠 DESKTOP MENU
-        </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            key="start-menu-backdrop"
+            className="fixed inset-0 z-40"
+            data-role="start-menu-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.2 }}
+            exit={{ opacity: 0 }}
+            transition={backdropTransition}
+            onClick={onClose}
+            style={{ backgroundColor: '#2a1d14' }}
+          />
 
-        {/* Menu Items */}
-        <div className="p-2">
-          {menuItems.map((item, index) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                item.onClick()
-                onClose()
-              }}
-              className={`w-full flex items-center gap-4 p-3 rounded transition-all duration-200 hover:scale-105 font-pixel-content text-sm ${
-                index % 2 === 0 ? 'hover:bg-blue-50' : 'hover:bg-green-50'
-              }`}
+          <motion.div
+            key="start-menu"
+            data-role="start-menu"
+            className="absolute left-4 bottom-[4.5rem] z-50 w-80 overflow-hidden rounded-lg border-4 shadow-[8px_8px_0_0_rgba(139,111,71,0.6)]"
+            initial={{ opacity: 0, y: 16, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.97 }}
+            transition={panelTransition}
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              backgroundColor: '#f4f1e8',
+              borderColor: '#8b6f47',
+            }}
+          >
+            <div
+              className="flex items-center justify-between border-b-4 px-5 py-4 font-pixel text-sm"
               style={{
-                color: '#5d4e37',
-                animationDelay: `${index * 50}ms`
+                background: 'linear-gradient(135deg, #7ba7bc 0%, #a8b5a0 100%)',
+                borderBottomColor: '#8b6f47',
+                color: '#ffffff',
               }}
             >
-              <span className="text-2xl">{item.icon}</span>
-              <div className="text-left">
-                <div className="font-semibold">{item.label}</div>
-                <div className="text-xs opacity-75">Click to open</div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🏠</span>
+                <span className="tracking-[0.2em] font-bold">START</span>
               </div>
-            </button>
-          ))}
-        </div>
+              <span className="text-xs opacity-75 font-pixel-content">v1.0</span>
+            </div>
 
-        {/* Menu Footer */}
-        <div 
-          className="px-4 py-2 border-t-4 font-pixel-content text-xs text-center"
-          style={{
-            backgroundColor: '#e8dcc0',
-            borderTopColor: '#8b6f47',
-            color: '#5d4e37'
-          }}
-        >
-          Pixel Portfolio v1.0
-        </div>
-      </div>
-    </>
+            <div className="flex flex-col gap-1 p-4">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    item.onClick()
+                    onClose()
+                  }}
+                  className="group flex w-full items-center gap-4 rounded-md border-2 border-transparent px-4 py-4 text-left transition-all duration-200 hover:-translate-y-[1px] hover:border-[#7ba7bc] hover:shadow-md"
+                  style={{ color: '#5d4e37' }}
+                >
+                  <div 
+                    className="flex items-center justify-center w-12 h-12 rounded-lg border-2 transition-all group-hover:scale-110"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderColor: '#d0c4b0',
+                      boxShadow: '2px 2px 0 0 rgba(139,111,71,0.3)'
+                    }}
+                  >
+                    <span className="text-xl" aria-hidden>
+                      {item.icon}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-2 flex-1">
+                    <span className="font-pixel-content text-base font-bold tracking-wide group-hover:text-[#7ba7bc] leading-tight">
+                      {item.label}
+                    </span>
+                    <span
+                      className="font-pixel-content text-sm leading-relaxed"
+                      style={{ color: '#8a7968' }}
+                    >
+                      {item.description ?? 'Open window'}
+                    </span>
+                  </div>
+                  <div className="text-xs opacity-50">
+                    →
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div
+              className="border-t-4 px-5 py-3 text-center font-pixel-content text-xs flex items-center justify-between"
+              style={{
+                backgroundColor: '#e8dcc0',
+                borderTopColor: '#8b6f47',
+                color: '#5d4e37',
+              }}
+            >
+              <span className="flex items-center gap-1">
+                <span>🎮</span>
+                <span>Pixel Portfolio</span>
+              </span>
+              <span className="opacity-75">v1.0</span>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 

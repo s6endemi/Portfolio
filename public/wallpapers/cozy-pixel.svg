@@ -1,48 +1,122 @@
-<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" shape-rendering="crispEdges">
   <defs>
-    <!-- Cozy Color Palette -->
-    <pattern id="pixelGrid" width="16" height="16" patternUnits="userSpaceOnUse">
-      <rect width="16" height="16" fill="#faf7f0"/>
-      <rect width="1" height="16" fill="#e8dcc0" opacity="0.3"/>
-      <rect width="16" height="1" fill="#e8dcc0" opacity="0.3"/>
+    <!-- Soft pixel sky -->
+    <linearGradient id="sky-gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde9cf"/>
+      <stop offset="40%" stop-color="#f8f0df"/>
+      <stop offset="100%" stop-color="#f5f6f0"/>
+    </linearGradient>
+
+    <!-- Cozy vignette -->
+    <radialGradient id="vignette" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="rgba(250,247,240,0.0)"/>
+      <stop offset="70%" stop-color="rgba(250,247,240,0.0)"/>
+      <stop offset="100%" stop-color="rgba(173,139,97,0.28)"/>
+    </radialGradient>
+
+    <!-- Field rows pattern -->
+    <pattern id="field-rows" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#e8dcc0"/>
+      <rect y="4" width="16" height="3" fill="#d1b78f"/>
+      <rect y="8" width="16" height="3" fill="#c29b6d"/>
+      <rect y="12" width="16" height="3" fill="#d1b78f"/>
     </pattern>
-    
-    <!-- Pixel Clouds -->
-    <pattern id="clouds" width="80" height="40" patternUnits="userSpaceOnUse">
-      <rect width="80" height="40" fill="transparent"/>
-      <!-- Cloud 1 -->
-      <rect x="10" y="8" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
-      <rect x="18" y="4" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
-      <rect x="26" y="8" width="8" height="8" fill="#e8dcc0" opacity="0.6"/>
-      <!-- Cloud 2 -->
-      <rect x="50" y="20" width="8" height="8" fill="#d4a574" opacity="0.4"/>
-      <rect x="58" y="16" width="8" height="8" fill="#d4a574" opacity="0.4"/>
+
+    <!-- Water shimmer pattern -->
+    <pattern id="water" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8d4da"/>
+      <rect x="0" y="8" width="12" height="2" fill="#9fbeca" opacity="0.6"/>
+      <rect x="0" y="3" width="12" height="2" fill="#d4e6ea" opacity="0.6"/>
     </pattern>
-    
-    <!-- Pixel Trees -->
-    <pattern id="trees" width="120" height="60" patternUnits="userSpaceOnUse">
-      <rect width="120" height="60" fill="transparent"/>
-      <!-- Tree 1 -->
-      <rect x="20" y="40" width="8" height="16" fill="#8b6f47"/>
-      <rect x="16" y="32" width="16" height="16" fill="#a8b5a0"/>
-      <!-- Tree 2 -->
-      <rect x="80" y="35" width="8" height="20" fill="#8b6f47"/>
-      <rect x="76" y="25" width="16" height="20" fill="#a8b5a0"/>
-    </pattern>
+
+    <!-- Pixel tree -->
+    <g id="tree">
+      <rect x="0" y="12" width="4" height="10" fill="#8b6f47"/>
+      <rect x="-4" y="6" width="12" height="8" fill="#a8b5a0"/>
+      <rect x="-2" y="2" width="8" height="6" fill="#92a892"/>
+    </g>
+
+    <!-- Pixel house -->
+    <g id="house">
+      <rect x="0" y="10" width="18" height="12" fill="#f6ede0" stroke="#8b6f47" stroke-width="1"/>
+      <rect x="6" y="15" width="6" height="7" fill="#d0c4b0"/>
+      <polygon points="0,10 9,2 18,10" fill="#c28c5d"/>
+      <rect x="6" y="4" width="6" height="3" fill="#a86f42"/>
+    </g>
+
+    <!-- Pixel star -->
+    <g id="sparkle">
+      <rect x="2" y="0" width="2" height="6" fill="#ffffff" opacity="0.5"/>
+      <rect x="0" y="2" width="6" height="2" fill="#ffffff" opacity="0.5"/>
+    </g>
   </defs>
-  
-  <!-- Base -->
-  <rect width="100%" height="100%" fill="url(#pixelGrid)"/>
-  
-  <!-- Sky gradient -->
-  <rect width="100%" height="60%" fill="url(#clouds)"/>
-  
-  <!-- Ground with trees -->
-  <rect y="60%" width="100%" height="40%" fill="#d4a574" opacity="0.2"/>
-  <rect y="60%" width="100%" height="40%" fill="url(#trees)"/>
-  
-  <!-- Decorative elements -->
-  <rect x="50" y="20" width="16" height="16" fill="#7ba7bc" opacity="0.6"/>
-  <rect x="300" y="40" width="16" height="16" fill="#b5a7d6" opacity="0.6"/>
-  <rect x="150" y="200" width="24" height="8" fill="#a8b5a0" opacity="0.5"/>
+
+  <!-- Background layers -->
+  <rect width="400" height="300" fill="#faf7f0"/>
+  <rect width="400" height="190" fill="url(#sky-gradient)"/>
+
+  <!-- Sun -->
+  <rect x="60" y="36" width="22" height="22" fill="#ffdf8d" opacity="0.8"/>
+  <rect x="60" y="36" width="22" height="6" fill="#f6cf70" opacity="0.6"/>
+
+  <!-- Distant mountains -->
+  <polygon points="-10,190 70,120 150,190" fill="#d6c0ae"/>
+  <polygon points="120,190 220,110 320,190" fill="#ccb29d"/>
+  <polygon points="260,190 350,130 430,190" fill="#d8c4b3"/>
+
+  <!-- Mid hills -->
+  <rect x="-20" y="170" width="160" height="30" fill="#b7c8b2"/>
+  <rect x="110" y="165" width="200" height="32" fill="#a4bb9e"/>
+  <rect x="260" y="172" width="160" height="30" fill="#b6c9af"/>
+
+  <!-- Lake -->
+  <rect x="232" y="198" width="120" height="34" fill="url(#water)" stroke="#94aeb6" stroke-width="2"/>
+
+  <!-- Foreground path -->
+  <rect x="40" y="210" width="48" height="90" fill="#d4a574" opacity="0.7"/>
+  <rect x="80" y="210" width="16" height="90" fill="#c28c5d" opacity="0.7"/>
+
+  <!-- Farmland strips -->
+  <rect y="200" width="400" height="100" fill="url(#field-rows)"/>
+  <rect y="260" width="400" height="40" fill="#d8c4a9"/>
+
+  <!-- Cozy barn and trees -->
+  <g transform="translate(88 192)">
+    <use xlink:href="#house"/>
+  </g>
+  <g transform="translate(58 204)">
+    <use xlink:href="#tree"/>
+  </g>
+  <g transform="translate(120 206)">
+    <use xlink:href="#tree"/>
+  </g>
+  <g transform="scale(-1,1) translate(-360 0)" opacity="0.8">
+    <g transform="translate(200 210)">
+      <use xlink:href="#tree"/>
+    </g>
+  </g>
+
+  <!-- Gentle clouds -->
+  <g opacity="0.5">
+    <rect x="40" y="60" width="18" height="6" fill="#ffffff"/>
+    <rect x="54" y="54" width="18" height="6" fill="#f1e5d6"/>
+    <rect x="188" y="48" width="20" height="8" fill="#f1e5d6"/>
+    <rect x="206" y="44" width="16" height="6" fill="#e7d5c2"/>
+    <rect x="280" y="62" width="18" height="6" fill="#f1e5d6"/>
+    <rect x="294" y="58" width="20" height="6" fill="#eddcca"/>
+  </g>
+
+  <!-- Fireflies / sparkles -->
+  <g opacity="0.35">
+    <use xlink:href="#sparkle" transform="translate(48 150)"/>
+    <use xlink:href="#sparkle" transform="translate(310 132) scale(0.8)"/>
+    <use xlink:href="#sparkle" transform="translate(210 160)"/>
+    <use xlink:href="#sparkle" transform="translate(150 130) scale(0.9)"/>
+  </g>
+
+  <!-- Soft vignette -->
+  <rect width="400" height="300" fill="url(#vignette)"/>
+
+  <!-- Subtle highlight so icons pop -->
+  <rect x="36" y="64" width="160" height="160" fill="#faf7f0" opacity="0.28"/>
 </svg>
