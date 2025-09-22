@@ -22,7 +22,7 @@ const DesktopIcon = ({
 }: DesktopIconProps) => {
   const controls = useAnimationControls()
   const [tapCount, setTapCount] = useState(0)
-  const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const tapTimeoutRef = useRef<number | null>(null)
 
   const triggerLaunch = useCallback(() => {
     controls.stop()
