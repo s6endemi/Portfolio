@@ -28,6 +28,8 @@ type DesktopWindowProps = PropsWithChildren<{
   onFocus?: () => void
   origin?: { x: number; y: number }
   onDragEnd?: (position: { x: number; y: number }) => void
+  isMaximized?: boolean
+  onToggleMaximize?: () => void
 }>
 
 const DesktopWindow = ({
@@ -39,6 +41,8 @@ const DesktopWindow = ({
   onFocus,
   origin,
   onDragEnd,
+  isMaximized = false,
+  onToggleMaximize,
   children,
 }: DesktopWindowProps) => {
   const dragControls = useDragControls()
@@ -50,31 +54,55 @@ const DesktopWindow = ({
     const isTablet = screenSize.width < 1024
     const isTerminal = title === 'TERMINAL.EXE'
 
-    if (isMobile) {
-      const windowWidth = Math.min(screenSize.width - 20, 520)
-      const windowHeight = isTerminal ? Math.min(screenSize.height - 140, 500) : 'auto'
-
+    // Determine sizes based on maximized state
+    const getMinimizedSize = () => {
+      const maxSize = getMaximizedSize()
       return {
-        width: windowWidth,
-        height: windowHeight,
+        width: isMobile ? Math.min(screenSize.width - 40, 420) : maxSize.width,
+        height: isMobile ? 350 : Math.round(typeof maxSize.height === 'number' ? maxSize.height * 0.7 : 400)
+      }
+    }
+
+    const getMaximizedSize = () => {
+      if (isMobile) {
+        return {
+          width: Math.min(screenSize.width - 20, 520),
+          height: isTerminal ? Math.min(screenSize.height - 140, 500) : Math.min(screenSize.height - 100, 600)
+        }
+      } else if (isTablet) {
+        return {
+          width: isTerminal ? Math.min(screenSize.width - 80, 700) : 520,
+          height: isTerminal ? Math.min(screenSize.height - 120, 550) : Math.min(screenSize.height - 100, 650)
+        }
+      } else {
+        return {
+          width: isTerminal ? 900 : 520,
+          height: isTerminal ? 650 : Math.min(screenSize.height - 100, 750)
+        }
+      }
+    }
+
+    const size = isMaximized ? getMaximizedSize() : getMinimizedSize()
+
+    if (isMobile) {
+      return {
+        ...size,
         position: {
-          x: Math.max(10, (screenSize.width - windowWidth) / 2),
+          x: Math.max(10, (screenSize.width - size.width) / 2),
           y: 20 // Closer to top, accounting for fixed taskbar at bottom
         }
       }
     } else if (isTablet) {
       return {
-        width: isTerminal ? Math.min(screenSize.width - 80, 700) : 520,
-        height: isTerminal ? Math.min(screenSize.height - 120, 550) : 'auto',
+        ...size,
         position: {
-          x: Math.max(40, Math.min(position.x, screenSize.width - (isTerminal ? 700 : 520) - 40)),
+          x: Math.max(40, Math.min(position.x, screenSize.width - size.width - 40)),
           y: Math.max(60, Math.min(position.y, screenSize.height - 200))
         }
       }
     } else {
       return {
-        width: isTerminal ? 900 : 520,
-        height: isTerminal ? 650 : 'auto',
+        ...size,
         position
       }
     }
@@ -178,8 +206,7 @@ const DesktopWindow = ({
           backgroundColor: '#fffdfa',
           borderColor: '#d0c4b0',
           width: `${responsiveProps.width}px`,
-          height: responsiveProps.height === 'auto' ? 'auto' : `${responsiveProps.height}px`,
-          minHeight: responsiveProps.height === 'auto' ? '420px' : undefined,
+          height: `${responsiveProps.height}px`,
         }}
         initial={initial}
         animate={enterKeyframes}
@@ -233,34 +260,57 @@ const DesktopWindow = ({
             {icon && <span aria-hidden>{icon}</span>}
             <span>{title}</span>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs"
-            style={{
-              backgroundColor: '#f4f1e8',
-              borderColor: '#8b6f47',
-              color: '#5d4e37',
-            }}
-            aria-label={`Close ${title}`}
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2">
+            {onToggleMaximize && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onToggleMaximize()
+                }}
+                className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs transition-all duration-200 hover:scale-105"
+                style={{
+                  backgroundColor: '#f4f1e8',
+                  borderColor: '#8b6f47',
+                  color: '#5d4e37',
+                }}
+                aria-label={isMaximized ? `Minimize ${title}` : `Maximize ${title}`}
+                title={isMaximized ? 'Minimize' : 'Maximize'}
+              >
+                {isMaximized ? '⤢' : '⤡'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs transition-all duration-200 hover:scale-105"
+              style={{
+                backgroundColor: '#f4f1e8',
+                borderColor: '#8b6f47',
+                color: '#5d4e37',
+              }}
+              aria-label={`Close ${title}`}
+              title="Close"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
          <div
            className={clsx(
              'scrollbar-thin overflow-y-auto font-pixel-content',
-             title === 'TERMINAL.EXE' 
-               ? 'h-full p-0' 
+             title === 'TERMINAL.EXE'
+               ? 'h-full p-0'
                : 'space-y-6 bg-white/96 p-5 text-sm'
            )}
            style={{
              color: title === 'TERMINAL.EXE' ? '#00ff41' : '#3b2f1d',
              backgroundColor: title === 'TERMINAL.EXE' ? '#000000' : '#ffffff',
-             backgroundImage: title === 'TERMINAL.EXE' 
+             backgroundImage: title === 'TERMINAL.EXE'
                ? 'none'
                : 'linear-gradient(180deg, rgba(248,240,223,0.6) 0%, rgba(255,255,255,0.75) 55%, rgba(249,237,218,0.85) 100%)',
+             height: title === 'TERMINAL.EXE' ? '100%' : 'calc(100% - 60px)',
            }}
          >
           {children}

@@ -30,11 +30,37 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     content: (
       <div className="space-y-6 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
         <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-          <p>
-            Hey there! I’m Eren, a creative technologist who loves turning nostalgic UI dreams into
-            polished, interactive experiences. This desktop is my playground to blend design, motion,
-            and storytelling into something memorable.
-          </p>
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative">
+              <img
+                src="/PixelMe.jpg"
+                alt="Pixel art portrait of Eren"
+                className="block rounded-lg border-2 border-[#d0c4b0] bg-[#faf3e5] shadow-[3px_3px_0_0_rgba(139,111,71,0.3)] object-cover"
+                style={{
+                  imageRendering: 'pixelated',
+                  width: '192px',
+                  height: '192px',
+                  maxWidth: '192px',
+                  maxHeight: '192px',
+                  minWidth: '192px',
+                  minHeight: '192px'
+                }}
+                loading="lazy"
+              />
+              <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full border border-[#16a34a] bg-[#22c55e] shadow-[1px_1px_0_0_rgba(139,111,71,0.4)]"></div>
+            </div>
+            <div className="space-y-3 text-center">
+              <p>
+                Hey there! I'm Eren, an AI engineer and founder who believes code can prevent suffering before it starts.
+                Currently building the future of preventive healthcare through computer vision and multimodal AI.
+              </p>
+              <p className="text-[13px] opacity-90">
+                When I'm not training neural networks, you'll find me improvising on piano, or working from random cafés
+                around the world. From athlete to tech builder - I approach startups like sports: discipline, teamwork,
+                and knowing when to pivot.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-4 rounded-lg border-2 border-[#d0c4b0] bg-[#faf3e5]/85 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.15)] md:grid-cols-2">
@@ -43,9 +69,10 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
               Core Focus
             </h3>
             <ul className="space-y-2 text-[12px] leading-relaxed">
-              <li>• Design-driven React, TypeScript & creative tooling</li>
-              <li>• Framer Motion & audio to add life to interfaces</li>
-              <li>• Gamified UX experiments packed with Easter eggs</li>
+              <li>🔬 Computer Vision & ML for healthcare innovation</li>
+              <li>🧠 Building AI that discovers patterns humans can't see</li>
+              <li>⚡ Turning academic research into real-world impact</li>
+              <li>🌍 Remote-first lifestyle with global perspective</li>
             </ul>
           </div>
           <div className="space-y-2">
@@ -54,16 +81,16 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
             </h3>
             <div className="grid gap-2 text-[12px]">
               <div className="rounded-md border border-[#d0c4b0] bg-white/90 px-3 py-2 shadow-[2px_2px_0_0_rgba(139,111,71,0.18)]">
-                <span className="block text-[10px] uppercase tracking-[0.3em] text-[#9b7a52]">Years Crafting</span>
-                <span className="text-[14px] font-semibold">6+</span>
+                <span className="block text-[10px] uppercase tracking-[0.3em] text-[#9b7a52]">Years in AI</span>
+                <span className="text-[14px] font-semibold">4+</span>
               </div>
               <div className="rounded-md border border-[#d0c4b0] bg-white/90 px-3 py-2 shadow-[2px_2px_0_0_rgba(139,111,71,0.18)]">
-                <span className="block text-[10px] uppercase tracking-[0.3em] text-[#9b7a52]">Projects Shipped</span>
-                <span className="text-[14px] font-semibold">40+</span>
+                <span className="block text-[10px] uppercase tracking-[0.3em] text-[#9b7a52]">Funding Raised</span>
+                <span className="text-[14px] font-semibold">€300k</span>
               </div>
               <div className="rounded-md border border-[#d0c4b0] bg-white/90 px-3 py-2 shadow-[2px_2px_0_0_rgba(139,111,71,0.18)]">
                 <span className="block text-[10px] uppercase tracking-[0.3em] text-[#9b7a52]">Current Mood</span>
-                <span className="text-[14px] font-semibold">Cozy Pixel Art</span>
+                <span className="text-[14px] font-semibold">Caffeinated & Optimistic</span>
               </div>
             </div>
           </div>
@@ -74,9 +101,10 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
             Currently Exploring
           </h3>
           <ul className="space-y-2 text-[12px]">
-            <li>– Building interactive storytelling frameworks with WebGL & shaders</li>
-            <li>– Crafting AI-assisted creative tools for designers & developers</li>
-            <li>– Designing tactile UI systems inspired by retro hardware</li>
+            <li>🎯 Multimodal health intelligence (movement + voice + face)</li>
+            <li>📐 Position-invariant pose estimation algorithms</li>
+            <li>🦄 Building Munich's next unicorn (relocating 2025 hopefully)</li>
+            <li>🧬 The intersection of longevity and prevention</li>
           </ul>
         </section>
       </div>
@@ -287,6 +315,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
                   Classic serpent navigation with pixel-perfect controls
                 </p>
               </div>
+
 
               <div className="text-center">
                 <div className="text-[8px] text-[#a7886f] font-pixel mb-2">⌨️ ARROW KEYS</div>
@@ -507,6 +536,7 @@ const Desktop = () => {
     about: WINDOW_CONFIG.about.position,
   }))
   const [openWindows, setOpenWindows] = useState<WindowId[]>(['about'])
+  const [maximizedWindows, setMaximizedWindows] = useState<Set<WindowId>>(new Set())
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 })
 
   // Handle responsive screen size changes
@@ -608,6 +638,23 @@ const Desktop = () => {
     setWindowOrigins((previous) => {
       const { [id]: _removed, ...rest } = previous
       return rest
+    })
+    setMaximizedWindows((previous) => {
+      const newSet = new Set(previous)
+      newSet.delete(id)
+      return newSet
+    })
+  }
+
+  const toggleWindowMaximize = (id: WindowId) => {
+    setMaximizedWindows((previous) => {
+      const newSet = new Set(previous)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
     })
   }
 
@@ -737,6 +784,9 @@ const Desktop = () => {
                 const config = WINDOW_CONFIG[id]
                 const isFocused = openWindows[openWindows.length - 1] === id
                 const currentPosition = windowPositions[id] ?? config.position
+                const isMaximizable = ['about', 'resume'].includes(id) // Only About Me and Resume can be maximized
+                const isMaximized = isMaximizable ? maximizedWindows.has(id) : true // Non-maximizable windows are always "maximized"
+
                 return (
                   <DesktopWindow
                     key={id}
@@ -748,6 +798,8 @@ const Desktop = () => {
                     onFocus={() => focusWindow(id)}
                     origin={windowOrigins[id]}
                     onDragEnd={(next) => handleWindowDragEnd(id, next)}
+                    isMaximized={isMaximized}
+                    onToggleMaximize={isMaximizable ? () => toggleWindowMaximize(id) : undefined}
                   >
                     {config.content}
                   </DesktopWindow>
