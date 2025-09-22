@@ -115,7 +115,8 @@ const DesktopWindow = ({
 
       <motion.div
         className={clsx(
-          'absolute w-[420px] overflow-hidden rounded-lg border-4 shadow-[6px_6px_0_0_rgba(139,111,71,0.35)]'
+          'absolute overflow-hidden rounded-lg border-4 shadow-[6px_6px_0_0_rgba(139,111,71,0.35)]',
+          title === 'TERMINAL.EXE' ? 'w-[900px] h-[650px]' : 'w-[520px] min-h-[420px]'
         )}
         style={{
           backgroundColor: '#fffdfa',
@@ -152,11 +153,15 @@ const DesktopWindow = ({
         <div
           className="flex items-center justify-between border-b-4 px-4 py-3 font-pixel text-xs uppercase tracking-[0.2em]"
           style={{
-            background: isFocused
-              ? 'linear-gradient(90deg, #7ba7bc 0%, #9fbec8 100%)'
-              : 'linear-gradient(90deg, #a7c2cd 0%, #c1d8df 100%)',
-            borderBottomColor: '#8b6f47',
-            color: '#ffffff',
+            background: title === 'TERMINAL.EXE'
+              ? (isFocused 
+                  ? 'linear-gradient(90deg, #2c3e50 0%, #34495e 100%)'
+                  : 'linear-gradient(90deg, #34495e 0%, #3f566b 100%)')
+              : (isFocused 
+                  ? 'linear-gradient(90deg, #7ba7bc 0%, #9fbec8 100%)'
+                  : 'linear-gradient(90deg, #a7c2cd 0%, #c1d8df 100%)'),
+            borderBottomColor: title === 'TERMINAL.EXE' ? '#1a252f' : '#8b6f47',
+            color: title === 'TERMINAL.EXE' ? '#00ff41' : '#ffffff',
             cursor: 'grab',
           }}
           onPointerDown={(event) => {
@@ -184,14 +189,21 @@ const DesktopWindow = ({
           </button>
         </div>
 
-        <div
-          className="scrollbar-thin space-y-6 overflow-y-auto bg-white/96 p-5 font-pixel-content text-sm"
-          style={{
-            color: '#3b2f1d',
-            backgroundImage:
-              'linear-gradient(180deg, rgba(248,240,223,0.6) 0%, rgba(255,255,255,0.75) 55%, rgba(249,237,218,0.85) 100%)',
-          }}
-        >
+         <div
+           className={clsx(
+             'scrollbar-thin overflow-y-auto font-pixel-content',
+             title === 'TERMINAL.EXE' 
+               ? 'h-full p-0' 
+               : 'space-y-6 bg-white/96 p-5 text-sm'
+           )}
+           style={{
+             color: title === 'TERMINAL.EXE' ? '#00ff41' : '#3b2f1d',
+             backgroundColor: title === 'TERMINAL.EXE' ? '#000000' : '#ffffff',
+             backgroundImage: title === 'TERMINAL.EXE' 
+               ? 'none'
+               : 'linear-gradient(180deg, rgba(248,240,223,0.6) 0%, rgba(255,255,255,0.75) 55%, rgba(249,237,218,0.85) 100%)',
+           }}
+         >
           {children}
         </div>
       </motion.div>

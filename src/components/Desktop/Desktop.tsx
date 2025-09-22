@@ -7,6 +7,7 @@ import type { TaskbarApp } from './Taskbar'
 import NewStartMenu from './NewStartMenu'
 import DesktopWindow from './DesktopWindow'
 import Wallpaper from './Wallpaper'
+import InteractiveTerminal from '../Terminal/InteractiveTerminal'
 
 type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games'
 
@@ -106,18 +107,8 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
   terminal: {
     title: 'TERMINAL.EXE',
     icon: '💻',
-    position: { x: 360, y: 320 },
-    content: (
-      <div className="space-y-3 text-left">
-        <p>Boot the in-browser command line to unlock Easter eggs:</p>
-        <ol className="list-decimal space-y-2 pl-5">
-          <li>Type <code>help</code> for available commands.</li>
-          <li>Run <code>konami</code> to toggle cheat mode visuals.</li>
-          <li>Summon mini apps with <code>projects</code>, <code>music</code>, or <code>snake</code>.</li>
-        </ol>
-        <p className="text-pixel-amber">Stay tuned – a fully interactive terminal is loading soon.</p>
-      </div>
-    ),
+    position: { x: 300, y: 80 },
+    content: <InteractiveTerminal />,
   },
   resume: {
     title: 'RESUME.PDF',
@@ -272,12 +263,15 @@ type DesktopShortcut = {
 }
 
 const DESKTOP_SHORTCUTS: (DesktopShortcut & { position: { x: number; y: number } })[] = [
-  { id: 'about', label: 'About Me', icon: '👤', description: 'Meet the pixel hero', position: { x: 72, y: 120 } },
-  { id: 'projects', label: 'Projects', icon: '💼', description: 'Interactive builds & case studies', position: { x: 72, y: 220 } },
-  { id: 'terminal', label: 'Terminal', icon: '💻', description: 'Hack the portfolio', position: { x: 72, y: 320 } },
-  { id: 'resume', label: 'Resume', icon: '📄', description: 'Experience & skills hologram', position: { x: 72, y: 420 } },
-  { id: 'contact', label: 'Contact', icon: '📧', description: 'Transmission channels', position: { x: 72, y: 520 } },
-  { id: 'games', label: 'Games', icon: '🎮', description: 'Easter eggs & arcade fun', position: { x: 980, y: 220 } },
+  // Left side - Clean vertical stack with consistent spacing
+  { id: 'about', label: 'About Me', icon: '👤', description: 'Meet the pixel hero', position: { x: 80, y: 120 } },
+  { id: 'projects', label: 'Projects', icon: '💼', description: 'Interactive builds & case studies', position: { x: 80, y: 240 } },
+  { id: 'terminal', label: 'Terminal', icon: '💻', description: 'Hack the portfolio', position: { x: 80, y: 360 } },
+  { id: 'resume', label: 'Resume', icon: '📄', description: 'Experience & skills hologram', position: { x: 80, y: 480 } },
+  
+  // Right side - Clean vertical stack  
+  { id: 'contact', label: 'Contact', icon: '📧', description: 'Transmission channels', position: { x: 1200, y: 120 } },
+  { id: 'games', label: 'Games', icon: '🎮', description: 'Easter eggs & arcade fun', position: { x: 1200, y: 240 } },
 ]
 
 const START_MENU_ITEMS = DESKTOP_SHORTCUTS.map(({ id, label, icon, description }) => ({
