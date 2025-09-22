@@ -153,21 +153,27 @@ export const commands: Command[] = [
     name: 'contact',
     description: 'Contact information',
     action: async () => [
-      '📧 CONTACT EREN - PIXEL DEVELOPER',
+      '🤝 CONTACT EREN - AI ENGINEER & FOUNDER',
       '',
-      '📨 Email: eren.pixel@retro.dev',
-      '💬 Discord: pixeleren#1337',
-      '🐦 Twitter: @pixeleren',
-      '💼 LinkedIn: /in/eren-pixel-dev',
-      '🐙 GitHub: github.com/pixeleren',
+      '📧 Email: erendemir10022@gmail.com',
+      '💼 LinkedIn: linkedin.com/in/eren-demir-4ba56a350',
+      '🐙 GitHub: github.com/s6endemi',
+      '🏥 Startup: www.previa.health',
       '',
-      '⚡ Response time: Usually within 24h',
-      '💡 Mention "pixel terminal" for priority!',
+      '📍 Location: Cologne/Bonn, Germany',
+      '☕ Working from: Random cafés worldwide',
       '',
-      '🌍 Available for:',
-      '  • Freelance projects',
-      '  • Technical consulting',
-      '  • Creative collaborations'
+      '🚀 Currently building: Previa Health (€300k pre-seed)',
+      '🔬 Focus: Computer Vision + Preventive Healthcare',
+      '',
+      '🤝 Open for:',
+      '  • Co-founder discussions (technical role)',
+      '  • Research collaborations',
+      '  • Healthcare AI consulting',
+      '  • Academic partnerships',
+      '',
+      '⚡ Response time: 24-48h (faster for healthcare/AI)',
+      '💡 Mention "preventive AI" for priority!'
     ]
   },
   {
@@ -209,5 +215,31 @@ export const commands: Command[] = [
     aliases: ['cls'],
     description: 'Clear terminal',
     action: async () => []
+  },
+  {
+    name: 'documents',
+    aliases: ['docs', 'files'],
+    description: 'List available documents',
+    action: async () => [
+      '📁 AVAILABLE DOCUMENTS',
+      '',
+      '📄 ErenDemir.pdf',
+      '   • Complete professional resume & CV',
+      '   • View: /files/ErenDemir.pdf',
+      '   • Download available',
+      '',
+      '🐕 Corgis.png',
+      '   • Personal photo collection',
+      '   • View: /files/Corgis.png',
+      '   • High resolution image',
+      '',
+      '🎨 PixelMe.jpg',
+      '   • Custom pixel art portrait',
+      '   • Used in portfolio interface',
+      '   • View: /PixelMe.jpg',
+      '',
+      '💡 Access via Start Menu → Documents',
+      '📂 All files safe to download'
+    ]
   }
 ]

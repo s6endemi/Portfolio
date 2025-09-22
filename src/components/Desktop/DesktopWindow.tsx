@@ -76,7 +76,7 @@ const DesktopWindow = ({
         }
       } else {
         return {
-          width: isTerminal ? 900 : 520,
+          width: isTerminal ? 900 : 620,
           height: isTerminal ? 650 : Math.min(screenSize.height - 100, 750)
         }
       }

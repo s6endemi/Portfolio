@@ -9,7 +9,357 @@ import DesktopWindow from './DesktopWindow'
 import Wallpaper from './Wallpaper'
 import InteractiveTerminal from '../Terminal/InteractiveTerminal'
 
-type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games'
+const ProjectsContent = () => {
+  const [selectedProject, setSelectedProject] = useState<string | null>(null)
+
+  const projects = [
+    {
+      id: 'previa',
+      title: 'Previa Health',
+      subtitle: 'AI-powered MSK dysfunction prevention',
+      year: '2025 - Active',
+      status: 'Active Funding',
+      color: 'from-[#7ba7bc] to-[#9fbec8]',
+      shadowColor: 'rgba(123, 167, 188, 0.4)',
+      accent: '#7ba7bc',
+      icon: '🏥',
+      tags: ['Computer Vision', 'Healthcare', 'AI', 'Preventive Medicine'],
+      shortDesc: 'Detecting movement problems before they become chronic pain through smartphone-based biomechanics analysis.',
+      description: 'Built computer vision system detecting movement problems before they become chronic pain. Using proprietary algorithms to analyze biomechanics via smartphone. Validated with clinical datasets, €300k pre-seed secured.',
+      highlights: [
+        '€300k pre-seed funding secured from healthcare VCs',
+        'Research collaboration with SpoHo Cologne & Uni Bonn',
+        'Position-invariant pose estimation algorithms',
+        'Smartphone-based movement analysis for early intervention'
+      ],
+      details: {
+        funding: '€300k pre-seed secured from healthcare-focused VCs',
+        research: 'Clinical validation with SpoHo Cologne & University of Bonn',
+        innovation: 'Proprietary position-invariant pose estimation algorithms',
+        market: 'Preventive healthcare targeting MSK dysfunction',
+        vision: 'Building Munich\'s next unicorn in healthcare AI',
+        tech: ['Python', 'TensorFlow', 'MediaPipe', 'React', 'Supabase', 'Computer Vision'],
+        impact: 'Preventing chronic pain through early detection and intervention',
+        website: 'https://www.previa.health'
+      }
+    },
+    {
+      id: 'athly',
+      title: 'Athly',
+      subtitle: 'Multimodal fitness AI (before it was cool)',
+      year: '2024',
+      status: 'Completed',
+      color: 'from-[#a8b5a0] to-[#bcc9b4]',
+      shadowColor: 'rgba(168, 181, 160, 0.4)',
+      accent: '#a8b5a0',
+      icon: '🤖',
+      tags: ['Multimodal AI', 'Fitness', 'Mobile', 'Behavioral Learning'],
+      shortDesc: 'Autonomous fitness assistant combining voice analysis, camera tracking, and behavioral learning for personalized workout optimization.',
+      description: 'Developed autonomous fitness assistant combining voice analysis, camera tracking, and behavioral learning. Predicted optimal workout timing and nutrition - basically built AI agents before ChatGPT made them mainstream.',
+      highlights: [
+        'Built multimodal AI agents before mainstream adoption',
+        'Combined voice analysis + camera tracking + behavior patterns',
+        'Predictive workout timing and nutrition optimization',
+        'Pioneered autonomous fitness intelligence'
+      ],
+      details: {
+        innovation: 'Built AI agents before ChatGPT made them mainstream',
+        approach: 'Multimodal AI combining voice, vision, and behavioral data',
+        intelligence: 'Predicted optimal workout timing and nutrition patterns',
+        achievement: 'Early pioneer in autonomous fitness AI',
+        market: 'Personalized fitness coaching and optimization',
+        tech: ['Multimodal ML', 'React Native', 'Supabase', 'Voice Analysis', 'Computer Vision'],
+        impact: 'Advanced personalized fitness intelligence through multimodal AI',
+        website: 'https://www.athly.de'
+      }
+    },
+    {
+      id: 'energy',
+      title: 'Energy Forecast System',
+      subtitle: 'Renewable energy prediction beating meteorologists',
+      year: '2023',
+      status: 'Research',
+      color: 'from-[#d4a574] to-[#e3b888]',
+      shadowColor: 'rgba(212, 165, 116, 0.4)',
+      accent: '#d4a574',
+      icon: '⚡',
+      tags: ['Neural Networks', 'Time Series', 'Climate Data', 'Renewable Energy'],
+      shortDesc: 'LSTM + Random Forest models processing nationwide German weather data with higher accuracy than standard meteorological systems.',
+      description: 'Created LSTM + Random Forest models processing nationwide German weather data. Achieved higher accuracy than standard meteorological systems for agricultural planning. Because clean energy needs smart predictions.',
+      highlights: [
+        'Outperformed standard meteorological forecasting systems',
+        'Processed nationwide German weather datasets',
+        'Optimized agricultural planning and energy forecasting',
+        'Advanced hybrid neural network approach'
+      ],
+      details: {
+        achievement: 'Higher forecast accuracy than standard meteorological systems',
+        scope: 'Nationwide German weather data processing and analysis',
+        application: 'Agricultural planning and renewable energy optimization',
+        methodology: 'Hybrid LSTM + Random Forest neural network approach',
+        purpose: 'Clean energy optimization through intelligent predictions',
+        tech: ['Python', 'LSTM Networks', 'Random Forest', 'Time Series Analysis', 'Large-scale Data Processing'],
+        impact: 'Enhanced renewable energy forecasting for sustainable agriculture'
+      }
+    }
+  ]
+
+  if (selectedProject) {
+    const project = projects.find(p => p.id === selectedProject)
+    if (!project) return null
+    return (
+      <div className="h-full flex flex-col">
+        {/* Improved Header with back button */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-[#d0c4b0]">
+          <button
+            onClick={() => setSelectedProject(null)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-[#d0c4b0] bg-white/90 hover:bg-[#faf3e5] hover:scale-105 transition-all duration-200 shadow-[2px_2px_0_0_rgba(139,111,71,0.2)] hover:shadow-[3px_3px_0_0_rgba(139,111,71,0.3)]"
+          >
+            <span className="text-[#7c6544] text-sm">←</span>
+            <span className="font-pixel text-[10px] uppercase tracking-[0.2em] text-[#7c6544]">Back to Projects</span>
+          </button>
+          <div className="flex items-center gap-4">
+            <div className="text-3xl">{project.icon}</div>
+            <div className="text-right">
+              <h2 className="font-pixel text-[16px] uppercase tracking-[0.3em] text-[#5d4e37] mb-1">{project.title}</h2>
+              <p className="text-[12px] text-[#8b6f47] font-medium">{project.subtitle}</p>
+              <span className={`inline-block mt-1 px-3 py-1 rounded-full text-[9px] font-pixel uppercase tracking-[0.1em] text-white bg-gradient-to-r ${project.color} shadow-sm`}>
+                {project.status}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Project detail content - Resume-inspired clean design */}
+        <div className="flex-1 space-y-6 overflow-y-auto">
+          {/* Project Overview - Enhanced with prominent CTA */}
+          <section className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
+                  {project.title}
+                </h3>
+                <p className="text-[13px] font-semibold mb-2">{project.subtitle}</p>
+                <span className="inline-block rounded-md border border-[#d0c4b0] bg-[#faf3e5] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#886746]">
+                  {project.year}
+                </span>
+              </div>
+              {project.details.website && (
+                <div className="flex flex-col items-end gap-2">
+                  <a
+                    href={project.details.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`group relative overflow-hidden px-6 py-3 bg-gradient-to-r ${project.color} text-white text-[11px] font-pixel uppercase tracking-[0.15em] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white/20`}
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      🚀 Visit Live Site
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  </a>
+                  <p className="text-[9px] text-[#8b6f47] italic">Click to view live demo</p>
+                </div>
+              )}
+            </div>
+            <p className="text-[12px] leading-relaxed text-[#5d4e37]">{project.description}</p>
+          </section>
+
+          {/* Key Achievements */}
+          <section className="rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+            <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544] mb-3">
+              Key Achievements
+            </h3>
+            <ul className="space-y-2 text-[12px]">
+              {project.highlights.map((highlight, i) => (
+                <li key={i}>• {highlight}</li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Technology Stack - Resume style */}
+          <section className="space-y-5 rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-5 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+            <h3 className="font-pixel text-[12px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+              Technology Stack
+            </h3>
+            <div className="bg-white/80 rounded-md p-3 border border-[#e5d8c6]">
+              <div className="flex flex-wrap gap-1.5 text-[10px]">
+                {project.details.tech.map((tech) => (
+                  <span key={tech} className={`rounded-full border border-[#d0c4b0] bg-gradient-to-r ${project.color} text-white px-2.5 py-1 shadow-[1px_1px_0_0_rgba(139,111,71,0.2)]`}>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Project Details - Clean sections */}
+          <div className="space-y-4">
+            {Object.entries(project.details).filter(([key]) => key !== 'tech' && key !== 'website' && key !== 'impact').map(([key, value]) => (
+              <section key={key} className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
+                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
+                  </h3>
+                </div>
+                {Array.isArray(value) ? (
+                  <div className="flex flex-wrap gap-1.5">
+                    {value.map((item, i) => (
+                      <span key={i} className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[10px] text-[#8b6f47]">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-[12px] leading-relaxed text-[#5d4e37]">{value}</p>
+                )}
+              </section>
+            ))}
+          </div>
+
+          {/* Impact Statement */}
+          <section className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+            <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544] mb-3">
+              Impact & Vision
+            </h3>
+            <p className="text-[12px] leading-relaxed text-[#5d4e37]">{project.details.impact}</p>
+          </section>
+        </div>
+      </div>
+    )
+  }
+
+  // Main grid view
+  return (
+    <div className="h-full flex flex-col">
+      {/* Enhanced Archive Header */}
+      <div className="mb-8 pb-6 border-b-2 border-[#d0c4b0] bg-gradient-to-r from-[#faf7f0]/50 to-transparent rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-lg bg-gradient-to-br from-[#7ba7bc] to-[#9fbec8] text-white shadow-lg">
+              <span className="text-2xl">💼</span>
+            </div>
+            <div>
+              <h2 className="font-pixel text-[16px] uppercase tracking-[0.3em] text-[#5d4e37] mb-1">Project Archive</h2>
+              <p className="text-[12px] text-[#8b6f47]">Building the future, one project at a time</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544]">{projects.length} Projects</p>
+            <p className="text-[9px] text-[#8b6f47]">Click any card to explore</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Grid Layout */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-8">
+          {projects.map((project, index) => (
+            <div
+              key={project.id}
+              onClick={() => setSelectedProject(project.id)}
+              className="group relative bg-white/95 rounded-xl border-2 border-[#d0c4b0] p-6 cursor-pointer transition-all duration-500 hover:scale-[1.03] shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[8px_8px_0_0_rgba(139,111,71,0.4)] min-h-[380px] flex flex-col overflow-hidden"
+              style={{
+                animationDelay: `${index * 100}ms`,
+                animation: 'fadeInUp 0.6s ease-out forwards'
+              }}
+            >
+              {/* Enhanced Project Header */}
+              <div className="relative mb-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-lg bg-gradient-to-br ${project.color} text-white shadow-md group-hover:shadow-lg transition-all duration-300`}>
+                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">{project.icon}</span>
+                    </div>
+                    <div>
+                      <h3 className="font-pixel text-[13px] uppercase tracking-[0.25em] text-[#5d4e37] mb-2 group-hover:text-[#7c6544] transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-[12px] text-[#8b6f47] font-medium leading-relaxed mb-2">
+                        {project.subtitle}
+                      </p>
+                      <span className="inline-block text-[10px] font-pixel uppercase tracking-[0.15em] text-[#8b6f47] bg-[#faf3e5] px-3 py-1 rounded-full border border-[#e5d8c6]">
+                        {project.year}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`px-3 py-1.5 rounded-full text-[9px] font-pixel uppercase tracking-[0.1em] text-white bg-gradient-to-r ${project.color} shadow-md ${project.status === 'Active Funding' ? 'animate-pulse' : ''}`}>
+                    {project.status}
+                  </div>
+                </div>
+              </div>
+
+              {/* Project Description */}
+              <div className="flex-1 mb-5">
+                <p className="text-[11px] text-[#8b6f47] leading-relaxed line-clamp-3">
+                  {project.shortDesc}
+                </p>
+              </div>
+
+              {/* Key Highlights Preview */}
+              <div className="mb-5">
+                <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544] mb-3">Key Highlights</h4>
+                <div className="space-y-2">
+                  {project.highlights.slice(0, 2).map((highlight, i) => (
+                    <div key={i} className="flex items-start gap-2 p-2 bg-[#faf7f0] rounded-md border border-[#e5d8c6]">
+                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${project.color} mt-1.5 flex-shrink-0`}></div>
+                      <p className="text-[10px] text-[#5d4e37] leading-relaxed">{highlight.split(' ').slice(0, 6).join(' ')}...</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tech Stack Preview */}
+              <div className="mb-5">
+                <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544] mb-2">Tech Stack</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.slice(0, 3).map((tag, i) => (
+                    <span key={i} className={`px-2 py-1 bg-gradient-to-r ${project.color} text-white rounded-full text-[8px] font-medium shadow-sm`}>
+                      {tag}
+                    </span>
+                  ))}
+                  {project.tags.length > 3 && (
+                    <span className="px-2 py-1 bg-[#f0e5d4] border border-[#d0c4b0] rounded-full text-[8px] text-[#9b7a52] font-medium">
+                      +{project.tags.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Enhanced CTA Section */}
+              <div className="mt-auto pt-4 border-t-2 border-[#e5d8c6]">
+                <div className="flex items-center justify-between">
+                  {project.details.website ? (
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color} animate-pulse`}></div>
+                      <span className="text-[9px] text-[#22c55e] font-pixel uppercase tracking-[0.1em]">Live Site Available</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color}`}></div>
+                      <span className="text-[9px] text-[#8b6f47] font-pixel uppercase tracking-[0.1em]">{project.status}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <span className="text-[9px] text-[#9b7a52] font-pixel uppercase tracking-[0.1em]">
+                      Explore Project
+                    </span>
+                    <span className="text-[12px]">→</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Enhanced Hover Effects */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-8 transition-all duration-500 rounded-xl`}></div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl border-2 border-transparent group-hover:border-white/20"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games' | 'websites' | 'documents'
 
 type WindowConfig = {
   title: string
@@ -56,7 +406,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
               </p>
               <p className="text-[13px] opacity-90">
                 When I'm not training neural networks, you'll find me improvising on piano, or working from random cafés
-                around the world. From athlete to tech builder - I approach startups like sports: discipline, teamwork,
+                around the world. From athlete to tech builder - I approach startups like sports: it's all about discipline, teamwork,
                 and knowing when to pivot.
               </p>
             </div>
@@ -103,7 +453,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           <ul className="space-y-2 text-[12px]">
             <li>🎯 Multimodal health intelligence (movement + voice + face)</li>
             <li>📐 Position-invariant pose estimation algorithms</li>
-            <li>🦄 Building Munich's next unicorn (relocating 2025 hopefully)</li>
+            <li>🦄 Currently building Cologne/Bonn's (relocating 2025 hopefully)</li>
             <li>🧬 The intersection of longevity and prevention</li>
           </ul>
         </section>
@@ -114,23 +464,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     title: 'PROJECTS.EXE',
     icon: '💼',
     position: { x: 540, y: 180 },
-     content: (
-       <div className="space-y-4 text-left font-pixel-content text-sm leading-relaxed">
-         <p className="text-pixel-text">Featured builds loaded straight from the archives:</p>
-         <ul className="space-y-3 border-l-4 border-pixel-warning pl-4 text-pixel-text-light">
-           <li>
-             <strong className="text-pixel-primary">Retro OS Portfolio</strong> – A draggable window system with a living terminal and
-             secret commands.
-           </li>
-           <li>
-             <strong className="text-pixel-secondary">Arcade Mini Games</strong> – Pixel-perfect Pong, Snake, and Tetris built in React.
-           </li>
-           <li>
-             <strong className="text-pixel-accent">Synthwave Dashboard</strong> – Framer Motion + Web Audio for reactive soundscapes.
-           </li>
-         </ul>
-       </div>
-     ),
+    content: <ProjectsContent />,
   },
   terminal: {
     title: 'TERMINAL.EXE',
@@ -150,52 +484,115 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
               <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
                 Current Role
               </h3>
-              <p className="text-[13px] font-semibold">Senior Frontend & Creative Developer @ Pixel Studio</p>
+              <p className="text-[13px] font-semibold">Founder & AI Engineer @ Previa Health</p>
             </div>
             <span className="rounded-md border border-[#d0c4b0] bg-[#faf3e5] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#886746]">
-              2021 → Now
+              2025 → Now
             </span>
           </div>
           <ul className="mt-3 space-y-2 text-[12px]">
-            <li>• Lead design-to-code delivery for immersive marketing experiences</li>
-            <li>• Prototype motion systems and audio feedback with Framer Motion + Howler</li>
-            <li>• Partner with designers to develop cohesive design systems & tooling</li>
+            <li>• Building computer vision for preventive healthcare</li>
+            <li>• Secured pre-seed funding from healthcare-focused VCs</li>
+            <li>• Research collaboration with SpoHo Cologne & Uni Bonn</li>
           </ul>
         </section>
 
-        <section className="grid gap-4 rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] md:grid-cols-2">
-          <div className="space-y-3">
-            <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
-              Skill Stack
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
+              Background
             </h3>
-            <div className="flex flex-wrap gap-2 text-[11px]">
-              {['React 18', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Node & Express', 'Design Systems', 'WebGL Basics', 'Creative Coding'].map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded border border-[#d0c4b0] bg-white/90 px-2 py-1 shadow-[2px_2px_0_0_rgba(139,111,71,0.18)]"
-                >
-                  {chip}
-                </span>
-              ))}
-            </div>
+            <span className="rounded-md border border-[#d0c4b0] bg-[#faf3e5] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#886746]">
+              2020 → 2025
+            </span>
           </div>
-          <div className="space-y-3">
-            <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
-              Highlights
-            </h3>
-            <ul className="space-y-2 text-[12px]">
-              <li>• Mentored designers learning React & motion fundamentals</li>
-              <li>• Built tooling to speed up asset pipelines by 35%</li>
-              <li>• Speaker at meetups on nostalgic UI and playful UX</li>
-            </ul>
+          <p className="text-[13px] font-semibold mb-2">Computer Science @ University of Bonn</p>
+          <ul className="space-y-2 text-[12px]">
+            <li>• Bachelor thesis supervised by Prof. Jürgen Gall (Lamarr Institute)</li>
+            <li>• Thesis: Position-invariant pose estimation for physiotherapeutic applications</li>
+            <li>• University Accelerator Program participant</li>
+          </ul>
+        </section>
+
+        <section className="space-y-5 rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-5 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              <h3 className="font-pixel text-[12px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+                Technical Skills
+              </h3>
+              <div className="space-y-4">
+                <div className="bg-white/80 rounded-md p-3 border border-[#e5d8c6]">
+                  <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#9b7a52] mb-2">AI & Machine Learning</h4>
+                  <div className="flex flex-wrap gap-1.5 text-[10px]">
+                    {['PyTorch', 'TensorFlow', 'Computer Vision', 'Time Series', 'MediaPipe'].map((chip) => (
+                      <span key={chip} className="rounded-full border border-[#d0c4b0] bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white px-2.5 py-1 shadow-[1px_1px_0_0_rgba(139,111,71,0.2)]">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white/80 rounded-md p-3 border border-[#e5d8c6]">
+                  <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#9b7a52] mb-2">Development</h4>
+                  <div className="flex flex-wrap gap-1.5 text-[10px]">
+                    {['Python', 'TypeScript', 'React', 'React Native', 'FastAPI', 'Supabase'].map((chip) => (
+                      <span key={chip} className="rounded-full border border-[#d0c4b0] bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white px-2.5 py-1 shadow-[1px_1px_0_0_rgba(139,111,71,0.2)]">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white/80 rounded-md p-3 border border-[#e5d8c6]">
+                  <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#9b7a52] mb-2">Specialization</h4>
+                  <div className="flex flex-wrap gap-1.5 text-[10px]">
+                    {['Pose Estimation', 'Multimodal AI', 'Healthcare Tech'].map((chip) => (
+                      <span key={chip} className="rounded-full border border-[#d0c4b0] bg-gradient-to-r from-[#d4a574] to-[#e3b888] text-white px-2.5 py-1 shadow-[1px_1px_0_0_rgba(139,111,71,0.2)]">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="font-pixel text-[12px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+                Key Achievements
+              </h3>
+              <div className="space-y-3">
+                <div className="bg-white/90 rounded-lg p-3 border-l-4 border-[#7ba7bc] shadow-[2px_2px_0_0_rgba(139,111,71,0.15)]">
+                  <div className="text-[11px] font-semibold text-[#5d4e37] mb-1">💰 Funding Success</div>
+                  <div className="text-[10px] text-[#8b6f47]">€300k pre-seed secured</div>
+                </div>
+                <div className="bg-white/90 rounded-lg p-3 border-l-4 border-[#a8b5a0] shadow-[2px_2px_0_0_rgba(139,111,71,0.15)]">
+                  <div className="text-[11px] font-semibold text-[#5d4e37] mb-1">🔬 Research Impact</div>
+                  <div className="text-[10px] text-[#8b6f47]">Publishing pose estimation research</div>
+                </div>
+                <div className="bg-white/90 rounded-lg p-3 border-l-4 border-[#d4a574] shadow-[2px_2px_0_0_rgba(139,111,71,0.15)]">
+                  <div className="text-[11px] font-semibold text-[#5d4e37] mb-1">🎯 Early Adopter</div>
+                  <div className="text-[10px] text-[#8b6f47]">Built AI products pre-mainstream</div>
+                </div>
+                <div className="bg-white/90 rounded-lg p-3 border-l-4 border-[#b5a7d6] shadow-[2px_2px_0_0_rgba(139,111,71,0.15)]">
+                  <div className="text-[11px] font-semibold text-[#5d4e37] mb-1">🎤 Speaking</div>
+                  <div className="text-[10px] text-[#8b6f47]">AI + preventive healthcare talks</div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 text-[12px] shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-          <p>
-            Full PDF resume available via the Start → Documents link. Let me know if you prefer a
-            tailored version for a specific role—happy to curate a focused case-study set.
-          </p>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">📋</div>
+            <div>
+              <p className="mb-2">
+                Currently working on computer vision systems that detect movement problems before they become chronic pain.
+                Open to collaborations in healthcare AI and preventive medicine.
+              </p>
+               <p className="text-[11px] text-[#8b6f47] bg-[#faf3e5] px-3 py-2 rounded-md border border-[#e5d8c6]">
+                 💡 <strong>Full PDF resume</strong> available via <span className="font-pixel text-[#7c6544]">Start → Documents</span> or terminal command <code className="font-pixel text-[#7c6544]">documents</code>
+               </p>
+            </div>
+          </div>
         </section>
       </div>
     ),
@@ -205,62 +602,260 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     icon: '📧',
     position: { x: 620, y: 80 },
     content: (
-      <div className="space-y-6 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#3a2b17]">
-        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.18)]">
-          <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
-            Let’s Talk
-          </h3>
-          <p className="mt-2">
-            Whether you want to jam on a pixel-perfect interface, remix a design system, or spin up
-            a creative coding collab—drop a line!
+      <div className="space-y-6 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-2xl">🤝</span>
+            <div>
+              <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
+                Let's Build Something
+              </h3>
+              <p className="text-[12px] text-[#8b6f47] mt-1">Open for collaboration & opportunities</p>
+            </div>
+          </div>
+          <p className="text-[13px] leading-relaxed">
+            Looking for a <strong>technical co-founder</strong> or want to collaborate on AI/healthcare projects? 
+            Currently building Cologne/Bonn's next unicorn and always excited to connect with fellow builders, 
+            researchers, and visionaries in the preventive healthcare space.
           </p>
         </section>
 
-        <section className="space-y-3 rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.18)]">
+        <section className="grid gap-4 rounded-lg border-2 border-[#d0c4b0] bg-[#faf3e5]/85 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.15)]">
           <div className="flex items-center gap-3">
-            <span className="text-xl">📨</span>
+            <span className="text-xl">📧</span>
             <div>
-              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">Email</h4>
+              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">Business Inquiries</h4>
               <a
-                href="mailto:eren.pixel@retro.dev"
-                className="text-[#54768a] underline-offset-2 hover:underline"
+                href="mailto:erendemir10022@gmail.com"
+                className="text-[#54768a] underline-offset-2 hover:underline text-[13px]"
               >
-                eren.pixel@retro.dev
+                erendemir10022@gmail.com
               </a>
             </div>
           </div>
+          
           <div className="flex items-center gap-3">
-            <span className="text-xl">💬</span>
+            <span className="text-xl">💼</span>
             <div>
-              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">Discord</h4>
-              <p className="text-[12px]">pixeleren</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xl">🐦</span>
-            <div>
-              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">X / Twitter</h4>
+              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">LinkedIn</h4>
               <a
-                href="https://x.com/pixeleren"
+                href="https://www.linkedin.com/in/eren-demir-4ba56a350"
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#54768a] underline-offset-2 hover:underline"
+                className="text-[#54768a] underline-offset-2 hover:underline text-[13px]"
               >
-                @pixeleren
+                Connect on LinkedIn
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl">🐙</span>
+            <div>
+              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">GitHub</h4>
+              <a
+                href="https://github.com/s6endemi"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#54768a] underline-offset-2 hover:underline text-[13px]"
+              >
+                View Code & Projects
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl">🏥</span>
+            <div>
+              <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">Previa Health</h4>
+              <a
+                href="https://www.previa.health"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#54768a] underline-offset-2 hover:underline text-[13px]"
+              >
+                Current Startup
               </a>
             </div>
           </div>
         </section>
 
-        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.18)]">
-          <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
-            Office Hours
-          </h3>
-          <p className="mt-2 text-[12px]">
-            Weekdays 09:00–17:00 CET — calling from Cologne, Germany. Terminal command
-            <code className="ml-1 rounded bg-[#f0e5d4] px-1 py-0.5">call eren</code> will soon trigger a playful
-            audio handshake.
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-xl">🌍</span>
+            <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
+              Current Location & Availability
+            </h3>
+          </div>
+          <div className="space-y-2 text-[13px] leading-relaxed">
+            <p>
+              <span className="text-[#8b6f47]">📍 Based in:</span> Cologne/Bonn, Germany
+            </p>
+            <p>
+              <span className="text-[#8b6f47]">☕ Working from:</span> Random cafés around the world
+            </p>
+            <p>
+              <span className="text-[#8b6f47]">🤝 Open to:</span> Co-founder discussions, research collaborations, 
+              healthcare AI consulting
+            </p>
+            <p className="text-[12px] text-[#8b6f47] mt-3">
+              Terminal command <code className="ml-1 rounded bg-[#f0e5d4] px-1 py-0.5 text-[11px]">contact</code> 
+              for quick info access!
+            </p>
+          </div>
+        </section>
+      </div>
+    ),
+  },
+  websites: {
+    title: 'WEBSITES.HTM',
+    icon: '🌐',
+    position: { x: 420, y: 200 },
+    content: (
+      <div className="space-y-6 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-5 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-2xl">🎨</span>
+            <div>
+              <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
+                Frontend Showcase
+              </h3>
+              <p className="text-[12px] text-[#8b6f47] mt-1">Landing pages & web design</p>
+            </div>
+          </div>
+          <p className="text-[13px] leading-relaxed mb-4">
+            Collection of landing pages and frontend projects showcasing design skills and modern web development.
           </p>
+        </section>
+
+        <section className="space-y-4">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🏥</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">Previa Health</h4>
+                  <p className="text-[11px] text-[#8b6f47]">AI Healthcare Platform</p>
+                </div>
+              </div>
+              <a
+                href="https://www.previa.health"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+              >
+                Visit Site
+              </a>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              AI-powered platform for preventive healthcare with computer vision technology.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">React</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">AI/ML</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Healthcare</span>
+            </div>
+          </div>
+
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🤖</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">Athly</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Multimodal Fitness AI</p>
+                </div>
+              </div>
+              <a
+                href="https://www.athly.de"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+              >
+                Visit Site
+              </a>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              Autonomous fitness assistant combining voice, camera, and behavioral learning.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">React Native</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Multimodal AI</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Fitness</span>
+            </div>
+          </div>
+
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">⚡</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">Vigor Protocol</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Crypto/DeFi Landing Page</p>
+                </div>
+              </div>
+              <a
+                href="https://vigorprotocol.xyz"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 bg-gradient-to-r from-[#d4a574] to-[#e3b888] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+              >
+                Visit Site
+              </a>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              Modern landing page for DeFi protocol with clean design and smooth animations.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">React</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Tailwind</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Framer Motion</span>
+            </div>
+          </div>
+
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🚀</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">Aenix</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Tech Startup Landing</p>
+                </div>
+              </div>
+              <a
+                href="https://aenix.xyz"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+              >
+                Visit Site
+              </a>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              Sleek startup landing page with modern design patterns and responsive layout.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Next.js</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">TypeScript</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">CSS3</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-[#faf3e5]/85 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.15)]">
+          <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+            Skills Showcase
+          </h4>
+          <div className="grid grid-cols-2 gap-3 text-[12px]">
+            <div>
+              <p className="text-[#8b6f47]">🎨 Modern UI/UX Design</p>
+              <p className="text-[#8b6f47]">📱 Responsive Layouts</p>
+            </div>
+            <div>
+              <p className="text-[#8b6f47]">✨ Smooth Animations</p>
+              <p className="text-[#8b6f47]">⚡ Performance Optimization</p>
+            </div>
+          </div>
         </section>
       </div>
     ),
@@ -415,6 +1010,161 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
       </div>
     ),
   },
+  documents: {
+    title: 'DOCUMENTS.DIR',
+    icon: '📁',
+    position: { x: 400, y: 160 },
+    content: (
+      <div className="space-y-6 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-5 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-2xl">📂</span>
+            <div>
+              <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
+                Document Archive
+              </h3>
+              <p className="text-[12px] text-[#8b6f47] mt-1">Files, photos & official documents</p>
+            </div>
+          </div>
+          <p className="text-[13px] leading-relaxed">
+            Collection of important documents, photos, and files. Click any item to view or download.
+          </p>
+        </section>
+
+        <section className="space-y-4">
+          {/* Resume PDF */}
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">📄</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">ErenDemir.pdf</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Complete Resume & CV</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/files/ErenDemir.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  View PDF
+                </a>
+                <a
+                  href="/files/ErenDemir.pdf"
+                  download="ErenDemir_Resume.pdf"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              Full professional resume with detailed experience, education, and technical skills.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">PDF</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Professional</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Downloadable</span>
+            </div>
+          </div>
+
+          {/* Corgi Photo */}
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🐕</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">Corgis.png</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Personal Photo Collection</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/files/Corgis.png"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#d4a574] to-[#e3b888] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  View Image
+                </a>
+                <a
+                  href="/files/Corgis.png"
+                  download="Eren_Corgis.png"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              A fun photo from my adventures - because who doesn't love corgis? 🐕
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">PNG</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Personal</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Fun</span>
+            </div>
+          </div>
+
+          {/* Pixel Portrait */}
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🎨</span>
+                <div>
+                  <h4 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-1">PixelMe.jpg</h4>
+                  <p className="text-[11px] text-[#8b6f47]">Pixel Art Portrait</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/PixelMe.jpg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#b5a7d6] to-[#c9bfe0] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  View Image
+                </a>
+                <a
+                  href="/PixelMe.jpg"
+                  download="Eren_PixelPortrait.jpg"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#a8b5a0] to-[#bcc9b4] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+            <p className="text-[12px] text-[#8b6f47] leading-relaxed">
+              Custom pixel art portrait used throughout the portfolio interface.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">JPG</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Pixel Art</span>
+              <span className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[9px] text-[#8b6f47]">Portrait</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-[#faf3e5]/85 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.15)]">
+          <h4 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+            File Information
+          </h4>
+          <div className="grid grid-cols-2 gap-3 text-[12px]">
+            <div>
+              <p className="text-[#8b6f47]">📄 Documents: 1 PDF</p>
+              <p className="text-[#8b6f47]">🖼️ Images: 1 PNG, 1 JPG</p>
+            </div>
+            <div>
+              <p className="text-[#8b6f47]">💾 Total Size: ~1MB</p>
+              <p className="text-[#8b6f47]">🔒 All files safe to download</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    ),
+  },
 }
 
 type DesktopShortcut = {
@@ -448,25 +1198,32 @@ const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
     position: { x: 80, y: 360 }
   },
   {
+    id: 'websites',
+    label: 'WEBSITES',
+    icon: '🌐',
+    description: 'Frontend showcase',
+    position: { x: 80, y: 480 }
+  },
+  {
     id: 'resume',
     label: 'RESUME',
     icon: '📄',
     description: 'Professional experience',
-    position: { x: 1200, y: 120 }
+    position: { x: 80, y: 600 }
   },
   {
     id: 'contact',
     label: 'CONTACT',
     icon: '📧',
     description: 'Get in touch',
-    position: { x: 1200, y: 240 }
+    position: { x: 80, y: 720 }
   },
   {
     id: 'games',
     label: 'GAMES',
     icon: '🎮',
     description: 'Retro arcade games',
-    position: { x: 1200, y: 360 }
+    position: { x: 80, y: 840 }
   }
 ]
 
@@ -507,13 +1264,23 @@ const getResponsiveIconPosition = (shortcut: DesktopShortcut, screenWidth: numbe
   }
 }
 
-const START_MENU_ITEMS = DESKTOP_SHORTCUTS.map(({ id, label, icon, description }) => ({
-  id,
-  label,
-  icon,
-  description,
-  onClick: () => {}, // Will be set in component
-}))
+const START_MENU_ITEMS = [
+  ...DESKTOP_SHORTCUTS.map(({ id, label, icon, description }) => ({
+    id,
+    label,
+    icon,
+    description,
+    onClick: () => {}, // Will be set in component
+  })),
+  // Special Documents section - only in start menu
+  {
+    id: 'documents',
+    label: 'DOCUMENTS',
+    icon: '📁',
+    description: 'Files, photos & downloads',
+    onClick: () => {}, // Will be set in component
+  }
+]
 
 const ICON_DIMENSIONS = {
   width: 96,
@@ -605,7 +1372,8 @@ const Desktop = () => {
       if (typeof window !== 'undefined') {
         window.setTimeout(() => {
           setWindowOrigins((previous) => {
-            const { [id]: _removed, ...rest } = previous
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { [id]: _, ...rest } = previous
             return rest
           })
         }, 360)
@@ -636,7 +1404,8 @@ const Desktop = () => {
   const closeWindow = (id: WindowId) => {
     setOpenWindows((previous) => previous.filter((windowId) => windowId !== id))
     setWindowOrigins((previous) => {
-      const { [id]: _removed, ...rest } = previous
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [id]: _, ...rest } = previous
       return rest
     })
     setMaximizedWindows((previous) => {
@@ -733,7 +1502,7 @@ const Desktop = () => {
         WebkitOverflowScrolling: 'touch'
       }}
       onMouseDown={handleDesktopMouseDown}
-      onTouchStart={handleDesktopMouseDown}
+      onTouchStart={(e) => handleDesktopMouseDown(e as unknown as ReactMouseEvent<HTMLDivElement>)}
     >
       <Wallpaper />
 
