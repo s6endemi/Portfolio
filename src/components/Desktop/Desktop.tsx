@@ -242,14 +242,147 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     icon: '🎮',
     position: { x: 420, y: 120 },
     content: (
-      <div className="space-y-3 text-left">
-        <p>Mini-games packing that arcade nostalgia:</p>
-        <ul className="space-y-2 pl-5">
-          <li>🐍 <strong>Snake</strong> – Keyboard-driven, terminal launchable.</li>
-          <li>🏓 <strong>Pong</strong> – Two-player fun with CRT scanlines.</li>
-          <li>🧩 <strong>Tetris</strong> – Pixel bricks & juicy sound effects.</li>
-        </ul>
-        <p className="text-pixel-cyan">Collect Easter eggs to unlock more cartridges.</p>
+      <div className="h-full p-6" style={{
+        background: 'linear-gradient(180deg, rgba(248,240,223,0.95) 0%, rgba(255,255,255,0.9) 55%, rgba(249,237,218,0.95) 100%)',
+      }}>
+        {/* Retro Header */}
+        <div className="mb-6 text-center relative">
+          <div className="inline-block relative">
+            <h2 className="font-pixel text-[18px] uppercase tracking-[0.4em] text-[#5d4e37] mb-2 relative z-10">
+              ◊ PIXEL ARCADE ◊
+            </h2>
+            <div className="absolute inset-0 bg-[#d4a574]/20 blur-md rounded-lg"></div>
+          </div>
+          <p className="text-[11px] text-[#8b6f47] font-pixel-content">
+            › SELECT YOUR RETRO ADVENTURE ‹
+          </p>
+        </div>
+
+        {/* 3-Column Games Grid */}
+        <div className="grid grid-cols-3 gap-4 h-[260px]">
+          {/* Snake Game */}
+          <div
+            onClick={() => window.open('https://playsnake.org/', '_blank')}
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+          >
+            {/* Pixel Art Background Pattern */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `
+                linear-gradient(45deg, #22c55e 25%, transparent 25%),
+                linear-gradient(-45deg, #22c55e 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #22c55e 75%),
+                linear-gradient(-45deg, transparent 75%, #22c55e 75%)
+              `,
+              backgroundSize: '8px 8px',
+              backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0px'
+            }}></div>
+
+            <div className="relative h-full p-4 flex flex-col justify-between">
+              <div className="text-center">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-200">🐍</div>
+                <h3 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-2">
+                  SNAKE
+                </h3>
+                <p className="text-[9px] text-[#8b6f47] font-pixel-content leading-relaxed">
+                  Classic serpent navigation with pixel-perfect controls
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-[8px] text-[#a7886f] font-pixel mb-2">⌨️ ARROW KEYS</div>
+                <div className="inline-block px-2 py-1 bg-[#22c55e]/20 border border-[#22c55e]/40 rounded text-[9px] font-pixel text-[#5d4e37] group-hover:bg-[#22c55e]/30 transition-colors duration-200">
+                  ▶ PLAY
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pong Game */}
+          <div
+            onClick={() => window.open('https://ponggame.org/', '_blank')}
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+          >
+            {/* Pixel Art Background Pattern */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `
+                linear-gradient(45deg, #3b82f6 25%, transparent 25%),
+                linear-gradient(-45deg, #3b82f6 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #3b82f6 75%),
+                linear-gradient(-45deg, transparent 75%, #3b82f6 75%)
+              `,
+              backgroundSize: '6px 6px',
+              backgroundPosition: '0 0, 0 3px, 3px -3px, -3px 0px'
+            }}></div>
+
+            <div className="relative h-full p-4 flex flex-col justify-between">
+              <div className="text-center">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-200">🏓</div>
+                <h3 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-2">
+                  PONG
+                </h3>
+                <p className="text-[9px] text-[#8b6f47] font-pixel-content leading-relaxed">
+                  Retro table tennis with authentic CRT feel
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-[8px] text-[#a7886f] font-pixel mb-2">🖱️ MOUSE</div>
+                <div className="inline-block px-2 py-1 bg-[#3b82f6]/20 border border-[#3b82f6]/40 rounded text-[9px] font-pixel text-[#5d4e37] group-hover:bg-[#3b82f6]/30 transition-colors duration-200">
+                  ▶ PLAY
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Tetris Game */}
+          <div
+            onClick={() => window.open('https://tetris.com/play-tetris/', '_blank')}
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+          >
+            {/* Pixel Art Background Pattern */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `
+                linear-gradient(45deg, #ec4899 25%, transparent 25%),
+                linear-gradient(-45deg, #ec4899 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ec4899 75%),
+                linear-gradient(-45deg, transparent 75%, #ec4899 75%)
+              `,
+              backgroundSize: '10px 10px',
+              backgroundPosition: '0 0, 0 5px, 5px -5px, -5px 0px'
+            }}></div>
+
+            <div className="relative h-full p-4 flex flex-col justify-between">
+              <div className="text-center">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-200">🧩</div>
+                <h3 className="font-pixel text-[12px] uppercase tracking-[0.2em] text-[#5d4e37] mb-2">
+                  TETRIS
+                </h3>
+                <p className="text-[9px] text-[#8b6f47] font-pixel-content leading-relaxed">
+                  Stack blocks and clear lines in this puzzle classic
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-[8px] text-[#a7886f] font-pixel mb-2">⌨️ ROTATIONS</div>
+                <div className="inline-block px-2 py-1 bg-[#ec4899]/20 border border-[#ec4899]/40 rounded text-[9px] font-pixel text-[#5d4e37] group-hover:bg-[#ec4899]/30 transition-colors duration-200">
+                  ▶ PLAY
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Retro Footer */}
+        <div className="mt-6 text-center relative">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-[#d4a574]">◆</span>
+            <span className="text-[9px] text-[#8b6f47] font-pixel uppercase tracking-[0.2em]">ARCADE STATUS: ONLINE</span>
+            <span className="text-[#d4a574]">◆</span>
+          </div>
+          <p className="text-[8px] text-[#a7886f] font-pixel-content opacity-75">
+            › GAMES OPEN IN NEW TABS • NO DOWNLOADS REQUIRED ‹
+          </p>
+        </div>
       </div>
     ),
   },
