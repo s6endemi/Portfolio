@@ -41,7 +41,7 @@ body {
   height: 100vh;
 }
 
-/* Terminal Animations */
+/* Terminal & Boot Animations */
 @keyframes scan {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100vh); }
@@ -55,6 +55,43 @@ body {
 @keyframes flicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.98; }
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 6px;
+  }
+}
+
+@keyframes bootGlow {
+  0%, 100% {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Custom pixel grid */
+.pixel-grid-20 {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 4px;
 }
 
 /* Scrollbar Styling for Terminal */
