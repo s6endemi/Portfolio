@@ -102,7 +102,7 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(ellipse at center, #001a2e 0%, #000811 50%, #000000 100%)'
+              background: 'radial-gradient(circle at 20% 20%, rgba(59,130,246,0.45) 0%, rgba(12,74,110,0.85) 45%, #051022 90%)'
             }}
           />
           <motion.div
@@ -206,41 +206,105 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                 )}
 
                 {stage === 'title' && (
-                  <motion.div className="flex flex-col items-center gap-8 max-w-4xl mx-auto">
+                  <motion.div className="flex flex-col items-center gap-16 max-w-4xl mx-auto">
                     <motion.span
-                      className="text-xl tracking-[0.3em] text-cyan-300"
+                      className="text-xl tracking-[0.3em] text-sky-200"
                       style={{
                         fontFamily: PIXEL_FONT,
-                        textShadow: '0 0 15px #00ffff'
+                        textShadow: '0 0 15px rgba(59,130,246,0.8)'
                       }}
                     >
                       LOADING PORTFOLIO
                     </motion.span>
-                    <motion.h1
-                      className="text-6xl sm:text-7xl lg:text-8xl"
-                      style={{
-                        fontFamily: PIXEL_FONT,
-                        background: 'linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00, #00ffff)',
-                        backgroundSize: '400% 400%',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        animation: 'rainbow 4s ease infinite',
-                        filter: 'drop-shadow(0 0 30px rgba(0,255,255,0.8))'
-                      }}
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                      EREN
-                    </motion.h1>
+
+                    {/* Pixel Loading Spinner */}
+                    <motion.div className="flex flex-col items-center gap-10">
+                      <div className="relative">
+                        {/* Outer spinning ring */}
+                        <motion.div
+                          className="w-24 h-24 border-4 border-transparent border-t-cyan-400 border-r-blue-400"
+                          style={{
+                            borderRadius: '0', // Keep it pixelated
+                            boxShadow: '0 0 20px rgba(59,130,246,0.5)'
+                          }}
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                        />
+
+                        {/* Inner pulsing square */}
+                        <motion.div
+                          className="absolute inset-6 bg-gradient-to-br from-cyan-400 to-blue-500"
+                          style={{
+                            boxShadow: '0 0 15px rgba(59,130,246,0.7)'
+                          }}
+                          animate={{
+                            scale: [0.8, 1.2, 0.8],
+                            opacity: [0.6, 1, 0.6]
+                          }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+
+                        {/* Corner pixels */}
+                        {[0, 1, 2, 3].map((i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute w-2 h-2 bg-cyan-300"
+                            style={{
+                              top: i < 2 ? '-4px' : 'calc(100% - 4px)',
+                              left: i % 2 === 0 ? '-4px' : 'calc(100% - 4px)',
+                              boxShadow: '0 0 8px rgba(0,255,255,0.8)'
+                            }}
+                            animate={{
+                              opacity: [0.3, 1, 0.3],
+                              scale: [0.5, 1, 0.5]
+                            }}
+                            transition={{
+                              duration: 0.8,
+                              repeat: Infinity,
+                              delay: i * 0.2,
+                              ease: 'easeInOut'
+                            }}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Loading text with dots */}
+                      <motion.div
+                        className="flex items-center gap-1 text-sky-300"
+                        style={{ fontFamily: PIXEL_FONT }}
+                      >
+                        <span className="text-sm tracking-wider">INITIALIZING</span>
+                        <motion.span
+                          animate={{ opacity: [0, 1, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                        >
+                          .
+                        </motion.span>
+                        <motion.span
+                          animate={{ opacity: [0, 1, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                        >
+                          .
+                        </motion.span>
+                        <motion.span
+                          animate={{ opacity: [0, 1, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                        >
+                          .
+                        </motion.span>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Progress bar */}
                     <motion.div
-                      className="w-96 h-2 border-2 border-cyan-400 relative bg-black/60"
+                      className="w-80 h-2 border-2 border-sky-400 relative bg-black/40"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
+                      transition={{ delay: 1 }}
                     >
                       <motion.div
-                        className="h-full bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300"
-                        style={{ boxShadow: '0 0 25px rgba(0,255,255,0.6)' }}
+                        className="h-full bg-gradient-to-r from-sky-400 via-cyan-400 to-blue-400"
+                        style={{ boxShadow: '0 0 20px rgba(59,130,246,0.6)' }}
                         initial={{ width: '0%' }}
                         animate={{ width: '100%' }}
                         transition={{ duration: 3, ease: 'easeInOut' }}
@@ -250,7 +314,7 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                 )}
 
                 {stage === 'prompt' && (
-                  <motion.div className="flex flex-col items-center gap-10 max-w-4xl mx-auto">
+                  <motion.div className="flex flex-col items-center gap-12 max-w-4xl mx-auto">
                     <motion.h1
                       className="text-5xl sm:text-6xl lg:text-7xl mb-8"
                       style={{
@@ -282,14 +346,14 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                         ADVENTURE PORTFOLIO
                       </motion.div>
                       <motion.div
-                        className="text-lg tracking-wider text-cyan-500 mb-8"
+                        className="text-lg tracking-wider text-cyan-500 mb-12"
                         style={{ fontFamily: PIXEL_FONT }}
                       >
                         FULL STACK DEVELOPER
                       </motion.div>
 
                       <motion.div
-                        className="flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.3rem] text-emerald-300/80 mb-12"
+                        className="flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.3rem] text-emerald-300/80 mb-16"
                         style={{ fontFamily: PIXEL_FONT }}
                       >
                         <span>React</span>
