@@ -36,13 +36,25 @@ body {
   font-family: 'Press Start 2P', monospace;
   background: #000000;
   color: #00ff41;
-  overflow: hidden;
   width: 100vw;
   height: 100vh;
   /* Enable smooth scrolling */
   scroll-behavior: smooth;
   /* Improve touch scrolling on mobile */
   -webkit-overflow-scrolling: touch;
+  /* Allow scrolling on mobile, hidden on desktop */
+  overflow: hidden;
+}
+
+/* Enable mobile scrolling */
+@media (max-width: 767px) {
+  body {
+    overflow: auto;
+    /* Better mobile scroll behavior */
+    overscroll-behavior: contain;
+    /* Prevent bounce on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Terminal & Boot Animations */
@@ -160,6 +172,42 @@ body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+/* Desktop scrolling improvements */
+.desktop-scroll {
+  /* Custom scrollbar for desktop scroll area */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 65, 0.6) transparent;
+}
+
+.desktop-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.desktop-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.desktop-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.6);
+  border-radius: 3px;
+  box-shadow: 0 0 4px rgba(0, 255, 65, 0.3);
+}
+
+.desktop-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.8);
+}
+
+/* Mobile-specific desktop scrolling */
+@media (max-width: 767px) {
+  .desktop-scroll::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .desktop-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 65, 0.4);
+  }
 }
 
 body,

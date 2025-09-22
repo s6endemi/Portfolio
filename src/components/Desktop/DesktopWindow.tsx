@@ -51,12 +51,15 @@ const DesktopWindow = ({
     const isTerminal = title === 'TERMINAL.EXE'
 
     if (isMobile) {
+      const windowWidth = Math.min(screenSize.width - 20, 520)
+      const windowHeight = isTerminal ? Math.min(screenSize.height - 140, 500) : 'auto'
+
       return {
-        width: Math.min(screenSize.width - 20, 520),
-        height: isTerminal ? Math.min(screenSize.height - 100, 500) : 'auto',
+        width: windowWidth,
+        height: windowHeight,
         position: {
-          x: Math.max(10, (screenSize.width - Math.min(screenSize.width - 20, 520)) / 2),
-          y: 60
+          x: Math.max(10, (screenSize.width - windowWidth) / 2),
+          y: 20 // Closer to top, accounting for fixed taskbar at bottom
         }
       }
     } else if (isTablet) {
@@ -139,11 +142,13 @@ const DesktopWindow = ({
     const isMobile = screenSize.width < 768
 
     const maxX = Math.max(16, window.innerWidth - windowWidth - 20)
-    const maxY = Math.max(48, window.innerHeight - (isMobile ? 200 : 156))
+    // Account for fixed taskbar (72px) + padding on mobile
+    const taskbarHeight = isMobile ? 72 : 0
+    const maxY = Math.max(20, window.innerHeight - taskbarHeight - 100)
 
     return {
-      x: Math.min(Math.max(16, x), maxX),
-      y: Math.min(Math.max(48, y), maxY),
+      x: Math.min(Math.max(10, x), maxX),
+      y: Math.min(Math.max(20, y), maxY),
     }
   }
 

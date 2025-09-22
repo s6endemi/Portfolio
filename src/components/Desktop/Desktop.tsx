@@ -547,10 +547,24 @@ const Desktop = () => {
       const withoutId = previous.filter((windowId) => windowId !== id)
       return [...withoutId, id]
     })
+
+    // On mobile, scroll to bring window into view
+    const isMobile = screenSize.width < 768
+    if (isMobile && windowPositions[id]) {
+      const windowY = windowPositions[id].y
+      const scrollContainer = document.querySelector('.desktop-scroll')
+      if (scrollContainer) {
+        scrollContainer.scrollTo({
+          top: Math.max(0, windowY - 50),
+          behavior: 'smooth'
+        })
+      }
+    }
   }
 
   const openWindow = (id: WindowId, origin?: { x: number; y: number }) => {
     const alreadyOpen = openWindows.includes(id)
+    const isMobile = screenSize.width < 768
 
     if (origin && !alreadyOpen) {
       setWindowOrigins((previous) => ({
@@ -569,9 +583,14 @@ const Desktop = () => {
     }
 
     if (!alreadyOpen && !windowPositions[id]) {
+      // On mobile, center windows and position them higher
+      const mobilePosition = isMobile
+        ? { x: Math.max(10, (screenSize.width - 520) / 2), y: 20 }
+        : WINDOW_CONFIG[id].position
+
       setWindowPositions((previous) => ({
         ...previous,
-        [id]: WINDOW_CONFIG[id].position,
+        [id]: mobilePosition,
       }))
     }
 
@@ -653,21 +672,41 @@ const Desktop = () => {
 
   return (
     <div
-      className="relative h-screen w-screen overflow-hidden font-pixel touch-manipulation"
+      className="relative h-screen w-screen font-pixel touch-manipulation desktop-scroll"
       style={{
         backgroundColor: '#faf7f0',
         color: '#5d4e37',
         backgroundImage: 'url(/wallpapers/cozy-pixel.svg)',
         backgroundSize: 'clamp(200px, 50vw, 400px) clamp(150px, 37.5vw, 300px)',
-        backgroundRepeat: 'repeat'
+        backgroundRepeat: 'repeat',
+        // Enable mobile scrolling while keeping desktop experience
+        overflow: screenSize.width < 768 ? 'auto' : 'hidden',
+        // Add smooth scrolling for mobile
+        scrollBehavior: 'smooth',
+        WebkitOverflowScrolling: 'touch'
       }}
       onMouseDown={handleDesktopMouseDown}
       onTouchStart={handleDesktopMouseDown}
     >
       <Wallpaper />
 
-      <div className="relative z-10 flex h-full flex-col">
-         <div className="relative flex-1">
+      <div
+        className="relative z-10 flex flex-col"
+        style={{
+          // On mobile, allow content to be taller than screen to enable scrolling
+          minHeight: screenSize.width < 768 ? 'calc(100vh + 400px)' : '100vh',
+          height: screenSize.width < 768 ? 'auto' : '100vh'
+        }}
+      >
+         <div
+           className="relative"
+           style={{
+             flex: screenSize.width < 768 ? 'none' : '1',
+             minHeight: screenSize.width < 768 ? 'calc(100vh + 350px)' : 'auto',
+             // Add padding bottom on mobile to account for fixed taskbar
+             paddingBottom: screenSize.width < 768 ? '80px' : '0'
+           }}
+         >
            <div className="absolute inset-0">
              {/* Desktop Icons - Responsive positioned */}
              {DESKTOP_SHORTCUTS.map((shortcut) => {
@@ -718,7 +757,17 @@ const Desktop = () => {
           </div>
         </div>
 
-        <div className="relative">
+        <div
+          className="relative"
+          style={{
+            // On mobile, make taskbar fixed at bottom of screen
+            position: screenSize.width < 768 ? 'fixed' : 'relative',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 50
+          }}
+        >
           <Taskbar
             timeLabel={timeLabel}
             isStartOpen={isStartOpen}
