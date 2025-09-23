@@ -22,7 +22,7 @@ const SimpleMusicPlayer = () => {
 
   return (
     <div
-      className="h-full overflow-hidden relative"
+      className="h-full overflow-y-auto relative"
       style={{
         background: 'linear-gradient(180deg, #8B4513 0%, #CD853F 15%, #DEB887 50%, #F5DEB3 85%, #FFF8DC 100%)',
         imageRendering: 'pixelated'
@@ -60,7 +60,7 @@ const SimpleMusicPlayer = () => {
         />
       </div>
 
-      <div className="relative z-10 p-3 sm:p-6">
+      <div className="relative z-10 p-3 sm:p-6 pb-20 sm:pb-6">
         {/* Pixel Art Header */}
         <div className="mb-6 sm:mb-12 text-center">
           {/* Café Sign */}

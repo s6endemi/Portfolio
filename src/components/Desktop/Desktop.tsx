@@ -112,253 +112,171 @@ const ProjectsContent = () => {
     const project = projects.find(p => p.id === selectedProject)
     if (!project) return null
     return (
-      <div className="h-full flex flex-col">
-        {/* Improved Header with back button */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-[#d0c4b0]">
+      <div className="space-y-4 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
+        {/* Clean Header with back button */}
+        <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => setSelectedProject(null)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-[#d0c4b0] bg-white/90 hover:bg-[#faf3e5] hover:scale-105 transition-all duration-200 shadow-[2px_2px_0_0_rgba(139,111,71,0.2)] hover:shadow-[3px_3px_0_0_rgba(139,111,71,0.3)]"
+            className="flex items-center gap-2 px-3 py-1.5 rounded border-2 border-[#d0c4b0] bg-white/90 hover:bg-[#faf3e5] transition-all duration-200 shadow-[2px_2px_0_0_rgba(139,111,71,0.2)]"
           >
             <span className="text-[#7c6544] text-sm">←</span>
-            <span className="font-pixel text-[10px] uppercase tracking-[0.2em] text-[#7c6544]">Back to Projects</span>
+            <span className="font-pixel text-[9px] uppercase tracking-[0.2em] text-[#7c6544]">Back</span>
           </button>
-          <div className="flex items-center gap-4">
-            <div className="text-3xl">{project.icon}</div>
-            <div className="text-right">
-              <h2 className="font-pixel text-[16px] uppercase tracking-[0.3em] text-[#5d4e37] mb-1">{project.title}</h2>
-              <p className="text-[12px] text-[#8b6f47] font-medium">{project.subtitle}</p>
-              <span className={`inline-block mt-1 px-3 py-1 rounded-full text-[9px] font-pixel uppercase tracking-[0.1em] text-white bg-gradient-to-r ${project.color} shadow-sm`}>
-                {project.status}
-              </span>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{project.icon}</span>
+            <div>
+              <h2 className="font-pixel text-[12px] uppercase tracking-[0.3em] text-[#5d4e37]">{project.title}</h2>
+              <p className="text-[10px] text-[#8b6f47]">{project.subtitle}</p>
             </div>
           </div>
         </div>
 
-        {/* Project detail content - Resume-inspired clean design */}
-        <div className="flex-1 space-y-6 overflow-y-auto">
-          {/* Project Overview - Enhanced with prominent CTA */}
-          <section className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
-                  {project.title}
-                </h3>
-                <p className="text-[13px] font-semibold mb-2">{project.subtitle}</p>
-                <span className="inline-block rounded-md border border-[#d0c4b0] bg-[#faf3e5] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#886746]">
-                  {project.year}
-                </span>
-              </div>
-              {project.details.website && (
-                <div className="flex flex-col items-end gap-2">
-                  <a
-                    href={project.details.website}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`group relative overflow-hidden px-6 py-3 bg-gradient-to-r ${project.color} text-white text-[11px] font-pixel uppercase tracking-[0.15em] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white/20`}
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      🚀 Visit Live Site
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                  </a>
-                  <p className="text-[9px] text-[#8b6f47] italic">Click to view live demo</p>
-                </div>
-              )}
+        {/* Project Overview */}
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <span className="inline-block rounded border border-[#d0c4b0] bg-[#faf3e5] px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-[#886746] mb-2">
+                {project.year}
+              </span>
+              <p className="text-[12px] leading-relaxed text-[#5d4e37]">{project.description}</p>
             </div>
-            <p className="text-[12px] leading-relaxed text-[#5d4e37]">{project.description}</p>
-          </section>
+            {project.details.website && (
+              <a
+                href={project.details.website}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-2 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded shadow-sm hover:scale-105 transition-transform duration-200 ml-4"
+              >
+                Visit Site
+              </a>
+            )}
+          </div>
+        </section>
 
-          {/* Key Achievements */}
-          <section className="rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-            <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544] mb-3">
-              Key Achievements
-            </h3>
-            <ul className="space-y-2 text-[12px]">
-              {project.highlights.map((highlight, i) => (
-                <li key={i}>• {highlight}</li>
-              ))}
-            </ul>
-          </section>
+        {/* Key Highlights */}
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+            Key Highlights
+          </h3>
+          <ul className="space-y-1.5 text-[11px] text-[#5d4e37]">
+            {project.highlights.map((highlight, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <span className="text-[#7ba7bc] mt-0.5">•</span>
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-          {/* Technology Stack - Resume style */}
-          <section className="space-y-5 rounded-lg border-2 border-[#d0c4b0] bg-[#faf7f0]/90 p-5 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-            <h3 className="font-pixel text-[12px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
-              Technology Stack
-            </h3>
-            <div className="bg-white/80 rounded-md p-3 border border-[#e5d8c6]">
-              <div className="flex flex-wrap gap-1.5 text-[10px]">
-                {project.details.tech.map((tech) => (
-                  <span key={tech} className={`rounded-full border border-[#d0c4b0] bg-gradient-to-r ${project.color} text-white px-2.5 py-1 shadow-[1px_1px_0_0_rgba(139,111,71,0.2)]`}>
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Project Details - Clean sections */}
-          <div className="space-y-4">
-            {Object.entries(project.details).filter(([key]) => key !== 'tech' && key !== 'website' && key !== 'impact').map(([key, value]) => (
-              <section key={key} className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544]">
-                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                  </h3>
-                </div>
-                {Array.isArray(value) ? (
-                  <div className="flex flex-wrap gap-1.5">
-                    {value.map((item, i) => (
-                      <span key={i} className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded-md text-[10px] text-[#8b6f47]">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-[12px] leading-relaxed text-[#5d4e37]">{value}</p>
-                )}
-              </section>
+        {/* Technology Stack */}
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+            Technology Stack
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {project.details.tech.map((tech) => (
+              <span key={tech} className="px-2 py-1 bg-[#faf3e5] border border-[#e5d8c6] rounded text-[9px] text-[#8b6f47]">
+                {tech}
+              </span>
             ))}
           </div>
+        </section>
 
-          {/* Impact Statement */}
-          <section className="rounded-lg border-2 border-[#d0c4b0] bg-white p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
-            <h3 className="font-pixel text-[12px] uppercase tracking-[0.35em] text-[#7c6544] mb-3">
-              Impact & Vision
-            </h3>
-            <p className="text-[12px] leading-relaxed text-[#5d4e37]">{project.details.impact}</p>
-          </section>
+        {/* Project Details */}
+        <div className="space-y-3">
+          {Object.entries(project.details).filter(([key]) => key !== 'tech' && key !== 'website' && key !== 'impact').map(([key, value]) => (
+            <section key={key} className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-3 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+              <h3 className="font-pixel text-[10px] uppercase tracking-[0.3em] text-[#7c6544] mb-2">
+                {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
+              </h3>
+              <p className="text-[11px] leading-relaxed text-[#5d4e37]">{value}</p>
+            </section>
+          ))}
         </div>
+
+        {/* Impact Statement */}
+        <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-4 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+          <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544] mb-3">
+            Impact & Vision
+          </h3>
+          <p className="text-[11px] leading-relaxed text-[#5d4e37]">{project.details.impact}</p>
+        </section>
       </div>
     )
   }
 
-  // Main grid view
+  // Main grid view - Compact and concise design
   return (
-    <div className="h-full flex flex-col">
-      {/* Enhanced Archive Header */}
-      <div className="mb-8 pb-6 border-b-2 border-[#d0c4b0] bg-gradient-to-r from-[#faf7f0]/50 to-transparent rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-gradient-to-br from-[#7ba7bc] to-[#9fbec8] text-white shadow-lg">
-              <span className="text-2xl">💼</span>
-            </div>
-            <div>
-              <h2 className="font-pixel text-[16px] uppercase tracking-[0.3em] text-[#5d4e37] mb-1">Project Archive</h2>
-              <p className="text-[12px] text-[#8b6f47]">Building the future, one project at a time</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544]">{projects.length} Projects</p>
-            <p className="text-[9px] text-[#8b6f47]">Click any card to explore</p>
+    <div className="space-y-4 text-left font-pixel-content text-[14px] leading-[1.8] tracking-[0.01em] text-[#433222]">
+      {/* Compact Header */}
+      <section className="rounded-lg border-2 border-[#d0c4b0] bg-white/95 p-3 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)]">
+        <div className="flex items-center gap-3">
+          <span className="text-xl">💼</span>
+          <div>
+            <h3 className="font-pixel text-[11px] uppercase tracking-[0.3em] text-[#7c6544]">
+              Project Portfolio
+            </h3>
+            <p className="text-[11px] text-[#8b6f47]">AI/ML, Healthcare & Full-stack Development</p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Enhanced Grid Layout */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-8">
-          {projects.map((project, index) => (
-            <div
-              key={project.id}
-              onClick={() => setSelectedProject(project.id)}
-              className="group relative bg-white/95 rounded-xl border-2 border-[#d0c4b0] p-6 cursor-pointer transition-all duration-500 hover:scale-[1.03] shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[8px_8px_0_0_rgba(139,111,71,0.4)] min-h-[380px] flex flex-col overflow-hidden"
-              style={{
-                animationDelay: `${index * 100}ms`,
-                animation: 'fadeInUp 0.6s ease-out forwards'
-              }}
-            >
-              {/* Enhanced Project Header */}
-              <div className="relative mb-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-br ${project.color} text-white shadow-md group-hover:shadow-lg transition-all duration-300`}>
-                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">{project.icon}</span>
-                    </div>
-                    <div>
-                      <h3 className="font-pixel text-[13px] uppercase tracking-[0.25em] text-[#5d4e37] mb-2 group-hover:text-[#7c6544] transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-[12px] text-[#8b6f47] font-medium leading-relaxed mb-2">
-                        {project.subtitle}
-                      </p>
-                      <span className="inline-block text-[10px] font-pixel uppercase tracking-[0.15em] text-[#8b6f47] bg-[#faf3e5] px-3 py-1 rounded-full border border-[#e5d8c6]">
-                        {project.year}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={`px-3 py-1.5 rounded-full text-[9px] font-pixel uppercase tracking-[0.1em] text-white bg-gradient-to-r ${project.color} shadow-md ${project.status === 'Active Funding' ? 'animate-pulse' : ''}`}>
-                    {project.status}
-                  </div>
+      {/* Compact Projects List */}
+      <section className="space-y-3">
+        {projects.map((project) => (
+          <div
+            key={project.id}
+            onClick={() => setSelectedProject(project.id)}
+            className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-3 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200 cursor-pointer group"
+          >
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{project.icon}</span>
+                <div>
+                  <h4 className="font-pixel text-[11px] uppercase tracking-[0.2em] text-[#5d4e37]">{project.title}</h4>
+                  <p className="text-[10px] text-[#8b6f47]">{project.subtitle}</p>
                 </div>
               </div>
-
-              {/* Project Description */}
-              <div className="flex-1 mb-5">
-                <p className="text-[11px] text-[#8b6f47] leading-relaxed line-clamp-3">
-                  {project.shortDesc}
-                </p>
+              <div className="flex items-center gap-2">
+                <span className="text-[8px] font-pixel uppercase tracking-[0.1em] text-[#8b6f47] bg-[#faf3e5] px-2 py-0.5 rounded border border-[#e5d8c6]">
+                  {project.year}
+                </span>
+                {project.details.website && (
+                  <a
+                    href={project.details.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="px-2 py-1 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[8px] font-pixel uppercase tracking-[0.1em] rounded shadow-sm hover:scale-105 transition-transform duration-200"
+                  >
+                    Live
+                  </a>
+                )}
               </div>
-
-              {/* Key Highlights Preview */}
-              <div className="mb-5">
-                <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544] mb-3">Key Highlights</h4>
-                <div className="space-y-2">
-                  {project.highlights.slice(0, 2).map((highlight, i) => (
-                    <div key={i} className="flex items-start gap-2 p-2 bg-[#faf7f0] rounded-md border border-[#e5d8c6]">
-                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${project.color} mt-1.5 flex-shrink-0`}></div>
-                      <p className="text-[10px] text-[#5d4e37] leading-relaxed">{highlight.split(' ').slice(0, 6).join(' ')}...</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tech Stack Preview */}
-              <div className="mb-5">
-                <h4 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-[#7c6544] mb-2">Tech Stack</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {project.tags.slice(0, 3).map((tag, i) => (
-                    <span key={i} className={`px-2 py-1 bg-gradient-to-r ${project.color} text-white rounded-full text-[8px] font-medium shadow-sm`}>
-                      {tag}
-                    </span>
-                  ))}
-                  {project.tags.length > 3 && (
-                    <span className="px-2 py-1 bg-[#f0e5d4] border border-[#d0c4b0] rounded-full text-[8px] text-[#9b7a52] font-medium">
-                      +{project.tags.length - 3} more
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Enhanced CTA Section */}
-              <div className="mt-auto pt-4 border-t-2 border-[#e5d8c6]">
-                <div className="flex items-center justify-between">
-                  {project.details.website ? (
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color} animate-pulse`}></div>
-                      <span className="text-[9px] text-[#22c55e] font-pixel uppercase tracking-[0.1em]">Live Site Available</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color}`}></div>
-                      <span className="text-[9px] text-[#8b6f47] font-pixel uppercase tracking-[0.1em]">{project.status}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <span className="text-[9px] text-[#9b7a52] font-pixel uppercase tracking-[0.1em]">
-                      Explore Project
-                    </span>
-                    <span className="text-[12px]">→</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Enhanced Hover Effects */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-8 transition-all duration-500 rounded-xl`}></div>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl border-2 border-transparent group-hover:border-white/20"></div>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="flex flex-wrap gap-1 mb-2">
+              {project.tags.slice(0, 3).map((tag) => (
+                <span key={tag} className="px-1.5 py-0.5 bg-[#faf3e5] border border-[#e5d8c6] rounded text-[8px] text-[#8b6f47]">
+                  {tag}
+                </span>
+              ))}
+              {project.tags.length > 3 && (
+                <span className="px-1.5 py-0.5 bg-[#faf3e5] border border-[#e5d8c6] rounded text-[8px] text-[#8b6f47]">
+                  +{project.tags.length - 3}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center justify-between text-[9px]">
+              <span className="text-[#8b6f47]">
+                {project.status === 'Active Funding' ? '🟢' : project.status === 'Completed' ? '✅' : '🔬'} {project.status}
+              </span>
+              <span className="text-[#9b7a52] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Details →
+              </span>
+            </div>
+          </div>
+        ))}
+      </section>
     </div>
   )
 }
@@ -1230,18 +1148,18 @@ const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
     position: { x: 80, y: 720 }
   },
   {
-    id: 'games',
-    label: 'GAMES',
-    icon: '🎮',
-    description: 'Retro arcade games',
-    position: { x: 80, y: 840 }
-  },
-  {
     id: 'music',
     label: 'MUSIC',
     icon: '🎵',
     description: 'Vinyl music player',
-    position: { x: 200, y: 120 }
+    position: { x: 80, y: 840 }
+  },
+  {
+    id: 'games',
+    label: 'GAMES',
+    icon: '🎮',
+    description: 'Retro arcade games',
+    position: { x: 80, y: 960 }
   }
 ]
 
