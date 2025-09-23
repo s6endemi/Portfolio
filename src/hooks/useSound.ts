@@ -119,14 +119,14 @@ export const useSound = (): UseSoundReturn => {
 
       // Load all sound effects
       const loadPromises = SOUND_EFFECTS.map(effect => {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve) => {
           const howl = new Howl({
             ...effect.config,
             onload: () => {
               soundMap.set(effect.name, howl)
               resolve()
             },
-            onloaderror: (id, error) => {
+            onloaderror: (_, error) => {
               console.warn(`Failed to load sound: ${effect.name}`, error)
               // Still resolve to not block other sounds
               resolve()
@@ -208,10 +208,13 @@ export const useSound = (): UseSoundReturn => {
       currentMusicRef.current = musicHowl
       setCurrentMusic(musicName)
 
+      // Get original volume from config
+      const originalVolume = SOUND_EFFECTS.find(effect => effect.name === musicName)?.config.volume || 0.3
+
       // Fade in the music
       musicHowl.volume(0)
       musicHowl.play()
-      musicHowl.fade(0, musicHowl._volume || 0.3, 1000)
+      musicHowl.fade(0, originalVolume, 1000)
     }
   }, [sounds, isLoaded])
 

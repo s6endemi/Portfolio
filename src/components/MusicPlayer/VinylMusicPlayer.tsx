@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useSoundContext } from '../../contexts/SoundContext'
 
 interface Track {
@@ -48,8 +48,6 @@ const VinylMusicPlayer = () => {
   const [volume, setVolume] = useState(0.6)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPlaylist, setShowPlaylist] = useState(false)
   const [autoStartTimer, setAutoStartTimer] = useState(10)
   const [autoStartActive, setAutoStartActive] = useState(true)
 
@@ -77,7 +75,6 @@ const VinylMusicPlayer = () => {
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration)
-      setIsLoading(false)
     }
 
     const handleTimeUpdate = () => {
@@ -89,11 +86,11 @@ const VinylMusicPlayer = () => {
     }
 
     const handleLoadStart = () => {
-      setIsLoading(true)
+      // Loading started
     }
 
     const handleCanPlay = () => {
-      setIsLoading(false)
+      // Can play
     }
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata)

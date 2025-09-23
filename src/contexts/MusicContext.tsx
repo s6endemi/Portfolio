@@ -1,4 +1,5 @@
-import { createContext, useContext, ReactNode, useState, useRef, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react'
+import type { ReactNode } from 'react'
 import { useSoundContext } from './SoundContext'
 
 interface Track {

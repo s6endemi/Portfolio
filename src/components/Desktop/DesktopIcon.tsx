@@ -1,7 +1,7 @@
 import type { KeyboardEvent, MouseEvent, TouchEvent } from 'react'
 import { motion, useAnimationControls } from 'framer-motion'
 import type { Variants } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 
 export type DesktopIconProps = {
   icon?: string
@@ -21,8 +21,6 @@ const DesktopIcon = ({
   onSelect,
 }: DesktopIconProps) => {
   const controls = useAnimationControls()
-  const [tapCount, setTapCount] = useState(0)
-  const tapTimeoutRef = useRef<number | null>(null)
 
   const triggerLaunch = useCallback(() => {
     controls.stop()
@@ -57,41 +55,11 @@ const DesktopIcon = ({
     event.preventDefault()
     event.stopPropagation()
 
-    // Clear any existing timeout
-    if (tapTimeoutRef.current) {
-      clearTimeout(tapTimeoutRef.current)
-    }
-
-    const newTapCount = tapCount + 1
-    setTapCount(newTapCount)
-
-    if (newTapCount === 1) {
-      // First tap - select the icon
-      onSelect?.()
-
-      // Set timeout to reset tap count if no second tap
-      tapTimeoutRef.current = setTimeout(() => {
-        setTapCount(0)
-      }, 300)
-    } else if (newTapCount === 2) {
-      // Double tap - activate the icon
-      setTapCount(0)
-      if (tapTimeoutRef.current) {
-        clearTimeout(tapTimeoutRef.current)
-      }
-      triggerLaunch()
-      onActivate?.()
-    }
+    // Single tap to activate on mobile
+    triggerLaunch()
+    onActivate?.()
   }
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (tapTimeoutRef.current) {
-        clearTimeout(tapTimeoutRef.current)
-      }
-    }
-  }, [])
 
   const iconVariants: Variants = {
     idle: {

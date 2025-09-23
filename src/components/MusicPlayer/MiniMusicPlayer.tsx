@@ -174,7 +174,7 @@ const MiniMusicPlayer = () => {
         </AnimatePresence>
       </motion.div>
 
-      <style jsx>{`
+      <style>{`
         input[type="range"]::-webkit-slider-thumb {
           appearance: none;
           height: 12px;

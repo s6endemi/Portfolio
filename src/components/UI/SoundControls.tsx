@@ -132,7 +132,7 @@ const SoundControls = () => {
         </AnimatePresence>
       </motion.div>
 
-      <style jsx>{`
+      <style>{`
         .slider::-webkit-slider-thumb {
           appearance: none;
           height: 16px;
