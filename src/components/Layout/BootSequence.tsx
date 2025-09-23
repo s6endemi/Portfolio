@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useSoundContext } from '../../contexts/SoundContext'
 
 interface BootSequenceProps {
   onComplete: () => void
@@ -24,6 +25,7 @@ const STAGE_FLOW: BootStage[] = [
 const BootSequence = ({ onComplete }: BootSequenceProps) => {
   const [stageIndex, setStageIndex] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
+  const { playMusic, stopMusic, playSound, isLoaded } = useSoundContext()
 
   const stage = STAGE_FLOW[stageIndex]?.id ?? 'prompt'
 
@@ -53,9 +55,26 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
     return () => clearTimeout(timeout)
   }, [stageIndex])
 
+  // Play boot music and sound effects
+  useEffect(() => {
+    if (!isLoaded) return
+
+    if (stage === 'intro') {
+      // Play boot sound and start retro adventure music
+      playSound('boot')
+      setTimeout(() => playMusic('bootMusic'), 500)
+    } else if (stage === 'title') {
+      // Play success sound for loading completion
+      setTimeout(() => playSound('success'), 2000)
+    }
+  }, [stage, isLoaded, playSound, playMusic])
+
   const handleComplete = useCallback(() => {
     setIsComplete(prev => (prev ? prev : true))
-  }, [])
+    // Stop boot music and play click sound
+    stopMusic()
+    playSound('click')
+  }, [stopMusic, playSound])
 
   useEffect(() => {
     if (stage !== 'prompt') {

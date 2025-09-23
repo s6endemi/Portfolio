@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { SoundProvider } from './contexts/SoundContext'
+import { MusicProvider } from './contexts/MusicContext'
 import Desktop from './components/Desktop/Desktop'
 import BootSequence from './components/Layout/BootSequence'
 
@@ -10,10 +12,12 @@ function App() {
   }
 
   return (
-    <>
-      {showBoot && <BootSequence onComplete={handleBootComplete} />}
-      {!showBoot && <Desktop />}
-    </>
+    <SoundProvider>
+      <MusicProvider>
+        {showBoot && <BootSequence onComplete={handleBootComplete} />}
+        {!showBoot && <Desktop />}
+      </MusicProvider>
+    </SoundProvider>
   )
 }
 

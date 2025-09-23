@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode, MouseEvent as ReactMouseEvent } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { useSoundContext } from '../../contexts/SoundContext'
 import DesktopIcon from './DesktopIcon'
 import Taskbar from './Taskbar'
 import type { TaskbarApp } from './Taskbar'
@@ -8,6 +9,9 @@ import NewStartMenu from './NewStartMenu'
 import DesktopWindow from './DesktopWindow'
 import Wallpaper from './Wallpaper'
 import InteractiveTerminal from '../Terminal/InteractiveTerminal'
+import SoundControls from '../UI/SoundControls'
+import SimpleMusicPlayer from '../MusicPlayer/SimpleMusicPlayer'
+import MiniMusicPlayer from '../MusicPlayer/MiniMusicPlayer'
 
 const ProjectsContent = () => {
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
@@ -359,7 +363,7 @@ const ProjectsContent = () => {
   )
 }
 
-type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games' | 'websites' | 'documents'
+type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games' | 'websites' | 'documents' | 'music'
 
 type WindowConfig = {
   title: string
@@ -1165,6 +1169,13 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
       </div>
     ),
   },
+  music: {
+    title: 'LOFI_CAFE.EXE',
+    icon: '🎵',
+    position: { x: 200, y: 80 },
+    content: <SimpleMusicPlayer />,
+    size: { width: 500, height: 600 }
+  },
 }
 
 type DesktopShortcut = {
@@ -1224,6 +1235,13 @@ const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
     icon: '🎮',
     description: 'Retro arcade games',
     position: { x: 80, y: 840 }
+  },
+  {
+    id: 'music',
+    label: 'MUSIC',
+    icon: '🎵',
+    description: 'Vinyl music player',
+    position: { x: 200, y: 120 }
   }
 ]
 
@@ -1279,6 +1297,13 @@ const START_MENU_ITEMS = [
     icon: '📁',
     description: 'Files, photos & downloads',
     onClick: () => {}, // Will be set in component
+  },
+  {
+    id: 'music',
+    label: 'MUSIC PLAYER',
+    icon: '🎵',
+    description: 'Vinyl lo-fi lounge',
+    onClick: () => {}, // Will be set in component
   }
 ]
 
@@ -1305,6 +1330,7 @@ const Desktop = () => {
   const [openWindows, setOpenWindows] = useState<WindowId[]>(['about'])
   const [maximizedWindows, setMaximizedWindows] = useState<Set<WindowId>>(new Set())
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 })
+  const { playSound, playMusic, isLoaded } = useSoundContext()
 
   // Handle responsive screen size changes
   useEffect(() => {
@@ -1317,8 +1343,20 @@ const Desktop = () => {
     return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
 
+  // Start desktop music when component mounts
+  useEffect(() => {
+    if (isLoaded) {
+      // Add a slight delay to let the boot sequence finish
+      const timer = setTimeout(() => {
+        playMusic('desktopMusic')
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [isLoaded, playMusic])
+
   const handleStartToggle = () => {
     setIsStartOpen((previous) => !previous)
+    playSound('click')
   }
 
   useEffect(() => {
@@ -1399,6 +1437,13 @@ const Desktop = () => {
       }
       return [...previous, id]
     })
+
+    // Play sound effect
+    if (!alreadyOpen) {
+      playSound('open')
+    } else {
+      playSound('click')
+    }
   }
 
   const closeWindow = (id: WindowId) => {
@@ -1413,6 +1458,7 @@ const Desktop = () => {
       newSet.delete(id)
       return newSet
     })
+    playSound('close')
   }
 
   const toggleWindowMaximize = (id: WindowId) => {
@@ -1444,6 +1490,7 @@ const Desktop = () => {
   const handleShortcutSelect = (id: WindowId) => {
     setSelectedShortcut(id)
     setIsStartOpen(false)
+    playSound('click')
   }
 
   const handleDesktopMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
@@ -1602,6 +1649,12 @@ const Desktop = () => {
           />
         </div>
       </div>
+
+      {/* Sound Controls */}
+      <SoundControls />
+
+      {/* Mini Music Player - appears when music is playing */}
+      <MiniMusicPlayer />
     </div>
   )
 }

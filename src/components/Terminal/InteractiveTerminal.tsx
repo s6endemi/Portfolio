@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { commands } from './commands'
 import TypewriterText from './TypewriterText'
+import { useSoundContext } from '../../contexts/SoundContext'
 
 interface TerminalLine {
   id: string
@@ -24,6 +25,7 @@ const InteractiveTerminal = () => {
   const [canScrollDown, setCanScrollDown] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
+  const { playSound } = useSoundContext()
 
   // Track screen size for dynamic font sizing
   useEffect(() => {
@@ -259,6 +261,7 @@ const InteractiveTerminal = () => {
           text: `❌ Error executing command: ${commandName}`,
           timestamp: new Date()
         }])
+        playSound('error')
       }
     } else {
       setLines(prev => [...prev, {
@@ -267,6 +270,7 @@ const InteractiveTerminal = () => {
         text: `❌ Command not found: ${commandName}. Type "help" for available commands.`,
         timestamp: new Date()
       }])
+      playSound('error')
     }
 
     setIsProcessing(false)
@@ -486,6 +490,7 @@ const InteractiveTerminal = () => {
               value={currentInput}
               onChange={(e) => setCurrentInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              onInput={() => playSound('type')}
               onFocus={(e) => e.preventDefault()}
               disabled={isProcessing || isBooting}
               className="flex-1 bg-transparent border-none outline-none font-mono touch-manipulation"
