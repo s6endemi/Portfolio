@@ -1655,6 +1655,7 @@ const Desktop = () => {
 
       {/* Mini Music Player - appears when music is playing */}
       <MiniMusicPlayer />
+
     </div>
   )
 }

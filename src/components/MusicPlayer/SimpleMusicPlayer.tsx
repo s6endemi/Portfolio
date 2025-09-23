@@ -60,12 +60,12 @@ const SimpleMusicPlayer = () => {
         />
       </div>
 
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 p-3 sm:p-6">
         {/* Pixel Art Header */}
-        <div className="mb-12 text-center">
+        <div className="mb-6 sm:mb-12 text-center">
           {/* Café Sign */}
           <div
-            className="inline-block p-8 mb-6 relative"
+            className="inline-block p-4 sm:p-8 mb-4 sm:mb-6 relative"
             style={{
               background: 'linear-gradient(45deg, #8B4513 0%, #A0522D 50%, #8B4513 100%)',
               border: '4px solid #654321',
@@ -88,12 +88,12 @@ const SimpleMusicPlayer = () => {
               }}
             />
             <h1
-              className="relative z-10 text-3xl font-bold uppercase tracking-[0.3em]"
+              className="relative z-10 text-xl sm:text-3xl font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em]"
               style={{
                 fontFamily: '"Press Start 2P", monospace',
                 color: '#FFF8DC',
                 textShadow: '2px 2px 0 #654321, 4px 4px 0 #5D4E37',
-                fontSize: '20px',
+                fontSize: 'clamp(14px, 4vw, 20px)',
                 lineHeight: '1.4'
               }}
             >
@@ -102,13 +102,13 @@ const SimpleMusicPlayer = () => {
           </div>
 
           <div
-            className="inline-block px-6 py-3"
+            className="inline-block px-3 sm:px-6 py-2 sm:py-3"
             style={{
               background: '#654321',
               border: '2px solid #8B4513',
               color: '#DEB887',
               fontFamily: '"Press Start 2P", monospace',
-              fontSize: '11px'
+              fontSize: 'clamp(8px, 2.5vw, 11px)'
             }}
           >
             ♪ Lo-Fi Beats & Chill Vibes ♪
@@ -120,11 +120,11 @@ const SimpleMusicPlayer = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mb-12"
+            className="mb-6 sm:mb-12"
           >
             {/* Jukebox Style Container */}
             <div
-              className="relative p-10 mx-auto max-w-md"
+              className="relative p-4 sm:p-10 mx-auto max-w-sm sm:max-w-md"
               style={{
                 background: 'linear-gradient(145deg, #8B4513 0%, #A0522D 25%, #CD853F 50%, #A0522D 75%, #8B4513 100%)',
                 border: '6px solid #654321',
@@ -190,22 +190,23 @@ const SimpleMusicPlayer = () => {
               {/* Big Red Button */}
               <button
                 onClick={startAutoPlay}
-                className="w-full relative group"
+                className="w-full relative group min-h-[60px] sm:min-h-[80px]"
                 style={{
                   background: 'linear-gradient(145deg, #FF0000 0%, #DC143C 50%, #B22222 100%)',
                   border: '4px solid #8B0000',
                   borderRadius: '0',
-                  padding: '16px',
+                  padding: 'clamp(12px, 4vw, 16px)',
                   boxShadow: '4px 4px 0 #5D0000, inset 0 0 0 2px #FF6B6B'
                 }}
               >
                 <div
-                  className="text-[14px] font-bold uppercase"
+                  className="font-bold uppercase"
                   style={{
                     fontFamily: '"Press Start 2P", monospace',
                     color: '#FFFFFF',
                     textShadow: '2px 2px 0 #8B0000',
-                    letterSpacing: '2px'
+                    letterSpacing: 'clamp(1px, 0.5vw, 2px)',
+                    fontSize: 'clamp(10px, 3vw, 14px)'
                   }}
                 >
                   ► START MUSIC ◄
@@ -238,11 +239,11 @@ const SimpleMusicPlayer = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mb-12"
+            className="mb-6 sm:mb-12"
           >
             {/* Retro Boombox Style */}
             <div
-              className="relative p-8 mx-auto max-w-lg"
+              className="relative p-4 sm:p-8 mx-auto max-w-sm sm:max-w-lg"
               style={{
                 background: 'linear-gradient(145deg, #2C2C2C 0%, #404040 25%, #565656 50%, #404040 75%, #2C2C2C 100%)',
                 border: '6px solid #1a1a1a',
@@ -376,10 +377,10 @@ const SimpleMusicPlayer = () => {
         )}
 
         {/* Game Controller Section */}
-        <div className="mb-12">
+        <div className="mb-6 sm:mb-12">
           {/* Game Controller Controls */}
           <div
-            className="relative p-8 mx-auto max-w-lg mb-8"
+            className="relative p-4 sm:p-8 mx-auto max-w-sm sm:max-w-lg mb-4 sm:mb-8"
             style={{
               background: 'linear-gradient(145deg, #4A4A4A 0%, #5E5E5E 25%, #727272 50%, #5E5E5E 75%, #4A4A4A 100%)',
               border: '6px solid #2D2D2D',
@@ -418,27 +419,30 @@ const SimpleMusicPlayer = () => {
             </div>
 
             {/* D-Pad Style Controls */}
-            <div className="flex items-center justify-center gap-8 mb-8">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
             {/* Previous Button */}
             <button
               onClick={playPreviousTrack}
               disabled={!currentTrack}
-              className="relative group"
+              className="relative group touch-manipulation"
               style={{
                 background: 'linear-gradient(145deg, #FF6B00 0%, #FF8500 50%, #FF6B00 100%)',
                 border: '4px solid #CC5500',
                 borderRadius: '0',
-                width: '60px',
-                height: '60px',
-                boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55'
+                width: 'clamp(50px, 12vw, 60px)',
+                height: 'clamp(50px, 12vw, 60px)',
+                boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55',
+                minHeight: '48px',
+                minWidth: '48px'
               }}
             >
               <div
-                className="text-[16px] font-bold"
+                className="font-bold"
                 style={{
                   fontFamily: '"Press Start 2P", monospace',
                   color: '#FFFFFF',
-                  textShadow: '2px 2px 0 #AA4400'
+                  textShadow: '2px 2px 0 #AA4400',
+                  fontSize: 'clamp(12px, 3vw, 16px)'
                 }}
               >
                 ◄
@@ -455,26 +459,29 @@ const SimpleMusicPlayer = () => {
             <button
               onClick={togglePlayPause}
               disabled={!currentTrack}
-              className="relative group"
+              className="relative group touch-manipulation"
               style={{
                 background: isPlaying
                   ? 'linear-gradient(145deg, #FF0000 0%, #FF3333 50%, #FF0000 100%)'
                   : 'linear-gradient(145deg, #00AA00 0%, #00FF00 50%, #00AA00 100%)',
                 border: `4px solid ${isPlaying ? '#CC0000' : '#008800'}`,
                 borderRadius: '0',
-                width: '80px',
-                height: '80px',
+                width: 'clamp(60px, 15vw, 80px)',
+                height: 'clamp(60px, 15vw, 80px)',
                 boxShadow: isPlaying
                   ? '4px 4px 0 #990000, inset 0 0 0 2px #FF6666'
-                  : '4px 4px 0 #006600, inset 0 0 0 2px #66FF66'
+                  : '4px 4px 0 #006600, inset 0 0 0 2px #66FF66',
+                minHeight: '48px',
+                minWidth: '48px'
               }}
             >
               <div
-                className="text-[20px] font-bold"
+                className="font-bold"
                 style={{
                   fontFamily: '"Press Start 2P", monospace',
                   color: '#FFFFFF',
-                  textShadow: isPlaying ? '2px 2px 0 #990000' : '2px 2px 0 #006600'
+                  textShadow: isPlaying ? '2px 2px 0 #990000' : '2px 2px 0 #006600',
+                  fontSize: 'clamp(14px, 4vw, 20px)'
                 }}
               >
                 {isPlaying ? '■' : '►'}
@@ -491,22 +498,25 @@ const SimpleMusicPlayer = () => {
             <button
               onClick={playNextTrack}
               disabled={!currentTrack}
-              className="relative group"
+              className="relative group touch-manipulation"
               style={{
                 background: 'linear-gradient(145deg, #FF6B00 0%, #FF8500 50%, #FF6B00 100%)',
                 border: '4px solid #CC5500',
                 borderRadius: '0',
-                width: '60px',
-                height: '60px',
-                boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55'
+                width: 'clamp(50px, 12vw, 60px)',
+                height: 'clamp(50px, 12vw, 60px)',
+                boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55',
+                minHeight: '48px',
+                minWidth: '48px'
               }}
             >
               <div
-                className="text-[16px] font-bold"
+                className="font-bold"
                 style={{
                   fontFamily: '"Press Start 2P", monospace',
                   color: '#FFFFFF',
-                  textShadow: '2px 2px 0 #AA4400'
+                  textShadow: '2px 2px 0 #AA4400',
+                  fontSize: 'clamp(12px, 3vw, 16px)'
                 }}
               >
                 ►
@@ -524,7 +534,7 @@ const SimpleMusicPlayer = () => {
 
           {/* Progress & Volume Panel - Full Width */}
           <div
-            className="relative p-10 w-full"
+            className="relative p-4 sm:p-10 w-full"
             style={{
               background: 'linear-gradient(145deg, #1A1A1A 0%, #2D2D2D 25%, #404040 50%, #2D2D2D 75%, #1A1A1A 100%)',
               border: '6px solid #0D0D0D',
@@ -563,7 +573,7 @@ const SimpleMusicPlayer = () => {
             </div>
 
             {/* Controls Layout - Side by Side */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12">
               {/* Progress Bar */}
               {currentTrack && duration > 0 && (
                 <div className="mb-6">
@@ -581,10 +591,10 @@ const SimpleMusicPlayer = () => {
 
                   {/* 8-bit Progress Bar - Interactive */}
                   <div
-                    className="relative w-full h-10 cursor-pointer"
+                    className="relative w-full h-8 cursor-pointer"
                     style={{
                       background: '#2D2D2D',
-                      border: '3px solid #1A1A1A',
+                      border: '2px solid #1A1A1A',
                       borderRadius: '0'
                     }}
                     onClick={(e) => {
@@ -595,36 +605,28 @@ const SimpleMusicPlayer = () => {
                       seekTo(seekTime)
                     }}
                   >
-                    {/* Progress fill */}
+                    {/* Progress fill - the "beam" */}
                     <div
                       className="h-full"
                       style={{
                         background: 'linear-gradient(90deg, #00FF00 0%, #FFFF00 50%, #FF0000 100%)',
                         width: `${(currentTime / duration) * 100}%`,
-                        boxShadow: '0 0 10px rgba(0,255,0,0.8)'
+                        boxShadow: '0 0 10px rgba(0,255,0,0.5)'
                       }}
                     />
-                    
-                    {/* Neon slider handle */}
+
+                    {/* Cyan dot that moves along the progress */}
                     <div
-                      className="absolute top-0 w-4 h-full transform -translate-x-2 transition-all duration-150 hover:scale-110"
+                      className="absolute top-1/2 w-5 h-5 transform -translate-x-2.5 -translate-y-2.5 transition-all duration-150 hover:scale-125"
                       style={{
                         left: `${(currentTime / duration) * 100}%`,
-                        background: 'linear-gradient(180deg, #FFFFFF 0%, #00FFFF 50%, #0080FF 100%)',
+                        background: 'radial-gradient(circle, #00FFFF 0%, #0080FF 100%)',
+                        borderRadius: '50%',
                         border: '2px solid #00FFFF',
-                        borderRadius: '0',
-                        boxShadow: '0 0 15px #00FFFF, inset 0 0 5px rgba(255,255,255,0.5)',
+                        boxShadow: '0 0 20px #00FFFF, 0 0 40px rgba(0,255,255,0.6), inset 0 0 5px rgba(255,255,255,0.8)',
                         cursor: 'grab'
                       }}
-                    >
-                      {/* Inner glow */}
-                      <div
-                        className="w-full h-full opacity-60"
-                        style={{
-                          background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, transparent 100%)'
-                        }}
-                      />
-                    </div>
+                    />
                   </div>
                 </div>
               )}
@@ -646,10 +648,10 @@ const SimpleMusicPlayer = () => {
 
                 {/* 8-bit Volume Bar */}
                 <div
-                  className="relative w-full h-10"
+                  className="relative w-full h-8"
                   style={{
                     background: '#2D2D2D',
-                    border: '3px solid #1A1A1A',
+                    border: '2px solid #1A1A1A',
                     borderRadius: '0'
                   }}
                 >
@@ -661,36 +663,28 @@ const SimpleMusicPlayer = () => {
                     onChange={(e) => setVolume(parseFloat(e.target.value) / 100)}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
-                  
-                  {/* Volume fill */}
+
+                  {/* Volume fill - the "beam" */}
                   <div
                     className="h-full"
                     style={{
-                      background: 'linear-gradient(90deg, #0000FF 0%, #00FFFF 50%, #FFFFFF 100%)',
+                      background: 'linear-gradient(90deg, #0000FF 0%, #00FFFF 50%, #FF00FF 100%)',
                       width: `${volume * 100}%`,
-                      boxShadow: '0 0 10px rgba(0,255,255,0.8)'
+                      boxShadow: '0 0 10px rgba(255,0,255,0.5)'
                     }}
                   />
-                  
-                  {/* Neon volume slider handle */}
+
+                  {/* Magenta dot that moves along the volume */}
                   <div
-                    className="absolute top-0 w-4 h-full transform -translate-x-2 transition-all duration-150 hover:scale-110 pointer-events-none"
+                    className="absolute top-1/2 w-5 h-5 transform -translate-x-2.5 -translate-y-2.5 transition-all duration-150 hover:scale-125 pointer-events-none"
                     style={{
                       left: `${volume * 100}%`,
-                      background: 'linear-gradient(180deg, #FFFFFF 0%, #FF00FF 50%, #8000FF 100%)',
+                      background: 'radial-gradient(circle, #FF00FF 0%, #8000FF 100%)',
+                      borderRadius: '50%',
                       border: '2px solid #FF00FF',
-                      borderRadius: '0',
-                      boxShadow: '0 0 15px #FF00FF, inset 0 0 5px rgba(255,255,255,0.5)',
+                      boxShadow: '0 0 20px #FF00FF, 0 0 40px rgba(255,0,255,0.6), inset 0 0 5px rgba(255,255,255,0.8)'
                     }}
-                  >
-                    {/* Inner glow */}
-                    <div
-                      className="w-full h-full opacity-60"
-                      style={{
-                        background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, transparent 100%)'
-                      }}
-                    />
-                  </div>
+                  />
                 </div>
               </div>
             </div>
@@ -699,7 +693,7 @@ const SimpleMusicPlayer = () => {
 
         {/* Cassette Playlist */}
         <div
-          className="relative p-8 mx-auto max-w-2xl"
+          className="relative p-4 sm:p-8 mx-auto max-w-full sm:max-w-2xl"
           style={{
             background: 'linear-gradient(145deg, #1A1A1A 0%, #2D2D2D 25%, #404040 50%, #2D2D2D 75%, #1A1A1A 100%)',
             border: '6px solid #0D0D0D',
@@ -752,14 +746,14 @@ const SimpleMusicPlayer = () => {
                     : 'linear-gradient(90deg, #2D2D2D 0%, #404040 50%, #2D2D2D 100%)',
                   border: `4px solid ${currentTrack?.id === track.id ? '#00FF00' : '#565656'}`,
                   borderRadius: '0',
-                  padding: '16px',
+                  padding: 'clamp(12px, 3vw, 16px)',
                   boxShadow: currentTrack?.id === track.id
                     ? '0 0 20px rgba(0,255,0,0.5), 4px 4px 0 #1A1A1A'
                     : '4px 4px 0 #1A1A1A'
                 }}
               >
                 {/* Vinyl Record and Track Info */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 sm:gap-6">
                   {/* Animated Vinyl Record */}
                   <div className="flex-shrink-0">
                     <motion.div
@@ -774,7 +768,7 @@ const SimpleMusicPlayer = () => {
                       }}
                     >
                       <div
-                        className="w-14 h-14 relative"
+                        className="w-10 h-10 sm:w-14 sm:h-14 relative"
                         style={{
                           background: 'radial-gradient(circle, #1a1a1a 0%, #000000 60%, #333333 100%)',
                           border: '2px solid #444444',
@@ -870,9 +864,9 @@ const SimpleMusicPlayer = () => {
         </div>
 
         {/* Footer Info Section - Full Width */}
-        <div className="mt-20">
+        <div className="mt-10 sm:mt-20">
           <div
-            className="w-full p-8 text-center"
+            className="w-full p-4 sm:p-8 text-center"
             style={{
               background: 'linear-gradient(145deg, #2D2D2D 0%, #404040 25%, #565656 50%, #404040 75%, #2D2D2D 100%)',
               border: '6px solid #1A1A1A',
