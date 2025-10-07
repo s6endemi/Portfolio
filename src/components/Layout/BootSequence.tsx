@@ -294,25 +294,6 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                     {/* Lucky Cat Loading Animation */}
                     <motion.div className="flex flex-col items-center gap-6">
                       <div className="relative w-24 h-24">
-                        {/* Lucky Cat Image - Smaller */}
-                        <motion.img
-                          src="/wallpapers/luckycat.png"
-                          alt="Lucky Cat"
-                          className="w-full h-full object-contain"
-                          style={{
-                            filter: 'drop-shadow(0 0 15px rgba(255, 215, 0, 0.6))'
-                          }}
-                          animate={{
-                            scale: [1, 1.1, 1],
-                            rotate: [-5, 5, -5]
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: 'easeInOut'
-                          }}
-                        />
-
                         {/* Spinning coins around Lucky Cat - Smaller radius */}
                         {[0, 1, 2, 3, 4, 5].map((i) => (
                           <motion.div
