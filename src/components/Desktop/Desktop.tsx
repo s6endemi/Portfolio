@@ -12,6 +12,10 @@ import InteractiveTerminal from '../Terminal/InteractiveTerminal'
 import SoundControls from '../UI/SoundControls'
 import SimpleMusicPlayer from '../MusicPlayer/SimpleMusicPlayer'
 import MiniMusicPlayer from '../MusicPlayer/MiniMusicPlayer'
+import CountdownTimer from './CountdownTimer'
+import InteractiveLuckyCat from '../LuckyCat/InteractiveLuckyCat'
+import FortuneWheel from '../FortuneWheel/FortuneWheel'
+import CoinRain from '../CoinRain/CoinRain'
 
 const ProjectsContent = () => {
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
@@ -281,7 +285,7 @@ const ProjectsContent = () => {
   )
 }
 
-type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games' | 'websites' | 'documents' | 'music'
+type WindowId = 'about' | 'projects' | 'terminal' | 'resume' | 'contact' | 'games' | 'websites' | 'documents' | 'music' | 'mystery'
 
 type WindowConfig = {
   title: string
@@ -296,6 +300,13 @@ type WindowPositionMap = Partial<Record<WindowId, { x: number; y: number }>>
 
 const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
   about: {
+    title: 'LUCKY_CAT.EXE',
+    icon: '🐱',
+    position: { x: 220, y: 140 },
+    size: { width: 600, height: 500 },
+    content: <InteractiveLuckyCat />,
+  },
+  aboutOLD: {
     title: 'ABOUT_ME.EXE',
     icon: '👤',
     position: { x: 220, y: 140 },
@@ -383,10 +394,10 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     ),
   },
   projects: {
-    title: 'PROJECTS.EXE',
-    icon: '💼',
+    title: 'FORTUNE.EXE',
+    icon: '🎰',
     position: { x: 540, y: 180 },
-    content: <ProjectsContent />,
+    content: <FortuneWheel />,
   },
   terminal: {
     title: 'TERMINAL.EXE',
@@ -782,6 +793,12 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
       </div>
     ),
   },
+  coinrain: {
+    title: 'COIN_RAIN.EXE',
+    icon: '💰',
+    position: { x: 420, y: 200 },
+    content: <CoinRain />,
+  },
   games: {
     title: 'GAMES.EXE',
     icon: '🎮',
@@ -1094,6 +1111,13 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
     content: <SimpleMusicPlayer />,
     size: { width: 500, height: 600 }
   },
+  mystery: {
+    title: '??? MYSTERY.EXE ???',
+    icon: '🔮',
+    position: { x: 300, y: 150 },
+    content: <CountdownTimer />,
+    size: { width: 500, height: 400 }
+  },
 }
 
 type DesktopShortcut = {
@@ -1107,16 +1131,16 @@ type DesktopShortcut = {
 const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
   {
     id: 'about',
-    label: 'ABOUT ME',
-    icon: '👤',
-    description: 'Personal info and background',
+    label: 'LUCKY CAT',
+    icon: '🐱',
+    description: 'Click for fortune!',
     position: { x: 80, y: 120 }
   },
   {
     id: 'projects',
-    label: 'PROJECTS',
-    icon: '💼',
-    description: 'Portfolio and work samples',
+    label: 'FORTUNE',
+    icon: '🎰',
+    description: 'Spin for your fortune!',
     position: { x: 80, y: 240 }
   },
   {
@@ -1127,24 +1151,17 @@ const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
     position: { x: 80, y: 360 }
   },
   {
-    id: 'websites',
-    label: 'WEBSITES',
-    icon: '🌐',
-    description: 'Frontend showcase',
+    id: 'coinrain',
+    label: 'COIN RAIN',
+    icon: '💰',
+    description: 'Catch falling coins!',
     position: { x: 80, y: 480 }
   },
   {
-    id: 'resume',
-    label: 'RESUME',
-    icon: '📄',
-    description: 'Professional experience',
-    position: { x: 80, y: 600 }
-  },
-  {
-    id: 'contact',
-    label: 'CONTACT',
-    icon: '📧',
-    description: 'Get in touch',
+    id: 'mystery',
+    label: '🔮 ???',
+    icon: '🔮',
+    description: 'Something is coming...',
     position: { x: 80, y: 720 }
   },
   {
@@ -1209,13 +1226,6 @@ const START_MENU_ITEMS = [
     onClick: () => {}, // Will be set in component
   })),
   // Special Documents section - only in start menu
-  {
-    id: 'documents',
-    label: 'DOCUMENTS',
-    icon: '📁',
-    description: 'Files, photos & downloads',
-    onClick: () => {}, // Will be set in component
-  },
   {
     id: 'music',
     label: 'MUSIC PLAYER',
@@ -1457,7 +1467,7 @@ const Desktop = () => {
       style={{
         backgroundColor: '#faf7f0',
         color: '#5d4e37',
-        backgroundImage: 'url(/wallpapers/cozy-pixel.svg)',
+        backgroundImage: 'url(/wallpapers/luckycat.png)',
         backgroundSize: 'clamp(200px, 50vw, 400px) clamp(150px, 37.5vw, 300px)',
         backgroundRepeat: 'repeat',
         // Enable mobile scrolling while keeping desktop experience

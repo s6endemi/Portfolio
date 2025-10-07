@@ -13,6 +13,13 @@ interface Track {
 // Your actual lo-fi jazz tracks
 const PLAYLIST: Track[] = [
   {
+    id: 'asian-chinese-bg',
+    name: 'Lucky Cat Theme',
+    file: '/sounds/music/asian-chinese-background-music-349936.mp3',
+    artist: 'Fortune Beats',
+    duration: '5:49'
+  },
+  {
     id: 'bittersweet-brew',
     name: 'Bittersweet Brew',
     file: '/sounds/music/bittersweet-brew-chill-lo-fi-cafe-beat-340597.mp3',
@@ -76,7 +83,7 @@ export const MusicProvider = ({ children }: MusicProviderProps) => {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  const [autoStartTimer, setAutoStartTimer] = useState(10)
+  const [autoStartTimer, setAutoStartTimer] = useState(0) // Changed from 10 to 0
   const [autoStartActive, setAutoStartActive] = useState(true)
 
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -96,17 +103,31 @@ export const MusicProvider = ({ children }: MusicProviderProps) => {
     }
   }, [])
 
-  // Auto-start timer
+  // Auto-start music immediately
   useEffect(() => {
-    if (autoStartActive && autoStartTimer > 0 && !currentTrack) {
-      const timer = setTimeout(() => {
-        setAutoStartTimer(prev => prev - 1)
-      }, 1000)
-      return () => clearTimeout(timer)
-    } else if (autoStartTimer === 0 && !currentTrack && autoStartActive) {
-      // Auto-start first track
-      playTrack(PLAYLIST[0])
-      setAutoStartActive(false)
+    if (!currentTrack && autoStartActive && PLAYLIST.length > 0) {
+      // Try to auto-play immediately
+      const audio = audioRef.current
+      if (audio) {
+        audio.src = PLAYLIST[0].file
+        audio.load()
+        audio.play().then(() => {
+          setCurrentTrack(PLAYLIST[0])
+          setIsPlaying(true)
+          setAutoStartActive(false)
+        }).catch(() => {
+          // If autoplay fails, will be handled by timer
+          if (autoStartTimer > 0) {
+            const timer = setTimeout(() => {
+              setAutoStartTimer(prev => prev - 1)
+            }, 1000)
+            return () => clearTimeout(timer)
+          } else if (autoStartTimer === 0) {
+            playTrack(PLAYLIST[0])
+            setAutoStartActive(false)
+          }
+        })
+      }
     }
   }, [autoStartTimer, currentTrack, autoStartActive])
 

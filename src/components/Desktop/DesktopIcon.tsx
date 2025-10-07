@@ -99,14 +99,14 @@ const DesktopIcon = ({
       <motion.div
         className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center text-3xl sm:text-4xl border-t-4 border-l-4 border-r-4 border-b-4"
         style={{
-          backgroundColor: isActive ? '#7ba7bc' : '#f9f6f0',
-          borderTopColor: isActive ? '#9bb5c4' : '#ffffff',
-          borderLeftColor: isActive ? '#9bb5c4' : '#ffffff',
-          borderRightColor: isActive ? '#6a8ba0' : '#c4b59a',
-          borderBottomColor: isActive ? '#6a8ba0' : '#c4b59a',
+          backgroundColor: isActive ? '#FFD700' : '#000000',
+          borderTopColor: isActive ? '#FFED4E' : '#333333',
+          borderLeftColor: isActive ? '#FFED4E' : '#333333',
+          borderRightColor: isActive ? '#D4AF37' : '#000000',
+          borderBottomColor: isActive ? '#D4AF37' : '#000000',
           boxShadow: isActive
-            ? '4px 4px 0 0 rgba(107, 139, 160, 0.3), 0 0 12px rgba(123, 167, 188, 0.2)'
-            : '4px 4px 0 0 rgba(196, 181, 154, 0.4), 0 2px 8px rgba(93, 78, 55, 0.1)'
+            ? '4px 4px 0 0 rgba(255, 215, 0, 0.5), 0 0 12px rgba(255, 215, 0, 0.3)'
+            : '4px 4px 0 0 rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)'
         }}
         variants={iconVariants}
         initial="idle"
@@ -142,10 +142,10 @@ const DesktopIcon = ({
       <span
         className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border shadow-sm"
         style={{
-          backgroundColor: isActive ? 'rgba(123, 167, 188, 0.25)' : 'rgba(249, 246, 240, 0.95)',
-          borderColor: isActive ? '#7ba7bc' : '#e0d6c7',
-          color: isActive ? '#5a7a8c' : '#5d4e37',
-          textShadow: isActive ? '0 1px 2px rgba(255,255,255,0.8)' : '0 1px 2px rgba(255,255,255,0.6)'
+          backgroundColor: isActive ? 'rgba(255, 215, 0, 0.9)' : 'rgba(0, 0, 0, 0.85)',
+          borderColor: isActive ? '#FFD700' : '#333333',
+          color: isActive ? '#000000' : '#FFD700',
+          textShadow: isActive ? '0 1px 2px rgba(0,0,0,0.3)' : '0 1px 2px rgba(255,215,0,0.5)'
         }}
       >
         {label}

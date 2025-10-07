@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSoundContext } from '../../contexts/SoundContext'
+import { useMusicContext } from '../../contexts/MusicContext'
 
 interface BootSequenceProps {
   onComplete: () => void
@@ -16,8 +17,19 @@ interface BootStage {
 
 const PIXEL_FONT = '"Press Start 2P", "IBM Plex Mono", monospace'
 
+// Chinese/Crypto Matrix Characters
+const MATRIX_CHARS = '招財進寶福祿壽喜富貴吉祥龍鳳麒麟財神0123456789$¥€£₿ΞABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+interface MatrixColumn {
+  id: number
+  x: number
+  speed: number
+  chars: string[]
+  delay: number
+}
+
 const STAGE_FLOW: BootStage[] = [
-  { id: 'intro', duration: 2600, autoAdvance: true },
+  { id: 'intro', duration: 2800, autoAdvance: true },
   { id: 'title', duration: 4200, autoAdvance: true },
   { id: 'prompt', autoAdvance: false }
 ]
@@ -26,21 +38,32 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
   const [stageIndex, setStageIndex] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const { playMusic, stopMusic, playSound, isLoaded } = useSoundContext()
+  const { playTrack, playlist } = useMusicContext()
 
   const stage = STAGE_FLOW[stageIndex]?.id ?? 'prompt'
 
-  const starField = useMemo(
-    () =>
-      Array.from({ length: 36 }, (_, index) => ({
-        id: index,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: 1 + Math.random() * 2,
-        delay: Math.random() * 2.5,
-        duration: 2.5 + Math.random() * 2.2
-      })),
-    []
-  )
+  // Generate Matrix Rain Columns
+  const matrixColumns = useMemo(() => {
+    const columns: MatrixColumn[] = []
+    const columnCount = Math.floor(window.innerWidth / 30)
+
+    for (let i = 0; i < columnCount; i++) {
+      const charCount = Math.floor(Math.random() * 15) + 10
+      const chars = Array.from({ length: charCount }, () =>
+        MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
+      )
+
+      columns.push({
+        id: i,
+        x: i * 30,
+        speed: 2 + Math.random() * 4,
+        chars,
+        delay: Math.random() * 2
+      })
+    }
+
+    return columns
+  }, [])
 
   useEffect(() => {
     const current = STAGE_FLOW[stageIndex]
@@ -55,26 +78,22 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
     return () => clearTimeout(timeout)
   }, [stageIndex])
 
-  // Play boot music and sound effects
+  // Play sound effects
   useEffect(() => {
     if (!isLoaded) return
 
-    if (stage === 'intro') {
-      // Play boot sound and start retro adventure music
-      playSound('boot')
-      setTimeout(() => playMusic('bootMusic'), 500)
-    } else if (stage === 'title') {
-      // Play success sound for loading completion
+    if (stage === 'title') {
       setTimeout(() => playSound('success'), 2000)
     }
-  }, [stage, isLoaded, playSound, playMusic])
+  }, [stage, isLoaded, playSound])
 
   const handleComplete = useCallback(() => {
+    // Start music on first user interaction
+    if (playlist.length > 0) {
+      playTrack(playlist[0])
+    }
     setIsComplete(prev => (prev ? prev : true))
-    // Stop boot music and play click sound
-    stopMusic()
-    playSound('click')
-  }, [stopMusic, playSound])
+  }, [playlist, playTrack])
 
   useEffect(() => {
     if (stage !== 'prompt') {
@@ -118,181 +137,265 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle at 20% 20%, rgba(59,130,246,0.45) 0%, rgba(12,74,110,0.85) 45%, #051022 90%)'
-            }}
-          />
-          <motion.div
-            className="absolute inset-0 opacity-40"
-            style={{
-              background:
-                'radial-gradient(circle at 50% 50%, rgba(14,165,233,0.35) 0%, transparent 65%)'
-            }}
-            animate={{ opacity: [0.25, 0.45, 0.25], scale: [0.95, 1.05, 0.95] }}
-            transition={{ repeat: Infinity, duration: 5.4, ease: 'easeInOut' }}
-          />
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(59,130,246,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.15) 1px, transparent 1px)',
-              backgroundSize: '70px 70px'
-            }}
-          />
-          <div className="absolute inset-0 overflow-hidden">
-            {starField.map(star => (
-              <motion.span
-                key={star.id}
-                className="absolute rounded-full bg-cyan-100/80"
-                style={{
-                  top: `${star.top}%`,
-                  left: `${star.left}%`,
-                  width: `${star.size}px`,
-                  height: `${star.size}px`
-                }}
-                animate={{ opacity: [0.12, 0.9, 0.12], scale: [0.85, 1.15, 0.85] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: star.duration,
-                  delay: star.delay,
-                  ease: 'easeInOut'
-                }}
-              />
-            ))}
-          </div>
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(0deg, rgba(226,232,240,0.07) 0px, rgba(226,232,240,0.07) 1px, transparent 1px, transparent 4px)'
-            }}
-            animate={{ opacity: [0.05, 0.12, 0.05] }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-          />
-          <div className="relative z-10 flex h-screen w-screen items-center justify-center px-6 text-center text-cyan-100">
+          {/* Black Background */}
+          <div className="absolute inset-0 bg-black" />
+
+          {/* Content */}
+          <div className="relative z-10 flex h-screen w-screen items-center justify-center px-6 text-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={stage}
                 className="w-full"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
               >
+                {/* INTRO STAGE - Glitchy Lucky Cat Reveal */}
                 {stage === 'intro' && (
-                  <motion.div className="flex flex-col items-center gap-12 max-w-4xl mx-auto">
+                  <motion.div className="flex flex-col items-center justify-center gap-12 max-w-4xl mx-auto h-screen">
+                    {/* Glitch Effect Container */}
+                    <div className="relative">
+                      {/* Background Glow */}
+                      <motion.div
+                        className="absolute inset-0 blur-3xl"
+                        animate={{
+                          background: [
+                            'radial-gradient(circle, #FFD700 0%, transparent 70%)',
+                            'radial-gradient(circle, #FF6347 0%, transparent 70%)',
+                            'radial-gradient(circle, #FFD700 0%, transparent 70%)'
+                          ]
+                        }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+
+                      {/* Lucky Cat with Glitch */}
+                      <motion.div
+                        className="relative text-9xl"
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          duration: 1.2,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                      >
+                        {/* Glitch Layers */}
+                        <motion.div
+                          className="absolute inset-0"
+                          animate={{
+                            x: [-2, 2, -2],
+                            opacity: [0.5, 0.8, 0.5]
+                          }}
+                          transition={{
+                            duration: 0.2,
+                            repeat: Infinity,
+                            repeatType: 'reverse'
+                          }}
+                          style={{
+                            color: '#FF6347',
+                            filter: 'blur(1px)'
+                          }}
+                        >
+                          🐱
+                        </motion.div>
+                        <motion.div
+                          className="absolute inset-0"
+                          animate={{
+                            x: [2, -2, 2],
+                            opacity: [0.5, 0.8, 0.5]
+                          }}
+                          transition={{
+                            duration: 0.2,
+                            repeat: Infinity,
+                            repeatType: 'reverse'
+                          }}
+                          style={{
+                            color: '#FFD700',
+                            filter: 'blur(1px)'
+                          }}
+                        >
+                          🐱
+                        </motion.div>
+
+                        {/* Main Cat */}
+                        <motion.div
+                          animate={{
+                            textShadow: [
+                              '0 0 20px #FFD700, 0 0 40px #FF6347',
+                              '0 0 40px #FF6347, 0 0 60px #FFD700',
+                              '0 0 20px #FFD700, 0 0 40px #FF6347'
+                            ]
+                          }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          🐱
+                        </motion.div>
+                      </motion.div>
+                    </div>
+
+                    {/* Chinese Characters */}
                     <motion.div
-                      className="text-6xl mb-8"
-                      animate={{
-                        textShadow: [
-                          '0 0 20px #00ffff',
-                          '0 0 40px #00ffff, 0 0 60px #00ffff',
-                          '0 0 20px #00ffff'
-                        ]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      🎮
-                    </motion.div>
-                    <motion.span
-                      className="text-2xl sm:text-3xl tracking-[0.4em] text-cyan-300"
+                      className="text-4xl tracking-[0.5em]"
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8, duration: 0.8 }}
                       style={{
                         fontFamily: PIXEL_FONT,
-                        textShadow: '0 0 20px #00ffff'
+                        background: 'linear-gradient(90deg, #FFD700 0%, #FF6347 50%, #FFD700 100%)',
+                        backgroundSize: '200% 100%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        animation: 'rainbow 3s linear infinite'
                       }}
-                      animate={{ opacity: [0.7, 1, 0.7] }}
-                      transition={{ repeat: Infinity, duration: 2 }}
                     >
-                      PIXEL STUDIOS
-                    </motion.span>
+                      招財進寶
+                    </motion.div>
+
+                    {/* Pulsing Dots */}
                     <motion.div
-                      className="h-1 w-64 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
-                      animate={{ opacity: [0.4, 1, 0.4], scaleX: [0.8, 1, 0.8] }}
-                      transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                    />
-                    <motion.span
-                      className="text-lg tracking-widest text-cyan-500"
-                      style={{ fontFamily: PIXEL_FONT }}
+                      className="flex gap-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 1, duration: 0.8 }}
+                      transition={{ delay: 1.2 }}
                     >
-                      PRESENTS
-                    </motion.span>
+                      {[0, 1, 2].map((i) => (
+                        <motion.div
+                          key={i}
+                          className="w-6 h-6"
+                          style={{
+                            background: i === 1 ? '#FF6347' : '#FFD700',
+                            boxShadow: `0 0 20px ${i === 1 ? '#FF6347' : '#FFD700'}`,
+                            borderRadius: '0'
+                          }}
+                          animate={{
+                            scale: [1, 1.5, 1],
+                            rotate: [0, 180, 360]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            delay: i * 0.2
+                          }}
+                        />
+                      ))}
+                    </motion.div>
+
+                    {/* Scanlines Effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-10"
+                      style={{
+                        background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #FFD700 2px, #FFD700 4px)',
+                        animation: 'scan 8s linear infinite'
+                      }}
+                    />
                   </motion.div>
                 )}
 
+                {/* TITLE STAGE - Lucky Cat */}
                 {stage === 'title' && (
                   <motion.div className="flex flex-col items-center gap-16 max-w-4xl mx-auto">
+                    {/* Lucky Cat Emoji with glow */}
+                    <motion.div
+                      className="text-8xl mb-8"
+                      animate={{
+                        textShadow: [
+                          '0 0 20px #FFD700',
+                          '0 0 60px #FFD700, 0 0 80px #FF6347',
+                          '0 0 20px #FFD700'
+                        ],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      🐱
+                    </motion.div>
+
+                    {/* Loading Text */}
                     <motion.span
-                      className="text-xl tracking-[0.3em] text-sky-200"
+                      className="text-xl tracking-[0.3em]"
                       style={{
                         fontFamily: PIXEL_FONT,
-                        textShadow: '0 0 15px rgba(59,130,246,0.8)'
+                        background: 'linear-gradient(45deg, #FFD700, #FF6347, #FFD700)',
+                        backgroundSize: '200% 200%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        animation: 'rainbow 3s ease infinite'
                       }}
                     >
-                      LOADING PORTFOLIO
+                      LOADING LUCKY CAT
                     </motion.span>
 
-                    {/* Pixel Loading Spinner */}
+                    {/* Lucky Cat Loading Animation */}
                     <motion.div className="flex flex-col items-center gap-10">
                       <div className="relative">
-                        {/* Outer spinning ring */}
-                        <motion.div
-                          className="w-24 h-24 border-4 border-transparent border-t-cyan-400 border-r-blue-400"
+                        {/* Lucky Cat Image */}
+                        <motion.img
+                          src="/wallpapers/luckycat.png"
+                          alt="Lucky Cat"
+                          className="w-32 h-32 object-contain"
                           style={{
-                            borderRadius: '0', // Keep it pixelated
-                            boxShadow: '0 0 20px rgba(59,130,246,0.5)'
-                          }}
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                        />
-
-                        {/* Inner pulsing square */}
-                        <motion.div
-                          className="absolute inset-6 bg-gradient-to-br from-cyan-400 to-blue-500"
-                          style={{
-                            boxShadow: '0 0 15px rgba(59,130,246,0.7)'
+                            filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))'
                           }}
                           animate={{
-                            scale: [0.8, 1.2, 0.8],
-                            opacity: [0.6, 1, 0.6]
+                            scale: [1, 1.1, 1],
+                            rotate: [-5, 5, -5]
                           }}
-                          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: 'easeInOut'
+                          }}
                         />
 
-                        {/* Corner pixels */}
-                        {[0, 1, 2, 3].map((i) => (
+                        {/* Spinning coins around Lucky Cat */}
+                        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
                           <motion.div
                             key={i}
-                            className="absolute w-2 h-2 bg-cyan-300"
+                            className="absolute text-2xl"
                             style={{
-                              top: i < 2 ? '-4px' : 'calc(100% - 4px)',
-                              left: i % 2 === 0 ? '-4px' : 'calc(100% - 4px)',
-                              boxShadow: '0 0 8px rgba(0,255,255,0.8)'
+                              top: '50%',
+                              left: '50%',
+                              transformOrigin: '0 0'
                             }}
                             animate={{
-                              opacity: [0.3, 1, 0.3],
-                              scale: [0.5, 1, 0.5]
+                              rotate: 360
                             }}
                             transition={{
-                              duration: 0.8,
+                              duration: 3,
                               repeat: Infinity,
-                              delay: i * 0.2,
-                              ease: 'easeInOut'
+                              ease: 'linear',
+                              delay: i * 0.125
                             }}
-                          />
+                          >
+                            <motion.div
+                              style={{
+                                transform: `translate(-50%, -50%) translateX(60px) rotate(-${i * 45}deg)`,
+                                textShadow: '0 0 10px rgba(255, 215, 0, 0.8)'
+                              }}
+                              animate={{
+                                scale: [1, 1.2, 1]
+                              }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                delay: i * 0.125
+                              }}
+                            >
+                              {i % 2 === 0 ? '💰' : '💎'}
+                            </motion.div>
+                          </motion.div>
                         ))}
                       </div>
 
                       {/* Loading text with dots */}
                       <motion.div
-                        className="flex items-center gap-1 text-sky-300"
-                        style={{ fontFamily: PIXEL_FONT }}
+                        className="flex items-center gap-1 text-yellow-300"
+                        style={{
+                          fontFamily: PIXEL_FONT,
+                          textShadow: '0 0 10px #FFD700'
+                        }}
                       >
-                        <span className="text-sm tracking-wider">INITIALIZING</span>
+                        <span className="text-sm tracking-wider">招財進寶</span>
                         <motion.span
                           animate={{ opacity: [0, 1, 0] }}
                           transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
@@ -314,16 +417,16 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                       </motion.div>
                     </motion.div>
 
-                    {/* Progress bar */}
+                    {/* Progress bar - Gold/Red */}
                     <motion.div
-                      className="w-80 h-2 border-2 border-sky-400 relative bg-black/40"
+                      className="w-80 h-2 border-2 border-yellow-400 relative bg-black/40"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
                     >
                       <motion.div
-                        className="h-full bg-gradient-to-r from-sky-400 via-cyan-400 to-blue-400"
-                        style={{ boxShadow: '0 0 20px rgba(59,130,246,0.6)' }}
+                        className="h-full bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400"
+                        style={{ boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)' }}
                         initial={{ width: '0%' }}
                         animate={{ width: '100%' }}
                         transition={{ duration: 3, ease: 'easeInOut' }}
@@ -332,21 +435,22 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                   </motion.div>
                 )}
 
+                {/* PROMPT STAGE - Lucky Cat Title */}
                 {stage === 'prompt' && (
                   <motion.div className="flex flex-col items-center gap-12 max-w-4xl mx-auto">
                     <motion.h1
                       className="text-5xl sm:text-6xl lg:text-7xl mb-8"
                       style={{
                         fontFamily: PIXEL_FONT,
-                        background: 'linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00, #00ffff)',
+                        background: 'linear-gradient(45deg, #FFD700, #FF6347, #FFD700, #FF6347, #FFD700)',
                         backgroundSize: '400% 400%',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         animation: 'rainbow 4s ease infinite',
-                        filter: 'drop-shadow(0 0 30px rgba(0,255,255,0.8))'
+                        filter: 'drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))'
                       }}
                     >
-                      EREN
+                      LUCKY CAT
                     </motion.h1>
 
                     <motion.div
@@ -356,32 +460,41 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                       transition={{ delay: 0.3 }}
                     >
                       <motion.div
-                        className="text-2xl lg:text-3xl mb-6 tracking-[0.25em] text-cyan-300"
+                        className="text-2xl lg:text-3xl mb-6 tracking-[0.25em]"
                         style={{
                           fontFamily: PIXEL_FONT,
-                          textShadow: '0 0 20px #00ffff'
+                          color: '#FFD700',
+                          textShadow: '0 0 20px #FFD700, 0 0 40px #FF6347'
                         }}
                       >
-                        ADVENTURE PORTFOLIO
+                        招財進寶
                       </motion.div>
                       <motion.div
-                        className="text-lg tracking-wider text-cyan-500 mb-12"
-                        style={{ fontFamily: PIXEL_FONT }}
+                        className="text-lg tracking-wider mb-12"
+                        style={{
+                          fontFamily: PIXEL_FONT,
+                          color: '#FF6347',
+                          textShadow: '0 0 10px #FF6347'
+                        }}
                       >
-                        FULL STACK DEVELOPER
+                        TO THE MOON 🚀
                       </motion.div>
 
                       <motion.div
-                        className="flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.3rem] text-emerald-300/80 mb-16"
-                        style={{ fontFamily: PIXEL_FONT }}
+                        className="flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.3rem] mb-16"
+                        style={{
+                          fontFamily: PIXEL_FONT,
+                          color: '#FFD700',
+                          textShadow: '0 0 8px #FFD700'
+                        }}
                       >
-                        <span>React</span>
-                        <span className="text-cyan-400">•</span>
-                        <span>TypeScript</span>
-                        <span className="text-cyan-400">•</span>
-                        <span>Pixel Art</span>
-                        <span className="text-cyan-400">•</span>
-                        <span>Creative Coding</span>
+                        <span>$LUCKY</span>
+                        <span className="text-red-500">•</span>
+                        <span>MEME COIN</span>
+                        <span className="text-red-500">•</span>
+                        <span>100X</span>
+                        <span className="text-red-500">•</span>
+                        <span>MOON</span>
                       </motion.div>
                     </motion.div>
 
@@ -389,9 +502,9 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                       className="flex items-center gap-6 text-xl px-8 py-4 border-2 border-yellow-400 bg-black/60"
                       style={{
                         fontFamily: PIXEL_FONT,
-                        color: '#ffff00',
-                        textShadow: '0 0 15px #ffff00',
-                        boxShadow: '0 0 30px rgba(255,255,0,0.3)'
+                        color: '#FFD700',
+                        textShadow: '0 0 15px #FFD700',
+                        boxShadow: '0 0 30px rgba(255, 215, 0, 0.5)'
                       }}
                       animate={{
                         opacity: [0.7, 1, 0.7],
@@ -399,9 +512,9 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                       }}
                       transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
                     >
-                      <span className="text-3xl">🎯</span>
+                      <span className="text-3xl">🐱</span>
                       <span className="tracking-widest">CLICK ANYWHERE TO START</span>
-                      <span className="text-3xl">🎯</span>
+                      <span className="text-3xl">💰</span>
                     </motion.div>
                   </motion.div>
                 )}
