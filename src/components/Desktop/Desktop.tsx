@@ -29,6 +29,7 @@ type WindowConfig = {
 
 type WindowOriginMap = Partial<Record<WindowId, { x: number; y: number }>>
 type WindowPositionMap = Partial<Record<WindowId, { x: number; y: number }>>
+type ShortcutId = WindowId | 'twitter'
 
 const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
   about: {
@@ -854,11 +855,12 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
 }
 
 type DesktopShortcut = {
-  id: WindowId
+  id: ShortcutId
   label: string
   icon: string
   description: string
   position: { x: number; y: number }
+  externalUrl?: string
 }
 
 const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
@@ -889,6 +891,14 @@ const DESKTOP_SHORTCUTS: DesktopShortcut[] = [
     icon: '💰',
     description: 'Catch falling coins!',
     position: { x: 80, y: 480 }
+  },
+  {
+    id: 'twitter',
+    label: 'TWITTER',
+    icon: '🐦',
+    description: 'Follow me on X/Twitter',
+    position: { x: 80, y: 600 },
+    externalUrl: 'https://x.com/yanhuabnb'
   },
   {
     id: 'mystery',
@@ -951,11 +961,12 @@ const getResponsiveIconPosition = (shortcut: DesktopShortcut, screenWidth: numbe
 }
 
 const START_MENU_ITEMS = [
-  ...DESKTOP_SHORTCUTS.map(({ id, label, icon, description }) => ({
+  ...DESKTOP_SHORTCUTS.map(({ id, label, icon, description, externalUrl }) => ({
     id,
     label,
     icon,
     description,
+    externalUrl: externalUrl || undefined,
     onClick: () => {}, // Will be set in component
   })),
   // Special Documents section - only in start menu
@@ -964,6 +975,7 @@ const START_MENU_ITEMS = [
     label: 'MUSIC PLAYER',
     icon: '🎵',
     description: 'Vinyl lo-fi lounge',
+    externalUrl: undefined,
     onClick: () => {}, // Will be set in component
   }
 ]
@@ -1135,6 +1147,14 @@ const Desktop = () => {
   }
 
   const handleShortcutActivate = (shortcut: (typeof DESKTOP_SHORTCUTS)[number]) => {
+    // Handle external links
+    if (shortcut.externalUrl) {
+      window.open(shortcut.externalUrl, '_blank', 'noopener,noreferrer')
+      playSound('click')
+      return
+    }
+
+    // Handle internal windows
     const origin = {
       x: Math.max(
         0,
@@ -1145,11 +1165,11 @@ const Desktop = () => {
         shortcut.position.y + ICON_DIMENSIONS.height / 2 - WINDOW_DIMENSIONS.height / 2,
       ),
     }
-    openWindow(shortcut.id, origin)
+    openWindow(shortcut.id as WindowId, origin)
   }
 
-  const handleShortcutSelect = (id: WindowId) => {
-    setSelectedShortcut(id)
+  const handleShortcutSelect = (id: ShortcutId) => {
+    setSelectedShortcut(id === 'twitter' ? null : id as WindowId)
     setIsStartOpen(false)
     playSound('click')
   }
@@ -1191,7 +1211,15 @@ const Desktop = () => {
 
   const startMenuItems = START_MENU_ITEMS.map((item) => ({
     ...item,
-    onClick: () => openWindow(item.id as WindowId, START_MENU_ORIGIN),
+    onClick: () => {
+      if (item.externalUrl) {
+        window.open(item.externalUrl, '_blank', 'noopener,noreferrer')
+        playSound('click')
+        setIsStartOpen(false)
+      } else {
+        openWindow(item.id as WindowId, START_MENU_ORIGIN)
+      }
+    },
   }))
 
   return (
@@ -1200,9 +1228,6 @@ const Desktop = () => {
       style={{
         backgroundColor: '#faf7f0',
         color: '#5d4e37',
-        backgroundImage: 'url(/wallpapers/luckycat.png)',
-        backgroundSize: 'clamp(200px, 50vw, 400px) clamp(150px, 37.5vw, 300px)',
-        backgroundRepeat: 'repeat',
         // Enable mobile scrolling while keeping desktop experience
         overflow: screenSize.width < 768 ? 'auto' : 'hidden',
         // Add smooth scrolling for mobile
@@ -1212,6 +1237,28 @@ const Desktop = () => {
       onMouseDown={handleDesktopMouseDown}
       onTouchStart={(e) => handleDesktopMouseDown(e as unknown as ReactMouseEvent<HTMLDivElement>)}
     >
+      {/* Animated background video/gif */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectFit: 'cover' }}
+          poster="/wallpapers/luckycat.png"
+        >
+          <source src="/wallpapers/luckycat.mp4" type="video/mp4" />
+          {/* Fallback to GIF if video doesn't work */}
+          <img 
+            src="/wallpapers/luckycat.gif" 
+            alt="Lucky cat background"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectFit: 'cover' }}
+          />
+        </video>
+      </div>
+      
       <Wallpaper />
 
       <div
