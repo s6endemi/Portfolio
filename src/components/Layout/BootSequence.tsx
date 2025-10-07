@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSoundContext } from '../../contexts/SoundContext'
 import { useMusicContext } from '../../contexts/MusicContext'
@@ -17,17 +17,6 @@ interface BootStage {
 
 const PIXEL_FONT = '"Press Start 2P", "IBM Plex Mono", monospace'
 
-// Chinese/Crypto Matrix Characters
-const MATRIX_CHARS = '招財進寶福祿壽喜富貴吉祥龍鳳麒麟財神0123456789$¥€£₿ΞABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
-interface MatrixColumn {
-  id: number
-  x: number
-  speed: number
-  chars: string[]
-  delay: number
-}
-
 const STAGE_FLOW: BootStage[] = [
   { id: 'intro', duration: 2800, autoAdvance: true },
   { id: 'title', duration: 4200, autoAdvance: true },
@@ -37,33 +26,10 @@ const STAGE_FLOW: BootStage[] = [
 const BootSequence = ({ onComplete }: BootSequenceProps) => {
   const [stageIndex, setStageIndex] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
-  const { playMusic, stopMusic, playSound, isLoaded } = useSoundContext()
+  const { playSound, isLoaded } = useSoundContext()
   const { playTrack, playlist } = useMusicContext()
 
   const stage = STAGE_FLOW[stageIndex]?.id ?? 'prompt'
-
-  // Generate Matrix Rain Columns
-  const matrixColumns = useMemo(() => {
-    const columns: MatrixColumn[] = []
-    const columnCount = Math.floor(window.innerWidth / 30)
-
-    for (let i = 0; i < columnCount; i++) {
-      const charCount = Math.floor(Math.random() * 15) + 10
-      const chars = Array.from({ length: charCount }, () =>
-        MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
-      )
-
-      columns.push({
-        id: i,
-        x: i * 30,
-        speed: 2 + Math.random() * 4,
-        chars,
-        delay: Math.random() * 2
-      })
-    }
-
-    return columns
-  }, [])
 
   useEffect(() => {
     const current = STAGE_FLOW[stageIndex]
@@ -326,15 +292,15 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                     </motion.span>
 
                     {/* Lucky Cat Loading Animation */}
-                    <motion.div className="flex flex-col items-center gap-10">
-                      <div className="relative">
-                        {/* Lucky Cat Image */}
+                    <motion.div className="flex flex-col items-center gap-6">
+                      <div className="relative w-24 h-24">
+                        {/* Lucky Cat Image - Smaller */}
                         <motion.img
                           src="/wallpapers/luckycat.png"
                           alt="Lucky Cat"
-                          className="w-32 h-32 object-contain"
+                          className="w-full h-full object-contain"
                           style={{
-                            filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))'
+                            filter: 'drop-shadow(0 0 15px rgba(255, 215, 0, 0.6))'
                           }}
                           animate={{
                             scale: [1, 1.1, 1],
@@ -347,11 +313,11 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                           }}
                         />
 
-                        {/* Spinning coins around Lucky Cat */}
-                        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                        {/* Spinning coins around Lucky Cat - Smaller radius */}
+                        {[0, 1, 2, 3, 4, 5].map((i) => (
                           <motion.div
                             key={i}
-                            className="absolute text-2xl"
+                            className="absolute text-xl"
                             style={{
                               top: '50%',
                               left: '50%',
@@ -361,15 +327,15 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                               rotate: 360
                             }}
                             transition={{
-                              duration: 3,
+                              duration: 2.5,
                               repeat: Infinity,
                               ease: 'linear',
-                              delay: i * 0.125
+                              delay: i * 0.15
                             }}
                           >
                             <motion.div
                               style={{
-                                transform: `translate(-50%, -50%) translateX(60px) rotate(-${i * 45}deg)`,
+                                transform: `translate(-50%, -50%) translateX(50px) rotate(-${i * 60}deg)`,
                                 textShadow: '0 0 10px rgba(255, 215, 0, 0.8)'
                               }}
                               animate={{
@@ -378,7 +344,7 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
                               transition={{
                                 duration: 1,
                                 repeat: Infinity,
-                                delay: i * 0.125
+                                delay: i * 0.15
                               }}
                             >
                               {i % 2 === 0 ? '💰' : '💎'}

@@ -99,14 +99,14 @@ const DesktopIcon = ({
       <motion.div
         className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center text-3xl sm:text-4xl border-t-4 border-l-4 border-r-4 border-b-4"
         style={{
-          backgroundColor: isActive ? '#FFD700' : '#000000',
-          borderTopColor: isActive ? '#FFED4E' : '#333333',
-          borderLeftColor: isActive ? '#FFED4E' : '#333333',
-          borderRightColor: isActive ? '#D4AF37' : '#000000',
-          borderBottomColor: isActive ? '#D4AF37' : '#000000',
+          backgroundColor: isActive ? '#FFD700' : '#4B0082',
+          borderTopColor: isActive ? '#FFED4E' : '#6A0DAD',
+          borderLeftColor: isActive ? '#FFED4E' : '#6A0DAD',
+          borderRightColor: isActive ? '#D4AF37' : '#2E0854',
+          borderBottomColor: isActive ? '#D4AF37' : '#2E0854',
           boxShadow: isActive
-            ? '4px 4px 0 0 rgba(255, 215, 0, 0.5), 0 0 12px rgba(255, 215, 0, 0.3)'
-            : '4px 4px 0 0 rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)'
+            ? '4px 4px 0 0 rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.5)'
+            : '4px 4px 0 0 rgba(46, 8, 84, 0.8), 0 0 20px rgba(106, 13, 173, 0.6), 0 0 40px rgba(106, 13, 173, 0.3)'
         }}
         variants={iconVariants}
         initial="idle"
@@ -140,12 +140,15 @@ const DesktopIcon = ({
       
       {/* Icon Label */}
       <span
-        className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border shadow-sm"
+        className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border-2 shadow-lg"
         style={{
-          backgroundColor: isActive ? 'rgba(255, 215, 0, 0.9)' : 'rgba(0, 0, 0, 0.85)',
-          borderColor: isActive ? '#FFD700' : '#333333',
+          backgroundColor: isActive ? 'rgba(255, 215, 0, 0.95)' : 'rgba(75, 0, 130, 0.95)',
+          borderColor: isActive ? '#FFD700' : '#6A0DAD',
           color: isActive ? '#000000' : '#FFD700',
-          textShadow: isActive ? '0 1px 2px rgba(0,0,0,0.3)' : '0 1px 2px rgba(255,215,0,0.5)'
+          textShadow: isActive ? '0 1px 2px rgba(0,0,0,0.3)' : '0 0 8px rgba(255,215,0,0.8)',
+          boxShadow: isActive
+            ? '0 0 15px rgba(255, 215, 0, 0.4)'
+            : '0 0 15px rgba(106, 13, 173, 0.6)'
         }}
       >
         {label}

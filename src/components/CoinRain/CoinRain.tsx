@@ -80,7 +80,7 @@ const CoinRain = () => {
     if (!gameRunning) return
 
     const fallInterval = setInterval(() => {
-      setCoins(prev => prev.filter(coin => {
+      setCoins(prev => prev.filter(() => {
         // Remove coins that reached bottom
         return true // We'll handle removal on click
       }))
