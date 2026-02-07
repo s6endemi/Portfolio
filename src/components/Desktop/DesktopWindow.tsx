@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls, type MotionStyle } from 'framer-motion'
 import type { PropsWithChildren } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -201,13 +201,18 @@ const DesktopWindow = ({
       )}
 
       <motion.div
-        className="absolute overflow-hidden rounded-lg border-4 shadow-[6px_6px_0_0_rgba(139,111,71,0.35)]"
+        className="absolute overflow-hidden rounded-lg border-4"
         style={{
-          backgroundColor: '#fffdfa',
-          borderColor: '#d0c4b0',
+          backgroundColor: title === 'TERMINAL.EXE' ? '#000000' : 'rgba(255,253,250,0.92)',
+          borderColor: isFocused ? '#c0b49a' : '#d0c4b0',
           width: `${responsiveProps.width}px`,
           height: `${responsiveProps.height}px`,
-        }}
+          backdropFilter: title === 'TERMINAL.EXE' ? 'none' : 'blur(8px) saturate(1.2)',
+          WebkitBackdropFilter: title === 'TERMINAL.EXE' ? 'none' : 'blur(8px) saturate(1.2)',
+          boxShadow: isFocused
+            ? '6px 6px 0 0 rgba(139,111,71,0.35), 0 8px 32px rgba(139,111,71,0.18), 0 0 24px rgba(123,167,188,0.15)'
+            : '4px 4px 0 0 rgba(139,111,71,0.25), 0 4px 16px rgba(139,111,71,0.12)',
+        } as MotionStyle}
         initial={initial}
         animate={enterKeyframes}
         exit={{ opacity: 0, scale: 0.9, y: position.y + 16 }}
@@ -237,18 +242,21 @@ const DesktopWindow = ({
         }}
       >
         <div
-          className="flex items-center justify-between border-b-4 px-4 py-3 font-pixel text-xs uppercase tracking-[0.2em]"
+          className="flex items-center justify-between border-b-4 px-4 py-3 font-pixel text-xs uppercase tracking-[0.2em] relative"
           style={{
             background: title === 'TERMINAL.EXE'
-              ? (isFocused 
-                  ? 'linear-gradient(90deg, #2c3e50 0%, #34495e 100%)'
-                  : 'linear-gradient(90deg, #34495e 0%, #3f566b 100%)')
-              : (isFocused 
-                  ? 'linear-gradient(90deg, #7ba7bc 0%, #9fbec8 100%)'
-                  : 'linear-gradient(90deg, #a7c2cd 0%, #c1d8df 100%)'),
+              ? (isFocused
+                  ? 'linear-gradient(90deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%)'
+                  : 'linear-gradient(90deg, #34495e 0%, #3f566b 50%, #34495e 100%)')
+              : (isFocused
+                  ? 'linear-gradient(90deg, #7ba7bc 0%, #8fbbc9 50%, #9fbec8 100%)'
+                  : 'linear-gradient(90deg, #a7c2cd 0%, #b4ced6 50%, #c1d8df 100%)'),
             borderBottomColor: title === 'TERMINAL.EXE' ? '#1a252f' : '#8b6f47',
             color: title === 'TERMINAL.EXE' ? '#00ff41' : '#ffffff',
             cursor: 'grab',
+            backgroundImage: title === 'TERMINAL.EXE'
+              ? undefined
+              : `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")`,
           }}
           onPointerDown={(event) => {
             event.stopPropagation()
@@ -262,38 +270,52 @@ const DesktopWindow = ({
           </div>
           <div className="flex items-center gap-2">
             {onToggleMaximize && (
-              <button
+              <motion.button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   onToggleMaximize()
                 }}
-                className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs transition-all duration-200 hover:scale-105"
+                className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs"
                 style={{
                   backgroundColor: '#f4f1e8',
                   borderColor: '#8b6f47',
                   color: '#5d4e37',
                 }}
+                whileHover={{
+                  scale: 1.15,
+                  boxShadow: '0 0 8px rgba(123,167,188,0.4)',
+                  backgroundColor: '#eae3d4',
+                }}
+                whileTap={{ scale: 0.9, y: 1 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 aria-label={isMaximized ? `Minimize ${title}` : `Maximize ${title}`}
                 title={isMaximized ? 'Minimize' : 'Maximize'}
               >
                 {isMaximized ? '⤢' : '⤡'}
-              </button>
+              </motion.button>
             )}
-            <button
+            <motion.button
               type="button"
               onClick={onClose}
-              className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs transition-all duration-200 hover:scale-105"
+              className="flex h-6 w-6 items-center justify-center rounded border-2 font-pixel text-xs"
               style={{
                 backgroundColor: '#f4f1e8',
                 borderColor: '#8b6f47',
                 color: '#5d4e37',
               }}
+              whileHover={{
+                scale: 1.15,
+                boxShadow: '0 0 8px rgba(212,100,100,0.4)',
+                backgroundColor: '#f5ddd8',
+              }}
+              whileTap={{ scale: 0.9, y: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               aria-label={`Close ${title}`}
               title="Close"
             >
               ✕
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -302,15 +324,18 @@ const DesktopWindow = ({
              'scrollbar-thin overflow-y-auto font-pixel-content',
              title === 'TERMINAL.EXE'
                ? 'h-full p-0'
-               : 'space-y-6 bg-white/96 p-5 text-sm'
+               : 'space-y-6 p-5 text-sm'
            )}
            style={{
              color: title === 'TERMINAL.EXE' ? '#00ff41' : '#3b2f1d',
-             backgroundColor: title === 'TERMINAL.EXE' ? '#000000' : '#ffffff',
+             backgroundColor: title === 'TERMINAL.EXE' ? '#000000' : 'rgba(255,255,255,0.85)',
              backgroundImage: title === 'TERMINAL.EXE'
                ? 'none'
                : 'linear-gradient(180deg, rgba(248,240,223,0.6) 0%, rgba(255,255,255,0.75) 55%, rgba(249,237,218,0.85) 100%)',
              height: title === 'TERMINAL.EXE' ? '100%' : 'calc(100% - 60px)',
+             boxShadow: title === 'TERMINAL.EXE'
+               ? 'none'
+               : 'inset 0 2px 8px rgba(139,111,71,0.06), inset 0 1px 3px rgba(139,111,71,0.04)',
            }}
          >
           {children}

@@ -19,14 +19,26 @@ const Wallpaper = ({ variant = 'nebula' }: WallpaperProps) => {
         className="absolute inset-0"
         style={{
           backgroundColor: '#f0f8ff',
-          backgroundImage: `${gradientMap[variant]}, linear-gradient(rgba(74,144,226,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,226,0.08) 1px, transparent 1px)`,
+          backgroundImage: `${gradientMap[variant]}, linear-gradient(rgba(74,144,226,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,226,0.05) 1px, transparent 1px)`,
           backgroundSize: '100% 100%, 32px 32px, 32px 32px',
         }}
       />
 
-      <div className="absolute inset-0 animate-[scanlines_6s_linear_infinite] bg-[length:100%_6px] bg-[radial-gradient(circle,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0.6)_100%)] opacity-10" />
+      {/* Scanlines — toned down for subtlety */}
+      <div
+        className="absolute inset-0 animate-[scanlines_6s_linear_infinite] bg-[length:100%_6px] opacity-[0.06]"
+        style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 6px)',
+        }}
+      />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_40%,rgba(0,0,0,0.6)_100%)]" />
+      {/* Vignette — slightly stronger for depth */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 35%, rgba(0,0,0,0.08) 65%, rgba(0,0,0,0.2) 100%)',
+        }}
+      />
     </div>
   )
 }

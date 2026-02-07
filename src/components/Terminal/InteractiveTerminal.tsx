@@ -348,9 +348,9 @@ const InteractiveTerminal = () => {
           {lines.map((line, index) => (
             <motion.div
               key={line.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
+              initial={{ opacity: 0, x: -10, filter: 'blur(3px)' }}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.35, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
               className={`mb-2 ${
                 line.type === 'system' ? 'text-cyan-400' :
                 line.type === 'user' ? 'text-green-300' :
@@ -366,13 +366,13 @@ const InteractiveTerminal = () => {
                 fontSize: screenWidth < 768 ? '12px' : '14px',
                 lineHeight: '1.6',
                 textShadow:
-                  line.type === 'system' ? '0 0 6px currentColor, 0 0 12px currentColor' :
-                  line.type === 'user' ? '0 0 6px #86efac, 0 0 12px #86efac' :
-                  line.type === 'help' ? '0 0 6px #fbbf24, 0 0 12px #fbbf24' :
-                  line.type === 'music' ? '0 0 6px #c084fc, 0 0 12px #c084fc' :
-                  line.type === 'games' ? '0 0 6px #f472b6, 0 0 12px #f472b6' :
-                  line.type === 'matrix' ? '0 0 6px #22c55e, 0 0 12px #22c55e' :
-                  '0 0 4px #bbf7d0, 0 0 8px #bbf7d0',
+                  line.type === 'system' ? '0 0 4px currentColor, 0 0 10px currentColor, 0 0 20px currentColor' :
+                  line.type === 'user' ? '0 0 4px #86efac, 0 0 10px #86efac, 0 0 22px rgba(134,239,172,0.4)' :
+                  line.type === 'help' ? '0 0 4px #fbbf24, 0 0 10px #fbbf24, 0 0 22px rgba(251,191,36,0.3)' :
+                  line.type === 'music' ? '0 0 4px #c084fc, 0 0 10px #c084fc, 0 0 22px rgba(192,132,252,0.3)' :
+                  line.type === 'games' ? '0 0 4px #f472b6, 0 0 10px #f472b6, 0 0 22px rgba(244,114,182,0.3)' :
+                  line.type === 'matrix' ? '0 0 4px #22c55e, 0 0 10px #22c55e, 0 0 22px rgba(34,197,94,0.3)' :
+                  '0 0 3px #bbf7d0, 0 0 8px #bbf7d0, 0 0 16px rgba(187,247,208,0.3)',
                 letterSpacing: screenWidth < 768 ? '0.3px' : '0.5px'
               }}
             >
@@ -403,7 +403,15 @@ const InteractiveTerminal = () => {
 
       {/* Mobile Scroll Controls */}
       {showScrollButtons && (
-        <div className="flex justify-center items-center gap-2 py-2 px-4 bg-black/80 border-t border-green-700/30">
+        <div
+          className="flex justify-center items-center gap-2 py-2 px-4 border-t"
+          style={{
+            background: 'rgba(0,10,3,0.9)',
+            borderColor: 'rgba(0,255,65,0.15)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+          }}
+        >
           <button
             onClick={scrollToTop}
             disabled={!canScrollUp}
@@ -468,13 +476,24 @@ const InteractiveTerminal = () => {
 
       {/* Input Area - Mobile Responsive */}
       <div
-        className="border-t-2 p-2 sm:p-3 bg-black/95 shrink-0"
+        className="border-t-2 p-2 sm:p-3 shrink-0"
         style={{
           borderTopColor: '#00ff41',
-          minHeight: screenWidth < 768 ? '60px' : '70px'
+          minHeight: screenWidth < 768 ? '60px' : '70px',
+          background: 'linear-gradient(180deg, rgba(0,20,5,0.98) 0%, rgba(0,0,0,0.99) 100%)',
+          boxShadow: '0 -2px 12px rgba(0,255,65,0.08)',
         }}
       >
-        <div className="flex items-center p-2 sm:p-3 rounded-lg border border-green-700/40 bg-black/50 backdrop-blur-sm">
+        <div
+          className="flex items-center p-2 sm:p-3 rounded-lg"
+          style={{
+            border: '1px solid rgba(0,255,65,0.25)',
+            background: 'rgba(0,10,3,0.7)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            boxShadow: '0 0 8px rgba(0,255,65,0.08), inset 0 0 12px rgba(0,255,65,0.04), 0 0 24px rgba(0,255,65,0.04)',
+          }}
+        >
             <span
               className="text-cyan-300 mr-2 sm:mr-3 font-bold whitespace-nowrap text-xs sm:text-base"
               style={{

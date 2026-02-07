@@ -117,7 +117,10 @@ const ProjectsContent = () => {
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => setSelectedProject(null)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded border-2 border-[#d0c4b0] bg-white/90 hover:bg-[#faf3e5] transition-all duration-200 shadow-[2px_2px_0_0_rgba(139,111,71,0.2)]"
+            className="flex items-center gap-2 px-3 py-1.5 rounded border-2 border-[#d0c4b0] bg-white/90 hover:bg-[#faf3e5] hover:-translate-y-[1px] active:translate-y-[1px] transition-all duration-200"
+            style={{
+              boxShadow: '2px 2px 0 0 rgba(139,111,71,0.2), 0 1px 3px rgba(139,111,71,0.08)',
+            }}
           >
             <span className="text-[#7c6544] text-sm">←</span>
             <span className="font-pixel text-[9px] uppercase tracking-[0.2em] text-[#7c6544]">Back</span>
@@ -145,7 +148,10 @@ const ProjectsContent = () => {
                 href={project.details.website}
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-2 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded shadow-sm hover:scale-105 transition-transform duration-200 ml-4"
+                className="px-3 py-2 bg-gradient-to-r from-[#7ba7bc] to-[#9fbec8] text-white text-[10px] font-pixel uppercase tracking-[0.1em] rounded hover:scale-105 hover:-translate-y-[1px] active:scale-95 transition-all duration-200 ml-4"
+                style={{
+                  boxShadow: '0 2px 6px rgba(123,167,188,0.3), 0 1px 2px rgba(0,0,0,0.06)',
+                }}
               >
                 Visit Site
               </a>
@@ -227,7 +233,17 @@ const ProjectsContent = () => {
           <div
             key={project.id}
             onClick={() => setSelectedProject(project.id)}
-            className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-3 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200 cursor-pointer group"
+            className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-3 cursor-pointer group transition-all duration-250 ease-out hover:-translate-y-[2px] hover:border-[#c0b49a]"
+            style={{
+              boxShadow: '3px 3px 0 0 rgba(139,111,71,0.2), 0 2px 6px rgba(139,111,71,0.08)',
+              transition: 'box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '5px 5px 0 0 rgba(139,111,71,0.3), 0 8px 20px rgba(139,111,71,0.12), 0 0 16px rgba(123,167,188,0.1)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '3px 3px 0 0 rgba(139,111,71,0.2), 0 2px 6px rgba(139,111,71,0.08)'
+            }}
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -651,7 +667,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
         </section>
 
         <section className="space-y-4">
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🏥</span>
@@ -679,7 +695,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
             </div>
           </div>
 
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🤖</span>
@@ -707,7 +723,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
             </div>
           </div>
 
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">⚡</span>
@@ -735,7 +751,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
             </div>
           </div>
 
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🚀</span>
@@ -808,7 +824,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           {/* Snake Game */}
           <div
             onClick={() => window.open('https://playsnake.org/', '_blank')}
-            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.35),0_8px_20px_rgba(139,111,71,0.12)] transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:-translate-y-[2px] active:scale-[0.97] active:translate-y-[1px]"
           >
             {/* Pixel Art Background Pattern */}
             <div className="absolute inset-0 opacity-10" style={{
@@ -846,7 +862,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           {/* Pong Game */}
           <div
             onClick={() => window.open('https://ponggame.org/', '_blank')}
-            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.35),0_8px_20px_rgba(139,111,71,0.12)] transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:-translate-y-[2px] active:scale-[0.97] active:translate-y-[1px]"
           >
             {/* Pixel Art Background Pattern */}
             <div className="absolute inset-0 opacity-10" style={{
@@ -883,7 +899,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           {/* Tetris Game */}
           <div
             onClick={() => window.open('https://tetris.com/play-tetris/', '_blank')}
-            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.4)] transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+            className="group relative overflow-hidden rounded-lg border-2 border-[#d0c4b0] bg-white/90 shadow-[4px_4px_0_0_rgba(139,111,71,0.2)] hover:shadow-[6px_6px_0_0_rgba(139,111,71,0.35),0_8px_20px_rgba(139,111,71,0.12)] transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:-translate-y-[2px] active:scale-[0.97] active:translate-y-[1px]"
           >
             {/* Pixel Art Background Pattern */}
             <div className="absolute inset-0 opacity-10" style={{
@@ -955,7 +971,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
 
         <section className="space-y-4">
           {/* Resume PDF */}
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">📄</span>
@@ -993,7 +1009,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           </div>
 
           {/* Corgi Photo */}
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🐕</span>
@@ -1031,7 +1047,7 @@ const WINDOW_CONFIG: Record<WindowId, WindowConfig> = {
           </div>
 
           {/* Pixel Portrait */}
-          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[4px_4px_0_0_rgba(139,111,71,0.3)] transition-all duration-200">
+          <div className="bg-white/95 rounded-lg border-2 border-[#d0c4b0] p-5 shadow-[3px_3px_0_0_rgba(139,111,71,0.2)] hover:shadow-[5px_5px_0_0_rgba(139,111,71,0.3)] hover:-translate-y-[1px] transition-all duration-250">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🎨</span>

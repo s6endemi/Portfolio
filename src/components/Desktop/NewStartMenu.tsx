@@ -27,25 +27,32 @@ const NewStartMenu = ({ isOpen, onClose, menuItems }: NewStartMenuProps) => {
             className="fixed inset-0 z-40"
             data-role="start-menu-backdrop"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.2 }}
+            animate={{ opacity: 0.3 }}
             exit={{ opacity: 0 }}
             transition={backdropTransition}
             onClick={onClose}
-            style={{ backgroundColor: '#2a1d14' }}
+            style={{
+              backgroundColor: '#2a1d14',
+              backdropFilter: 'blur(2px)',
+              WebkitBackdropFilter: 'blur(2px)',
+            }}
           />
 
           <motion.div
             key="start-menu"
             data-role="start-menu"
-            className="absolute left-4 bottom-[4.5rem] z-50 w-80 overflow-hidden rounded-lg border-4 shadow-[8px_8px_0_0_rgba(139,111,71,0.6)]"
+            className="absolute left-4 bottom-[4.5rem] z-50 w-80 overflow-hidden rounded-lg border-4"
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.97 }}
             transition={panelTransition}
             onClick={(event) => event.stopPropagation()}
             style={{
-              backgroundColor: '#f4f1e8',
+              backgroundColor: 'rgba(244,241,232,0.92)',
               borderColor: '#8b6f47',
+              backdropFilter: 'blur(12px) saturate(1.4)',
+              WebkitBackdropFilter: 'blur(12px) saturate(1.4)',
+              boxShadow: '8px 8px 0 0 rgba(139,111,71,0.5), 0 12px 40px rgba(139,111,71,0.2), 0 0 20px rgba(123,167,188,0.1)',
             }}
           >
             <div
@@ -72,18 +79,28 @@ const NewStartMenu = ({ isOpen, onClose, menuItems }: NewStartMenuProps) => {
                     item.onClick()
                     onClose()
                   }}
-                  className="group flex w-full items-center gap-4 rounded-md border-2 border-transparent px-4 py-4 text-left transition-all duration-200 hover:-translate-y-[1px] hover:border-[#7ba7bc] hover:shadow-md"
-                  style={{ color: '#5d4e37' }}
+                  className="group flex w-full items-center gap-4 rounded-md border-2 border-transparent px-4 py-4 text-left transition-all duration-200 hover:-translate-y-[1px] hover:border-[#7ba7bc]"
+                  style={{
+                    color: '#5d4e37',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.08)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(123,167,188,0.15), 0 2px 4px rgba(139,111,71,0.08)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                    e.currentTarget.style.boxShadow = 'none'
+                  }}
                 >
-                  <div 
-                    className="flex items-center justify-center w-12 h-12 rounded-lg border-2 transition-all group-hover:scale-110"
+                  <div
+                    className="flex items-center justify-center w-12 h-12 rounded-lg border-2 transition-all duration-200 group-hover:scale-110 group-hover:shadow-md"
                     style={{
                       backgroundColor: '#ffffff',
                       borderColor: '#d0c4b0',
-                      boxShadow: '2px 2px 0 0 rgba(139,111,71,0.3)'
+                      boxShadow: '2px 2px 0 0 rgba(139,111,71,0.3)',
                     }}
                   >
-                    <span className="text-xl" aria-hidden>
+                    <span className="text-xl transition-transform duration-200 group-hover:scale-110" aria-hidden>
                       {item.icon}
                     </span>
                   </div>

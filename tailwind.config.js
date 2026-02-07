@@ -11,6 +11,21 @@ const config = {
         'pixel-content': ['Courier New', 'monospace'],
         'pixel-ui': ['Arial', 'sans-serif'],
       },
+      boxShadow: {
+        'pixel-sm': '2px 2px 0 0 rgba(139,111,71,0.25), 0 1px 3px rgba(139,111,71,0.12)',
+        'pixel-md': '4px 4px 0 0 rgba(139,111,71,0.3), 0 4px 8px rgba(139,111,71,0.15)',
+        'pixel-lg': '6px 6px 0 0 rgba(139,111,71,0.35), 0 8px 24px rgba(139,111,71,0.18)',
+        'pixel-glow': '4px 4px 0 0 rgba(139,111,71,0.3), 0 0 20px rgba(123,167,188,0.2)',
+      },
+      keyframes: {
+        'subtle-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.85' },
+        },
+      },
+      animation: {
+        'subtle-pulse': 'subtle-pulse 3s ease-in-out infinite',
+      },
       colors: {
         // Cozy & Warm Palette - Gemütlich & Sonnig
         'cozy-cream': '#faf7f0',         // Warmes Creme (Background)

@@ -66,16 +66,31 @@ const DesktopIcon = ({
       scale: 1,
       rotate: 0,
       y: 0,
+      filter: 'drop-shadow(0 0 0px rgba(123,167,188,0))',
     },
     hover: {
-      scale: 1.05,
-      y: -2,
-      transition: { type: 'spring' as const, stiffness: 360, damping: 20 },
+      scale: 1.08,
+      y: -3,
+      filter: 'drop-shadow(0 0 8px rgba(123,167,188,0.3))',
+      transition: { type: 'spring' as const, stiffness: 360, damping: 18 },
+    },
+    tap: {
+      scale: 0.95,
+      y: 2,
+      filter: 'drop-shadow(0 0 4px rgba(123,167,188,0.15))',
+      transition: { type: 'spring' as const, stiffness: 500, damping: 25 },
     },
     launch: {
       scale: [1, 1.18, 0.94, 1.04, 1],
       rotate: [0, -6, 4, -1, 0],
       y: [0, -4, 0, -2, 0],
+      filter: [
+        'drop-shadow(0 0 0px rgba(123,167,188,0))',
+        'drop-shadow(0 0 12px rgba(123,167,188,0.5))',
+        'drop-shadow(0 0 6px rgba(123,167,188,0.2))',
+        'drop-shadow(0 0 8px rgba(123,167,188,0.3))',
+        'drop-shadow(0 0 0px rgba(123,167,188,0))',
+      ],
       transition: {
         duration: 0.45,
         ease: [0.17, 0.84, 0.44, 1],
@@ -105,13 +120,15 @@ const DesktopIcon = ({
           borderRightColor: isActive ? '#6a8ba0' : '#c4b59a',
           borderBottomColor: isActive ? '#6a8ba0' : '#c4b59a',
           boxShadow: isActive
-            ? '4px 4px 0 0 rgba(107, 139, 160, 0.3), 0 0 12px rgba(123, 167, 188, 0.2)'
-            : '4px 4px 0 0 rgba(196, 181, 154, 0.4), 0 2px 8px rgba(93, 78, 55, 0.1)'
+            ? '4px 4px 0 0 rgba(107, 139, 160, 0.3), 0 0 14px rgba(123, 167, 188, 0.25), 0 4px 12px rgba(123, 167, 188, 0.15)'
+            : '4px 4px 0 0 rgba(196, 181, 154, 0.4), 0 2px 8px rgba(93, 78, 55, 0.1)',
+          transition: 'background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
         }}
         variants={iconVariants}
         initial="idle"
         animate={controls}
         whileHover="hover"
+        whileTap="tap"
       >
         {/* Inner 3D highlight */}
         <div
@@ -140,12 +157,18 @@ const DesktopIcon = ({
       
       {/* Icon Label */}
       <span
-        className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border shadow-sm"
+        className="text-center text-xs font-bold tracking-wide px-2 py-1 rounded border"
         style={{
-          backgroundColor: isActive ? 'rgba(123, 167, 188, 0.25)' : 'rgba(249, 246, 240, 0.95)',
+          backgroundColor: isActive ? 'rgba(123, 167, 188, 0.3)' : 'rgba(249, 246, 240, 0.9)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
           borderColor: isActive ? '#7ba7bc' : '#e0d6c7',
-          color: isActive ? '#5a7a8c' : '#5d4e37',
-          textShadow: isActive ? '0 1px 2px rgba(255,255,255,0.8)' : '0 1px 2px rgba(255,255,255,0.6)'
+          color: isActive ? '#4a6a7c' : '#5d4e37',
+          textShadow: isActive ? '0 1px 2px rgba(255,255,255,0.8)' : '0 1px 2px rgba(255,255,255,0.6)',
+          boxShadow: isActive
+            ? '0 2px 8px rgba(123,167,188,0.2), 0 1px 2px rgba(0,0,0,0.06)'
+            : '0 1px 4px rgba(139,111,71,0.1), 0 1px 2px rgba(0,0,0,0.04)',
+          transition: 'background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease',
         }}
       >
         {label}

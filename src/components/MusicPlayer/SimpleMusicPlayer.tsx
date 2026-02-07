@@ -188,7 +188,7 @@ const SimpleMusicPlayer = () => {
               </div>
 
               {/* Big Red Button */}
-              <button
+              <motion.button
                 onClick={startAutoPlay}
                 className="w-full relative group min-h-[60px] sm:min-h-[80px]"
                 style={{
@@ -198,6 +198,9 @@ const SimpleMusicPlayer = () => {
                   padding: 'clamp(12px, 4vw, 16px)',
                   boxShadow: '4px 4px 0 #5D0000, inset 0 0 0 2px #FF6B6B'
                 }}
+                whileHover={{ scale: 1.04, boxShadow: '4px 4px 0 #5D0000, inset 0 0 0 2px #FF6B6B, 0 0 24px rgba(255,0,0,0.5)' }}
+                whileTap={{ scale: 0.96, y: 2, boxShadow: '2px 2px 0 #5D0000, inset 0 0 0 2px #FF6B6B' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               >
                 <div
                   className="font-bold uppercase"
@@ -219,7 +222,7 @@ const SimpleMusicPlayer = () => {
                     background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)'
                   }}
                 />
-              </button>
+              </motion.button>
 
               {/* Coin Slot Decoration */}
               <div
@@ -421,7 +424,7 @@ const SimpleMusicPlayer = () => {
             {/* D-Pad Style Controls */}
             <div className="flex items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
             {/* Previous Button */}
-            <button
+            <motion.button
               onClick={playPreviousTrack}
               disabled={!currentTrack}
               className="relative group touch-manipulation"
@@ -435,6 +438,9 @@ const SimpleMusicPlayer = () => {
                 minHeight: '48px',
                 minWidth: '48px'
               }}
+              whileHover={{ scale: 1.08, boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55, 0 0 16px rgba(255,107,0,0.4)' }}
+              whileTap={{ scale: 0.93, y: 2, boxShadow: '2px 2px 0 #AA4400, inset 0 0 0 2px #FFAA55' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
               <div
                 className="font-bold"
@@ -453,10 +459,10 @@ const SimpleMusicPlayer = () => {
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)'
                 }}
               />
-            </button>
+            </motion.button>
 
             {/* Play/Pause Button */}
-            <button
+            <motion.button
               onClick={togglePlayPause}
               disabled={!currentTrack}
               className="relative group touch-manipulation"
@@ -474,6 +480,14 @@ const SimpleMusicPlayer = () => {
                 minHeight: '48px',
                 minWidth: '48px'
               }}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: isPlaying
+                  ? '4px 4px 0 #990000, inset 0 0 0 2px #FF6666, 0 0 20px rgba(255,0,0,0.4)'
+                  : '4px 4px 0 #006600, inset 0 0 0 2px #66FF66, 0 0 20px rgba(0,255,0,0.4)',
+              }}
+              whileTap={{ scale: 0.92, y: 2 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
               <div
                 className="font-bold"
@@ -492,10 +506,10 @@ const SimpleMusicPlayer = () => {
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)'
                 }}
               />
-            </button>
+            </motion.button>
 
             {/* Next Button */}
-            <button
+            <motion.button
               onClick={playNextTrack}
               disabled={!currentTrack}
               className="relative group touch-manipulation"
@@ -509,6 +523,9 @@ const SimpleMusicPlayer = () => {
                 minHeight: '48px',
                 minWidth: '48px'
               }}
+              whileHover={{ scale: 1.08, boxShadow: '4px 4px 0 #AA4400, inset 0 0 0 2px #FFAA55, 0 0 16px rgba(255,107,0,0.4)' }}
+              whileTap={{ scale: 0.93, y: 2, boxShadow: '2px 2px 0 #AA4400, inset 0 0 0 2px #FFAA55' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
               <div
                 className="font-bold"
@@ -527,7 +544,7 @@ const SimpleMusicPlayer = () => {
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)'
                 }}
               />
-            </button>
+            </motion.button>
           </div>
 
           </div>
@@ -593,9 +610,10 @@ const SimpleMusicPlayer = () => {
                   <div
                     className="relative w-full h-8 cursor-pointer"
                     style={{
-                      background: '#2D2D2D',
+                      background: 'linear-gradient(180deg, #1A1A1A 0%, #2D2D2D 50%, #1A1A1A 100%)',
                       border: '2px solid #1A1A1A',
-                      borderRadius: '0'
+                      borderRadius: '0',
+                      boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(0,255,0,0.05)',
                     }}
                     onClick={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect()
@@ -650,9 +668,10 @@ const SimpleMusicPlayer = () => {
                 <div
                   className="relative w-full h-8"
                   style={{
-                    background: '#2D2D2D',
+                    background: 'linear-gradient(180deg, #1A1A1A 0%, #2D2D2D 50%, #1A1A1A 100%)',
                     border: '2px solid #1A1A1A',
-                    borderRadius: '0'
+                    borderRadius: '0',
+                    boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,0,255,0.05)',
                   }}
                 >
                   <input
@@ -748,8 +767,9 @@ const SimpleMusicPlayer = () => {
                   borderRadius: '0',
                   padding: 'clamp(12px, 3vw, 16px)',
                   boxShadow: currentTrack?.id === track.id
-                    ? '0 0 20px rgba(0,255,0,0.5), 4px 4px 0 #1A1A1A'
-                    : '4px 4px 0 #1A1A1A'
+                    ? '0 0 20px rgba(0,255,0,0.5), 0 0 40px rgba(0,255,0,0.15), 4px 4px 0 #1A1A1A, inset 0 0 12px rgba(0,255,0,0.1)'
+                    : '4px 4px 0 #1A1A1A',
+                  transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
                 }}
               >
                 {/* Vinyl Record and Track Info */}
